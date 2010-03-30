@@ -1,0 +1,51 @@
+.nivoSlider {
+	margin:30px 30px 60px 30px;
+	-moz-box-shadow:0px 0px 10px #333;
+	-webkit-box-shadow:0px 0px 10px #333;
+	box-shadow:0px 0px 10px #333;
+}
+
+.nivo-directionNav a {
+	position: static; /* Override default style */
+	opacity: 1;  /* Override default style */
+	z-index: 0;  /* Override default style */
+	display:block;
+	width:32px;
+	height:34px;
+	background:url(images/arrows.png) no-repeat;
+	text-indent:-9999px;
+	border:0;
+}
+
+a.nivo-nextNav {
+	background-position:-32px 0;
+	right:10px;
+}
+
+a.nivo-prevNav {
+	left:10px;
+}
+
+.nivo-controlNav {
+  position:absolute;
+  left:47%;
+  bottom:-30px;
+}
+
+.nivo-controlNav a {
+	position: static;  /* Override default style */
+	z-index: 0;  /* Override default style */
+	cursor: auto;  /* Override default style */
+	display:block;
+	width:10px;
+	height:10px;
+	background:url(images/bullets.png) no-repeat;
+	text-indent:-9999px;
+	border:0;
+	margin-right:3px;
+	float:left;
+}
+
+.nivo-controlNav a.active {
+	background-position:-10px 0;
+}
