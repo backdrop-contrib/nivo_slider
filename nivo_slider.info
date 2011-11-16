@@ -1,10 +1,6 @@
 name = Nivo Slider
-description = Provides a nivo slider views display plugin.
-package = Views
-core = 6.x
-dependencies[] = views
-dependencies[] = jquery_update
+description = Provides a user interface for building a rotating banner powered by the Nivo jQuery Image Slider.
+core = 7.x
+
+dependencies[] = block
 dependencies[] = libraries
-version = "6.x-1.x-dev"
-core = "6.x"
-project = "nivo_slider"

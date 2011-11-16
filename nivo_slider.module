@@ -1,46 +1,162 @@
 <?php
 /**
- * Implementation of hook_views_api().
+ * @file
+ * Primarily Drupal hooks.
  */
-function nivo_slider_views_api() {
-  return array('api' => 2);
+
+// Include the banner generation functions
+include_once('banners.inc');
+
+/**
+ * Implements hook_permission().
+ */
+function nivo_slider_permission() {
+  return array(
+    'administer nivo slider' => array(
+      'title' => t('Administer Nivo Slider'),
+      'description' => t('Allows a user to configure Nivo Slider.'),
+    ),
+  );
 }
 
 /**
- * Template function for nivo_slider
- *
- * @param array $vars
- *  Array of template variables.
+ * Implements hook_menu().
  */
-function template_preprocess_views_view_nivo_slider(&$vars) {
-  drupal_add_css(libraries_get_path('nivoslider') .'/nivo-slider.css');
-  drupal_add_css(drupal_get_path('module', 'nivo_slider') .'/nivo_slider.css');
-  drupal_add_js(libraries_get_path('nivoslider') .'/jquery.nivo.slider.pack.js');
-  
-  // Get the view
-  $view = $vars['view'];
-
-  // Get options from view
-  $options = $view->style_plugin->options;
-
-  // Create a tpl var for our view tpl
-  $vars['nivo_slider_id']                = 'nivo-slider-'. $view->name .'-'. $view->current_display;
-
-  // Process the options we want
-  $view_settings['effect']               = check_plain($options['effect']);
-  $view_settings['slices']               = check_plain($options['slices']);
-  $view_settings['animSpeed']            = check_plain($options['animSpeed']) * 1000;
-  $view_settings['pauseTime']            = check_plain($options['pauseTime']) * 1000;
-  $view_settings['directionNav']         = check_plain($options['directionNav']);
-  $view_settings['directionNavHide']     = check_plain($options['directionNavHide']);
-  $view_settings['controlNav']           = check_plain($options['controlNav']);
-  $view_settings['pauseOnHover']         = check_plain($options['pauseOnHover']);
-
-  // Wrap everything up and display client side
-  drupal_add_js(array('nivo_slider' => array($vars['nivo_slider_id'] => $view_settings)), 'setting');
-
-  // Initiate slider with vars from view
-  drupal_add_js(drupal_get_path('module', 'nivo_slider') .'/nivo_slider.js');
+function nivo_slider_menu() {
+  $items['admin/structure/nivo-slider'] = array(
+    'title' => 'Nivo Slider',
+    'description' => 'Configure slider content and options.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('nivo_slider_slide_configuration_form'),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_slides.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['admin/structure/nivo-slider/slides'] = array(
+    'title' => 'Slides',
+    'description' => 'Configure slider content.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('nivo_slider_slide_configuration_form'),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_slides.admin.inc',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 1,
+  );
+  $items['admin/structure/nivo-slider/options'] = array(
+    'title' => 'Options',
+    'description' => 'Configure slider options.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('nivo_slider_option_configuration_form'),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_options.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2,
+  );
+  return $items;
 }
 
+/**
+ * Implements hook_help().
+ */
+function nivo_slider_help($path, $arg) {
+  switch ($path) {
+    case 'admin/structure/nivo-slider':
+      $output = '';
+      $output .= '<p>' . t('Configure slider content.') . '</p>';
+      return $output;
+    case 'admin/structure/nivo-slider/slides':
+      $output = '';
+      $output .= '<p>' . t('Configure slider content.') . '</p>';
+      return $output;
+    case 'admin/structure/nivo-slider/option':
+      $output = '';
+      $output .= '<p>' . t('Configure slider options.') . '</p>';
+      return $output;
+  }
+}
 
+/**
+ * Implements hook_image_default_styles().
+ */
+function nivo_slider_image_default_styles() {
+  $styles = array();
+
+  $styles['nivo_slider_slide'] = array(
+    'effects' => array(
+      array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 980,
+          'height' => 185,
+          'upscale' => 1,
+        ),
+        'weight' => 0,
+      ),
+    ),
+  );
+  return $styles;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function nivo_slider_block_info() {
+  $blocks['nivo_slider'] = array(
+    'info' => t('Nivo Slider'),
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function nivo_slider_block_view($delta = '') {
+  switch ($delta) {
+    case 'nivo_slider':
+      // Get paths to required resources
+      $library_path = libraries_get_path('nivo-slider');
+      $module_path = drupal_get_path('module', 'nivo_slider');
+
+      // Include required resources
+      if ($library_path) {
+        // Module
+        drupal_add_css($library_path. '/css/nivo-slider.css');
+        drupal_add_js($library_path . '/jquery.nivo.slider.pack.js');
+
+        // Slider
+        drupal_add_css($module_path. '/css/nivo_slider.css');
+        drupal_add_js($module_path . '/js/nivo_slider.js');
+
+        // Settings
+        drupal_add_js(array(
+          'nivo_slider' => array(
+            'effect' => variable_get('nivo_slider_effect', 'random'),
+            'slices' => variable_get('nivo_slider_slices', 15),
+            'boxCols' => variable_get('nivo_slider_box_columns', 8),
+            'boxRows' => variable_get('nivo_slider_box_rows', 4),
+            'animSpeed' => variable_get('nivo_slider_animation_speed', 500),
+            'pauseTime' => variable_get('nivo_slider_pause_time', 3000),
+            'startSlide' => variable_get('nivo_slider_start_slide', 0),
+            'directionNav' => variable_get('nivo_slider_directional_navigation', TRUE),
+            'directionNavHide' => variable_get('nivo_slider_directional_navigation_hide', TRUE),
+            'controlNav' => variable_get('nivo_slider_control_navigation', TRUE),
+            'keyboardNav' => variable_get('nivo_slider_keyboard_navigation', TRUE),
+            'pauseOnHover' => variable_get('nivo_slider_pause_on_hover', TRUE),
+            'manualAdvance' => variable_get('nivo_slider_manual_advance', FALSE),
+            'captionOpacity' => variable_get('nivo_slider_caption_opacity', 0.8),
+            'prevText' => variable_get('nivo_slider_previous_text', t('Prev')),
+            'nextText' => variable_get('nivo_slider_next_text', t('Next')),
+            'randomStart' => variable_get('nivo_slider_random_start', FALSE),
+            )
+          ),
+          'setting'
+        );
+      }
+
+      // Get banners
+      $banners = nivo_slider_show_banners();
+      $block['content'] = nivo_slider_banners_markup($banners);
+      break;
+  }
+  return $block;
+}

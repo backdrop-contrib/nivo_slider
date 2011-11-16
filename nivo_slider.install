@@ -1,0 +1,111 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the Nivo Slider module.
+ */
+
+// Include the banner generation functions
+include_once('banners.inc');
+include_once('nivo_slider.admin.inc');
+ 
+/**
+ * Implements hook_install().
+ */
+function nivo_slider_install() {
+  $settings = array(
+    1 => array(
+      'image_path' => 'images/1.jpg',
+      'image_title' => 'Title for image 1',
+      'image_description' => 'Description for image 1',
+      'image_published' => 'TRUE',
+      'image_weight' => 1,
+      'image_published' => TRUE,
+    ),
+    2 => array(
+      'image_path' => 'images/2.jpg',
+      'image_title' => 'Title for image 2',
+      'image_description' => 'Description for image 2',
+      'image_published' => 'TRUE',
+      'image_weight' => 2,
+      'image_published' => TRUE,
+    ),
+    3 => array(
+      'image_path' => 'images/3.jpg',
+      'image_title' => 'Title for image 3',
+      'image_description' => 'Description for image 3',
+      'image_published' => 'TRUE',
+      'image_weight' => 3,
+      'image_published' => TRUE,
+    ),
+    4 => array(
+      'image_path' => 'images/4.jpg',
+      'image_title' => 'Title for image 4',
+      'image_description' => 'Description for image 4',
+      'image_published' => 'TRUE',
+      'image_weight' => 4,
+      'image_published' => TRUE,
+    ),
+    5 => array(
+      'image_path' => 'images/5.jpg',
+      'image_title' => 'Title for image 5',
+      'image_description' => 'Description for image 5',
+      'image_published' => 'TRUE',
+      'image_weight' => 5,
+      'image_published' => TRUE,
+    ),
+    6 => array(
+      'image_path' => 'images/6.jpg',
+      'image_title' => 'Title for image 6',
+      'image_description' => 'Description for image 6',
+      'image_published' => 'TRUE',
+      'image_weight' => 6,
+      'image_published' => TRUE,
+    ),
+  );
+
+  // Default data
+  $file = new stdClass;
+  $banners = array();
+  // Source base for images
+  
+  $src_base_path = drupal_get_path('module', 'nivo_slider');
+  $default_banners = $settings;
+  
+  // Put all image as banners
+  foreach ($default_banners as $i => $data) {
+    $file->uri = $src_base_path . '/' . $data['image_path'];
+    $file->filename = $file->uri;
+
+    $banner = _nivo_slider_save_image($file);
+    unset($data['image_path']);
+    $banner = array_merge($banner, $data);
+    $banners[$i] = $banner;
+  }
+
+  // Save banner data
+  nivo_slider_set_banners($banners);
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function nivo_slider_uninstall() {
+  variable_del('nivo_slider_banner_settings');
+}
+
+/**
+ * Implements hook_enable().
+ */
+function nivo_slider_enable() {
+  $styles = image_styles();
+  foreach ($styles as $style) {
+    image_style_flush($style);
+  }
+}
+
+/**
+ * Implements hook_disable().
+ */
+function nivo_slider_disable() {
+  nivo_slider_enable();
+}
