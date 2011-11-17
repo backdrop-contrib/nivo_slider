@@ -19,10 +19,10 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
     '#type' => 'radios',
     '#title' => t('Random start'),
     '#options' => array(
-      TRUE => t('True'),
-      FALSE => t('False'),
+      'true' => t('True'),
+      'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_random_start', FALSE),
+    '#default_value' => variable_get('nivo_slider_random_start', 'true'),
     '#description' => t('Start on a random slide.'),
   );
   $form['nivo_slider_caption_opacity'] = array(
@@ -101,20 +101,20 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
     '#type' => 'radios',
     '#title' => t('Directional navigation'),
     '#options' => array(
-      TRUE => t('True'),
-      FALSE => t('False'),
+      'true' => t('True'),
+      'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_directional_navigation', TRUE),
+    '#default_value' => variable_get('nivo_slider_directional_navigation', 'true'),
     '#description' => t('Next & Prev navigation.'),
   );
   $form['navigation']['nivo_slider_directional_navigation_hide'] = array(
     '#type' => 'radios',
     '#title' => t('Directional navigation hide'),
     '#options' => array(
-      TRUE => t('True'),
-      FALSE => t('False'),
+      'true' => t('True'),
+      'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_directional_navigation_hide', TRUE),
+    '#default_value' => variable_get('nivo_slider_directional_navigation_hide', 'true'),
     '#description' => t('Only show on hover.'),
     '#states' => array(
       'visible' => array(
@@ -126,40 +126,40 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
     '#type' => 'radios',
     '#title' => t('Control navigation'),
     '#options' => array(
-      TRUE => t('True'),
-      FALSE => t('False'),
+      'true' => t('True'),
+      'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_control_navigation', TRUE),
+    '#default_value' => variable_get('nivo_slider_control_navigation', 'true'),
     '#description' => t('1, 2, 3 navigation.'),
   );
   $form['navigation']['nivo_slider_keyboard_navigation'] = array(
     '#type' => 'radios',
     '#title' => t('Keyboard navigation'),
     '#options' => array(
-      TRUE => t('True'),
-      FALSE => t('False'),
+      'true' => t('True'),
+      'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_keyboard_navigation', TRUE),
+    '#default_value' => variable_get('nivo_slider_keyboard_navigation', 'true'),
     '#description' => t('Use left & right arrows.'),
   );
   $form['navigation']['nivo_slider_pause_on_hover'] = array(
     '#type' => 'radios',
     '#title' => t('Pause on hover'),
     '#options' => array(
-      TRUE => t('True'),
-      FALSE => t('False'),
+      'true' => t('True'),
+      'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_pause_on_hover', TRUE),
+    '#default_value' => variable_get('nivo_slider_pause_on_hover', 'true'),
     '#description' => t('Stop animation while hovering.'),
   );
   $form['navigation']['nivo_slider_manual_advance'] = array(
     '#type' => 'radios',
     '#title' => t('Manual advance'),
     '#options' => array(
-      TRUE => t('True'),
-      FALSE => t('False'),
+      'true' => t('True'),
+      'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_manual_advance', FALSE),
+    '#default_value' => variable_get('nivo_slider_manual_advance', 'true'),
     '#description' => t('Force manual transitions.'),
   );
   $form['navigation']['nivo_slider_previous_text'] = array(
