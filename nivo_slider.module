@@ -119,11 +119,11 @@ function nivo_slider_block_view($delta = '') {
 
       // Include required resources
       if ($library_path) {
-        // Module
-        drupal_add_css($library_path. '/css/nivo-slider.css');
+        // Slider
+        drupal_add_css($library_path. '/nivo-slider.css');
         drupal_add_js($library_path . '/jquery.nivo.slider.pack.js');
 
-        // Slider
+        // Module
         drupal_add_css($module_path. '/css/nivo_slider.css');
         drupal_add_js($module_path . '/js/nivo_slider.js');
 
