@@ -86,7 +86,7 @@ function nivo_slider_image_default_styles() {
       array(
         'name' => 'image_scale_and_crop',
         'data' => array(
-          'width' => 980,
+          'width' => 940,
           'height' => 185,
           'upscale' => 1,
         ),
@@ -191,19 +191,19 @@ function nivo_slider_block_view($delta = '') {
       drupal_add_js(array(
         'nivo_slider' => array(
           'effect' => variable_get('nivo_slider_effect', 'random'),
-          'slices' => variable_get('nivo_slider_slices', 15),
-          'boxCols' => variable_get('nivo_slider_box_columns', 8),
-          'boxRows' => variable_get('nivo_slider_box_rows', 4),
-          'animSpeed' => variable_get('nivo_slider_animation_speed', 500),
-          'pauseTime' => variable_get('nivo_slider_pause_time', 3000),
-          'startSlide' => variable_get('nivo_slider_start_slide', 0),
+          'slices' => variable_get('nivo_slider_slices', '15'),
+          'boxCols' => variable_get('nivo_slider_box_columns', '8'),
+          'boxRows' => variable_get('nivo_slider_box_rows', '4'),
+          'animSpeed' => variable_get('nivo_slider_animation_speed', '500'),
+          'pauseTime' => variable_get('nivo_slider_pause_time', '3000'),
+          'startSlide' => variable_get('nivo_slider_start_slide', '0'),
           'directionNav' => variable_get('nivo_slider_directional_navigation', 'true') == 'true' ? TRUE : FALSE,
           'directionNavHide' => variable_get('nivo_slider_directional_navigation_hide', 'true') == 'true' ? TRUE : FALSE,
           'controlNav' => variable_get('nivo_slider_control_navigation', 'true') == 'true' ? TRUE : FALSE,
           'keyboardNav' => variable_get('nivo_slider_keyboard_navigation', 'true') == 'true' ? TRUE : FALSE,
           'pauseOnHover' => variable_get('nivo_slider_pause_on_hover', 'true') == 'true' ? TRUE : FALSE,
           'manualAdvance' => variable_get('nivo_slider_manual_advance', 'false') == 'true' ? TRUE : FALSE,
-          'captionOpacity' => variable_get('nivo_slider_caption_opacity', 0.8),
+          'captionOpacity' => variable_get('nivo_slider_caption_opacity', '0.8'),
           'prevText' => variable_get('nivo_slider_previous_text', t('Prev')),
           'nextText' => variable_get('nivo_slider_next_text', t('Next')),
           'randomStart' => variable_get('nivo_slider_random_start', 'false') == 'true' ? TRUE : FALSE,
@@ -216,7 +216,7 @@ function nivo_slider_block_view($delta = '') {
       $banners = nivo_slider_show_banners();
 
       $output = '';
-      $output .= '<div class="slider-wrapper theme-' . variable_get('nivo_slider_theme', $available_themes) . '">';
+      $output .= '<div class="slider-wrapper theme-' . variable_get('nivo_slider_theme', 'default') . '">';
         $output .= '<div id="slider" class="nivoSlider">';
           $output .= nivo_slider_banners_markup($banners);
         $output .= '</div>';

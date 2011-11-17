@@ -31,7 +31,7 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
   $form['nivo_slider_start_slide'] = array(
     '#type' => 'textfield',
     '#title' => t('Start slide'),
-    '#default_value' => variable_get('nivo_slider_start_slide', 0),
+    '#default_value' => variable_get('nivo_slider_start_slide', '0'),
     '#description' => t(''),
   );
   $form['nivo_slider_random_start'] = array(
@@ -47,7 +47,7 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
   $form['nivo_slider_caption_opacity'] = array(
     '#type' => 'textfield',
     '#title' => t('Opacity'),
-    '#default_value' => variable_get('nivo_slider_caption_opacity', 0.8),
+    '#default_value' => variable_get('nivo_slider_caption_opacity', '0.8'),
     '#description' => t('Universal caption opacity.'),
   );
   $form['effect'] = array(
@@ -83,31 +83,31 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
   $form['effect']['nivo_slider_slices'] = array(
     '#type' => 'textfield',
     '#title' => t('Slices'),
-    '#default_value' => variable_get('nivo_slider_slices', 15),
+    '#default_value' => variable_get('nivo_slider_slices', '15'),
     '#description' => t('For slice animations.'),
   );
   $form['effect']['nivo_slider_box_columns'] = array(
     '#type' => 'textfield',
     '#title' => t('Box columns'),
-    '#default_value' => variable_get('nivo_slider_box_columns', 8),
+    '#default_value' => variable_get('nivo_slider_box_columns', '8'),
     '#description' => t('For box animations.'),
   );
   $form['effect']['nivo_slider_box_rows'] = array(
     '#type' => 'textfield',
     '#title' => t('Box rows'),
-    '#default_value' => variable_get('nivo_slider_box_rows', 4),
+    '#default_value' => variable_get('nivo_slider_box_rows', '4'),
     '#description' => t('For box animations.'),
   );
   $form['effect']['nivo_slider_animation_speed'] = array(
     '#type' => 'textfield',
     '#title' => t('Animation speed'),
-    '#default_value' => variable_get('nivo_slider_animation_speed', 500),
+    '#default_value' => variable_get('nivo_slider_animation_speed', '500'),
     '#description' => t('Slide transition speed.'),
   );
   $form['effect']['nivo_slider_pause_time'] = array(
     '#type' => 'textfield',
     '#title' => t('Pause Time'),
-    '#default_value' => variable_get('nivo_slider_pause_time', 3000),
+    '#default_value' => variable_get('nivo_slider_pause_time', '3000'),
     '#description' => t('How long each slide will show.'),
   );
   $form['navigation'] = array(
@@ -137,7 +137,7 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
     '#description' => t('Only show on hover.'),
     '#states' => array(
       'visible' => array(
-        ':input[name="nivo_slider_directional_navigation"]' => array('value' => 1),
+        ':input[name="nivo_slider_directional_navigation"]' => array('value' => '1'),
       ),
     ),
   );
@@ -178,7 +178,7 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
       'true' => t('True'),
       'false' => t('False'),
     ),
-    '#default_value' => variable_get('nivo_slider_manual_advance', 'true'),
+    '#default_value' => variable_get('nivo_slider_manual_advance', 'false'),
     '#description' => t('Force manual transitions.'),
   );
   $form['navigation']['nivo_slider_previous_text'] = array(
