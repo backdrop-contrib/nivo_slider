@@ -1,6 +1,6 @@
 (function ($) {
   $(window).load(function() {
-    $('#block-nivo-slider-nivo-slider .content').nivoSlider({
+    $('#block-nivo-slider-nivo-slider .content #slider').nivoSlider({
         effect: Drupal.settings.nivo_slider.effect, // Specify sets like: 'fold,fade,sliceDown'
         slices: Drupal.settings.nivo_slider.slices, // For slice animations
         boxCols: Drupal.settings.nivo_slider.boxCols, // For box animations

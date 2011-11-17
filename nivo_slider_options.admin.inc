@@ -8,6 +8,25 @@
  * Implements hook_form().
  */
 function nivo_slider_option_configuration_form($form, &$form_state) {
+  // Create a list of the currently available themes
+  $themes = module_invoke_all('nivo_slider_theme');
+  $available_themes = array();
+
+  foreach ($themes as $i => $theme) {
+    if (file_exists($theme['path']['css'] . $i . '.css')) {
+      $available_themes[$i] = $theme['name'];
+    }
+  }
+
+  // Theme
+  $form['nivo_slider_theme'] = array(
+    '#type' => 'select',
+    '#title' => t('Styles'),
+    '#options' => $available_themes,
+    '#default_value' => variable_get('nivo_slider_theme', 'default'),
+    '#description' => t('Available themes.'),
+  );
+
   // Options
   $form['nivo_slider_start_slide'] = array(
     '#type' => 'textfield',
