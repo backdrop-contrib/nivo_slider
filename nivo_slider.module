@@ -8,6 +8,33 @@
 include_once('banners.inc');
 
 /**
+ * Implements hook_requirements().
+ */
+function nivo_slider_requirements($phase) {
+  $requirements = array();
+  if ($phase == 'runtime') {
+    // The Nivo Slider jQuery plugin library is available
+    if (file_exists(libraries_get_path('nivo-slider'))) {
+      $requirements['nivo_slider_library'] = array(
+        'title' => t('Nivo Slider jQuery plugin'),
+        'value' => t('Available'),
+        'severity' => REQUIREMENT_OK,
+      );
+    }
+    // The Nivo Slider jQuery plugin library is unavailable
+    else {
+      $requirements['nivo_slider_library'] = array(
+        'title' => t('Nivo Slider jQuery plugin'),
+        'value' => t('Unavailable'),
+        'description' => t('The Nivo Slider jQuery plugin is missing. Download the latest version of the Nivo Slider jQuery plugin and extract it to %sites/all or %sites/sitename.', array('%sites/all' => 'sites/all/libraries', '%sites/sitename' => 'sites/sitename/libraries')),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+  return $requirements;
+}
+
+/**
  * Implements hook_permission().
  */
 function nivo_slider_permission() {
