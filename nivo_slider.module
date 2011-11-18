@@ -134,22 +134,28 @@ function nivo_slider_nivo_slider_theme() {
     'default' => array(
       'name' => t('Default'),
       'description' => t('The default Nivo Slider theme.'),
-      'path' => array(
-        'css' => $library_path . '/themes/default/',
+      'resources' => array(
+        'css' => array (
+          $library_path . '/themes/default/default.css',
+        ),
       ),
     ),
     'orman' => array(
       'name' => t('Orman'),
       'description' => t('Description of Orman style.'),
-      'path' => array(
-        'css' => $library_path . '/themes/orman/',
+      'resources' => array(
+        'css' => array (
+          $library_path . '/themes/orman/orman.css',
+        ),
       ),
     ),
     'pascal' => array(
       'name' => t('Pascal'),
       'description' => t('Description of Orman style.'),
-      'path' => array(
-        'css' => $library_path . '/themes/pascal/',
+      'resources' => array(
+        'css' => array (
+          $library_path . '/themes/pascal/pascal.css',
+        ),
       ),
     ),
   );
@@ -171,50 +177,70 @@ function nivo_slider_block_info() {
 function nivo_slider_block_view($delta = '') {
   switch ($delta) {
     case 'nivo_slider':
-      $themes = module_invoke_all('nivo_slider_theme');
-      $available_themes = array();
-
-      // Create a list of the currently available themes and their properties
-      foreach ($themes as $i => $theme) {
-        if (file_exists($theme['path']['css'] . $i . '.css')) {
-          $available_themes[$i]['name'] = $theme['name'];
-          $available_themes[$i]['description'] = $theme['description'];
-          $available_themes[$i]['path']['css'] = $theme['path']['css'];
-          $available_themes[$i]['path']['js'] = $theme['path']['js'];
-        }
-      }
-
-      // Add slider resources
-      $library_path = libraries_get_path('nivo-slider');
-      $current_theme = variable_get('nivo_slider_theme', 'default');
-
-      // CSS
-      // If the theme specifies a CSS file, include it in addition to the default CSS file
-      drupal_add_css($library_path . '/nivo-slider.css');
-
-      $theme_css = $available_themes[$current_theme]['path']['css'] . $current_theme . '.css';
-      if (file_exists($theme_css)) {
-        drupal_add_css($theme_css);
-      }
-
-      // JS
-      // If a theme specifies a JS file, include it instead of the default JS file
-      $theme_js = $available_themes[$current_theme]['path']['js'] . $current_theme . '.js';
-
-      if (file_exists($theme_js)) {
-        drupal_add_js($theme_js);
-      }
-      else {
-        drupal_add_js($library_path . '/jquery.nivo.slider.pack.js');
-      }
-
-      // Add module resources
+      // Add the Nivo Slider module's resources
       $module_path = drupal_get_path('module', 'nivo_slider');
 
       drupal_add_css($module_path . '/css/nivo_slider.css');
       drupal_add_js($module_path . '/js/nivo_slider.js');
 
-      // Settings
+      $themes = module_invoke_all('nivo_slider_theme'); // Collect all themes
+      $available_themes = array();
+
+      // Create a list of the currently available themes and their properties
+      foreach ($themes as $theme => $properties) {
+        // Name
+        $available_themes[$theme]['name'] = $properties['name'];
+
+        // Description
+        $available_themes[$theme]['description'] = $properties['description'];
+
+        // Override
+        $available_themes[$theme]['override'] = $properties['override'];
+        $available_themes[$theme]['override']['css'] = $properties['override']['css'];
+        $available_themes[$theme]['override']['js'] = $properties['override']['js'];
+
+        // Resources
+        $available_themes[$theme]['resources'] = $properties['resources'];
+
+        $i = 0;
+        $available_themes[$theme]['resources']['css'] = $properties['resources']['css'];
+        foreach ($available_themes[$theme]['resources']['css'] as $file) {
+          $available_themes[$theme]['resources']['css'][$i] = $file;
+          $i++;
+        }
+
+        $i = 0;
+        $available_themes[$theme]['resources']['js'] = $properties['resources']['js'];
+        foreach ($available_themes[$theme]['resources']['js'] as $file) {
+          $available_themes[$theme]['resources']['js'][$i] = $file;
+          $i++;
+        }
+      }
+
+      $current_theme = variable_get('nivo_slider_theme', 'default'); // Current theme
+
+      // Add slider resources
+      $library_path = libraries_get_path('nivo-slider');
+
+      // Add the Nivo Slider jQuery plugin's resources
+      if (!isset($available_themes[$current_theme]['override']['css']) || $available_themes[$current_theme]['override']['css'] == FALSE) {
+        drupal_add_css($library_path . '/nivo-slider.css');
+      }
+
+      if (!isset($available_themes[$current_theme]['override']['js']) || $available_themes[$current_theme]['override']['js'] == FALSE) {
+        drupal_add_js($library_path . '/jquery.nivo.slider.pack.js');
+      }
+
+      // Add the theme's resources
+      foreach ($available_themes[$current_theme]['resources']['css'] as $index => $file_path) {
+        drupal_add_css($available_themes[$current_theme]['resources']['css'][$index]);
+      }
+
+      foreach ($available_themes[$current_theme]['resources']['js'] as $index => $file_path) {
+        drupal_add_js($available_themes[$current_theme]['resources']['js'][$index]);
+      }
+
+      // Pass the current slider settings to JavaScript
       drupal_add_js(array(
         'nivo_slider' => array(
           'effect' => check_plain(variable_get('nivo_slider_effect', 'random')),

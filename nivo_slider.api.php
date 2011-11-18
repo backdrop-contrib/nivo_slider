@@ -4,12 +4,22 @@
  */
 function hook_nivo_slider_theme() {
   return array(
-    'theme' => array(
+    'theme_name' => array(
       'name' => t('Theme name'), // Human readable theme name
       'description' => t('Theme description.'), // Description of the theme
-      'path' => array(
-        'css' => drupal_get_path('module', 'my_module') . '/css/', // The path (including a trailing slash) to the theme's stylesheet location
-        'js' => drupal_get_path('module', 'my_module') . '/js/', // The path (including a trailing slash) to the theme's javascript location
+      'override' => array(
+        'css' => FALSE, // Override the default Nivo Slider jQuery plugin cascading style sheet
+        'js' => FALSE, // Override the default Nivo Slider jQuery plugin javascript
+      ),
+      'resources' => array(
+        'css' => array (
+          drupal_get_path('module', 'module_name') . '/css/example.css', // Full path to a CSS file to include with the theme
+          drupal_get_path('module', 'module_name') . '/css/demonstration.css',
+        ),
+        'js' => array (
+          drupal_get_path('module', 'module_name') . '/js/example.css', // Full path to a JS file to include with the theme
+          drupal_get_path('module', 'module_name') . '/js/demonstration.css',
+        ),
       ),
     )
   );

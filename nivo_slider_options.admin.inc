@@ -12,10 +12,8 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
   $themes = module_invoke_all('nivo_slider_theme');
   $available_themes = array();
 
-  foreach ($themes as $i => $theme) {
-    if (file_exists($theme['path']['css'] . $i . '.css')) {
-      $available_themes[$i] = $theme['name'];
-    }
+  foreach ($themes as $theme => $properties) {
+    $available_themes[$theme] = $properties['name'];
   }
 
   // Theme
