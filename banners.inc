@@ -71,12 +71,12 @@ function nivo_slider_banner_markup($banners) {
   foreach ($banners as $i => $banner) {
     $variables = array(
       'style_name' => 'nivo_slider_slide',
-      'path' => $banner['image_path'],
+      'path' => check_plain($banner['image_path']),
       'title' => t('@image_desc', array('@image_desc' => $banner['image_description'])),
       'alt' => t('@image_title', array('@image_title' => $banner['image_title'])),
       'attributes' => array(
-        'class' => 'slide' . ($i != 0 ? ' nivo_slider-hide-no-js' : ''), // hide all the slides except #1
-        'id' => 'slide-number-' . $i
+        'class' => 'slide' . $i,
+        'id' => 'slide-number-' . $i,
       ),
     );
     // Draw image
@@ -107,7 +107,7 @@ function nivo_slider_show_banners() {
   // Check visibility for each banner
   foreach ($banners as $banner) {
     // Pages
-    $pages = drupal_strtolower($banner['image_visibility']);
+    $pages = check_plain(drupal_strtolower($banner['image_visibility']));
 
     // Check path for alias, and (if required) for path
     $page_match = drupal_match_path($path, $pages);
