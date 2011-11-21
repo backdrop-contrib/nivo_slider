@@ -95,7 +95,7 @@ function nivo_slider_help($path, $arg) {
       $output = '';
       $output .= '<p>' . t('Configure slider content.') . '</p>';
       return $output;
-    case 'admin/structure/nivo-slider/option':
+    case 'admin/structure/nivo-slider/options':
       $output = '';
       $output .= '<p>' . t('Configure slider options.') . '</p>';
       return $output;

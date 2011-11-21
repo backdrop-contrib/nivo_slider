@@ -175,23 +175,22 @@ function _nivo_slider_banner_form($image_data) {
     '#type' => 'textfield',
     '#title' => t('Title'),
     '#default_value' => $image_data['image_title'],
-    '#description' => t('Enter a title for the image. The title will be displayed on the banner slide and used as alternative text.'),
+    '#description' => t('The title is used as alternative text for the banner image.'),
   );
   $img_form['image_description'] = array(
     '#type' => 'textarea',
     '#title' => t('Description'),
     '#default_value' => $image_data['image_description'],
-    '#description' => t('Enter a description of the image. The description will be displayed on the banner slide and used as a rollover title.'),
+    '#description' => t('The description will be displayed with the banner image.'),
   );
   $img_form['image_url'] = array(
     '#type' => 'textfield',
-    '#title' => t('Url'),
+    '#title' => t('Link image to URL'),
     '#default_value' => $image_data['image_url'],
-    '#description' => t('Enter a url. If specified, the current image will be linked to the provided url.'),
   );
   $img_form['image_visibility'] = array(
     '#type' => 'textarea',
-    '#title' => t('Visibility'),
+    '#title' => t('Show image on specific pages'),
     '#description' => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
     '#default_value' => $image_data['image_visibility'],
   );
@@ -207,7 +206,7 @@ function _nivo_slider_banner_form($image_data) {
   );
   $img_form['image_delete'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Delete image.'),
+    '#title' => t('Delete image'),
     '#default_value' => FALSE,
   );
   return $img_form;
