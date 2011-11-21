@@ -103,6 +103,17 @@ function nivo_slider_help($path, $arg) {
 }
 
 /**
+ * Implements hook_theme().
+ */
+function nivo_slider_theme() {
+  return array(
+    'nivo_slider_wrapper' => array(
+      'template' => 'nivo-slider-wrapper'
+    ),
+  );
+}
+
+/**
  * Implements hook_image_default_styles().
  */
 function nivo_slider_image_default_styles() {
@@ -265,18 +276,16 @@ function nivo_slider_block_view($delta = '') {
         'setting'
       );
 
-      // Get banners
-      $banners = nivo_slider_show_banners();
-
-      $output = '';
-      $output .= '<div class="slider-wrapper theme-' . variable_get('nivo_slider_theme', 'default') . '">';
-        $output .= '<div id="slider" class="nivoSlider">';
-          $output .= nivo_slider_banners_markup($banners);
-        $output .= '</div>';
-      $output .= '</div>';
-      
-      $block['content'] = $output;
+      $block['content'] = theme('nivo_slider_wrapper', array());
       break;
   }
   return $block;
+}
+
+/**
+ * Implements template_preprocess_hook().
+ */
+function template_preprocess_nivo_slider_wrapper(&$variables) {
+  $variables['theme'] = variable_get('nivo_slider_theme', 'default');
+  $variables['banners'] = nivo_slider_banners_markup(nivo_slider_show_banners());
 }
