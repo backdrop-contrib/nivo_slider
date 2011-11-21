@@ -90,7 +90,28 @@ function nivo_slider_install() {
  * Implements hook_uninstall().
  */
 function nivo_slider_uninstall() {
+  // Banner
   variable_del('nivo_slider_banner_settings');
+
+  // Options
+  variable_del('nivo_slider_theme');
+  variable_del('nivo_slider_random_start');
+  variable_del('nivo_slider_start_slide');
+  variable_del('nivo_slider_caption_opacity');
+  variable_del('nivo_slider_effect');
+  variable_del('nivo_slider_slices');
+  variable_del('nivo_slider_box_columns');
+  variable_del('nivo_slider_box_rows');
+  variable_del('nivo_slider_animation_speed');
+  variable_del('nivo_slider_pause_on_hover');
+  variable_del('nivo_slider_directional_navigation');
+  variable_del('nivo_slider_next_text');
+  variable_del('nivo_slider_previous_text');
+  variable_del('nivo_slider_directional_navigation_hide');
+  variable_del('nivo_slider_control_navigation');
+  variable_del('nivo_slider_keyboard_navigation');
+  variable_del('nivo_slider_manual_advance');
+  variable_del('nivo_slider_pause_time');
 }
 
 /**
