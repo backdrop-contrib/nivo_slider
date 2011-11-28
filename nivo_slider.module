@@ -200,31 +200,47 @@ function nivo_slider_block_view($delta = '') {
       // Create a list of the currently available themes and their properties
       foreach ($themes as $theme => $properties) {
         // Name
-        $available_themes[$theme]['name'] = $properties['name'];
-
-        // Description
-        $available_themes[$theme]['description'] = $properties['description'];
-
-        // Override
-        $available_themes[$theme]['override'] = $properties['override'];
-        $available_themes[$theme]['override']['css'] = $properties['override']['css'];
-        $available_themes[$theme]['override']['js'] = $properties['override']['js'];
-
-        // Resources
-        $available_themes[$theme]['resources'] = $properties['resources'];
-
-        $i = 0;
-        $available_themes[$theme]['resources']['css'] = $properties['resources']['css'];
-        foreach ($available_themes[$theme]['resources']['css'] as $file) {
-          $available_themes[$theme]['resources']['css'][$i] = $file;
-          $i++;
+        if (isset($properties['name'])) {
+          $available_themes[$theme]['name'] = $properties['name'];
         }
 
-        $i = 0;
-        $available_themes[$theme]['resources']['js'] = $properties['resources']['js'];
-        foreach ($available_themes[$theme]['resources']['js'] as $file) {
-          $available_themes[$theme]['resources']['js'][$i] = $file;
-          $i++;
+        // Description
+        if (isset($properties['description'])) {
+          $available_themes[$theme]['description'] = $properties['description'];
+        }
+
+        // Override
+        if (isset($properties['override'])) {
+          $available_themes[$theme]['override'] = $properties['override'];
+          if (isset($properties['override']['css'])) {
+            $available_themes[$theme]['override']['css'] = $properties['override']['css'];
+          }
+          if (isset($properties['override']['js'])) {
+            $available_themes[$theme]['override']['js'] = $properties['override']['js'];
+          }
+        }
+
+        // Resources
+        if (isset($properties['resources'])) {
+          $available_themes[$theme]['resources'] = $properties['resources'];
+
+          if (isset($properties['resources']['css'])) {
+            $i = 0;
+            $available_themes[$theme]['resources']['css'] = $properties['resources']['css'];
+            foreach ($available_themes[$theme]['resources']['css'] as $file) {
+              $available_themes[$theme]['resources']['css'][$i] = $file;
+              $i++;
+            }
+          }
+
+          if (isset($properties['resources']['js'])) {
+            $i = 0;
+            $available_themes[$theme]['resources']['js'] = $properties['resources']['js'];
+            foreach ($available_themes[$theme]['resources']['js'] as $file) {
+              $available_themes[$theme]['resources']['js'][$i] = $file;
+              $i++;
+            }
+          }
         }
       }
 
@@ -243,12 +259,16 @@ function nivo_slider_block_view($delta = '') {
       }
 
       // Add the theme's resources
-      foreach ($available_themes[$current_theme]['resources']['css'] as $index => $file_path) {
-        drupal_add_css($available_themes[$current_theme]['resources']['css'][$index]);
+      if (isset($available_themes[$current_theme]['resources']['css'])) {
+        foreach ($available_themes[$current_theme]['resources']['css'] as $index => $file_path) {
+          drupal_add_css($available_themes[$current_theme]['resources']['css'][$index]);
+        }
       }
 
-      foreach ($available_themes[$current_theme]['resources']['js'] as $index => $file_path) {
-        drupal_add_js($available_themes[$current_theme]['resources']['js'][$index]);
+      if (isset($available_themes[$current_theme]['resources']['js'])) {
+        foreach ($available_themes[$current_theme]['resources']['js'] as $index => $file_path) {
+          drupal_add_js($available_themes[$current_theme]['resources']['js'][$index]);
+        }
       }
 
       // Pass the current slider settings to JavaScript
