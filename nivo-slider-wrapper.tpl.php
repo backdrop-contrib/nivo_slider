@@ -16,6 +16,7 @@
  */
 ?>
 <div class="slider-wrapper theme-<?php print $theme; ?>">
+  <div class="ribbon"></div>
   <div id="slider" class="nivoSlider">
     <?php print $banners; ?>
   </div>
