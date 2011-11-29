@@ -109,6 +109,7 @@ function nivo_slider_uninstall() {
   variable_del('nivo_slider_previous_text');
   variable_del('nivo_slider_directional_navigation_hide');
   variable_del('nivo_slider_control_navigation');
+  variable_del('nivo_slider_control_nav_thumbs');
   variable_del('nivo_slider_keyboard_navigation');
   variable_del('nivo_slider_manual_advance');
   variable_del('nivo_slider_pause_time');

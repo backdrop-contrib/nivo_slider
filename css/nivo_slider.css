@@ -1,0 +1,15 @@
+.nivoSlider {
+  position: relative;
+}
+
+.nivoSlider img {
+  display: none;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+}
+
+.nivoSlider a {
+  border: 0;
+  display: block;
+}

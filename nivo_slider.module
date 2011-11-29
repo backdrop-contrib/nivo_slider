@@ -98,6 +98,7 @@ function nivo_slider_help($path, $arg) {
     case 'admin/structure/nivo-slider/options':
       $output = '';
       $output .= '<p>' . t('Configure slider options.') . '</p>';
+      $output .= '<p>' . t('Slider images are controlled by image styles. Resize or apply effects to slide or thumbnail images on the <a href="@styles">image styles</a> page.', array('@styles' => '/admin/config/media/image-styles')) . '</p>';
       return $output;
   }
 }
@@ -126,6 +127,19 @@ function nivo_slider_image_default_styles() {
         'data' => array(
           'width' => 940,
           'height' => 185,
+          'upscale' => 1,
+        ),
+        'weight' => 0,
+      ),
+    ),
+  );
+  $styles['nivo_slider_thumbnail'] = array(
+    'effects' => array(
+      array(
+        'name' => 'image_scale_and_crop',
+        'data' => array(
+          'width' => 40,
+          'height' => 40,
           'upscale' => 1,
         ),
         'weight' => 0,
@@ -244,6 +258,7 @@ function nivo_slider_block_view($delta = '') {
         }
       }
 
+      // The theme currently in use
       $current_theme = variable_get('nivo_slider_theme', 'default'); // Current theme
 
       // Add slider resources
@@ -284,6 +299,7 @@ function nivo_slider_block_view($delta = '') {
           'directionNav' => check_plain(variable_get('nivo_slider_directional_navigation', 'true')) == 'true' ? TRUE : FALSE,
           'directionNavHide' => check_plain(variable_get('nivo_slider_directional_navigation_hide', 'true')) == 'true' ? TRUE : FALSE,
           'controlNav' => check_plain(variable_get('nivo_slider_control_navigation', 'true')) == 'true' ? TRUE : FALSE,
+          'controlNavThumbs' => check_plain(variable_get('nivo_slider_control_nav_thumbs', 'false')) == 'true' ? TRUE : FALSE,
           'keyboardNav' => check_plain(variable_get('nivo_slider_keyboard_navigation', 'true')) == 'true' ? TRUE : FALSE,
           'pauseOnHover' => check_plain(variable_get('nivo_slider_pause_on_hover', 'true')) == 'true' ? TRUE : FALSE,
           'manualAdvance' => check_plain(variable_get('nivo_slider_manual_advance', 'false')) == 'true' ? TRUE : FALSE,

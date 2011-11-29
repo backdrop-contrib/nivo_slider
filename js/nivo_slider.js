@@ -11,6 +11,8 @@
         directionNav: Drupal.settings.nivo_slider.directionNav, // Next & Prev navigation
         directionNavHide: Drupal.settings.nivo_slider.directionNavHide, // Only show on hover
         controlNav: Drupal.settings.nivo_slider.controlNav, // 1,2,3... navigation
+        controlNavThumbs: Drupal.settings.nivo_slider.controlNavThumbs, // Use thumbnails for Control Nav
+        controlNavThumbsFromRel: true, // Use image rel for thumbs
         keyboardNav: Drupal.settings.nivo_slider.keyboardNav, // Use left & right arrows
         pauseOnHover: Drupal.settings.nivo_slider.pauseOnHover, // Stop animation while hovering
         manualAdvance: Drupal.settings.nivo_slider.manualAdvance, // Force manual transitions

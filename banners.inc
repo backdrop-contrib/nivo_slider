@@ -77,6 +77,7 @@ function nivo_slider_banner_markup($banners) {
       'attributes' => array(
         'class' => 'slide' . $i,
         'id' => 'slide-number-' . $i,
+        'rel' => image_style_url('nivo_slider_thumbnail', check_plain($banner['image_path'])),
       ),
     );
     // Draw image
@@ -87,6 +88,23 @@ function nivo_slider_banner_markup($banners) {
 
     // Add link (if required)
     $output .= $banner['image_url'] ? l($image, $banner['image_url'], array('html' => TRUE)) : $image;
+  }
+
+  // Set the slider's dimensions to those of the first banner image
+  if (isset($banners[0])) {
+    $path = image_style_path('nivo_slider_slide', $banners[0]['image_path']); // Get the path to the banner's first image
+    $dimensions = image_get_info($path); // Find the image's dimensions
+
+    $css = '';
+    $css .= '.nivoSlider {';
+    $css .= 'width: ' . $dimensions['width'] . 'px;'; // Determine image width
+    $css .= 'height: ' . $dimensions['height'] . 'px;'; // Determine image height
+    $css .= '}';
+
+    drupal_add_css($css, array(
+      'type' => 'inline',
+      )
+    );
   }
   return $output;
 }

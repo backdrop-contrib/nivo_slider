@@ -190,6 +190,21 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
     '#default_value' => variable_get('nivo_slider_control_navigation', 'true'),
     '#description' => t('Display individual slide number navigation buttons.'),
   );
+  $form['navigation']['nivo_slider_control_nav_thumbs'] = array(
+    '#type' => 'radios',
+    '#title' => t('Control navigation thumbnails'),
+    '#options' => array(
+      'true' => t('True'),
+      'false' => t('False'),
+    ),
+    '#default_value' => variable_get('nivo_slider_control_nav_thumbs', 'false'),
+    '#description' => t('Use thumbnails for Control Nav.'),
+    '#states' => array(
+      'visible' => array(
+        ':input[name="nivo_slider_control_navigation"]' => array('value' => 'true'),
+      ),
+    ),
+  );
   $form['navigation']['nivo_slider_keyboard_navigation'] = array(
     '#type' => 'radios',
     '#title' => t('Keyboard navigation'),
@@ -208,7 +223,7 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
       'false' => t('False'),
     ),
     '#default_value' => variable_get('nivo_slider_manual_advance', 'false'),
-    '#description' => t('Disable automatic slide transitions.'),
+    '#description' => t('Automatic slide transitions.'),
   );
   $form['navigation']['nivo_slider_pause_time'] = array(
     '#type' => 'textfield',
