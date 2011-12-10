@@ -109,7 +109,8 @@ function nivo_slider_help($path, $arg) {
 function nivo_slider_theme() {
   return array(
     'nivo_slider_wrapper' => array(
-      'template' => 'nivo-slider-wrapper'
+    	'render element' => 'nivo_slider',
+      'template' => 'nivo-slider-wrapper',
     ),
   );
 }
