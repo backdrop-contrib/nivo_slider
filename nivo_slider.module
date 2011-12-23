@@ -109,7 +109,7 @@ function nivo_slider_help($path, $arg) {
 function nivo_slider_theme() {
   return array(
     'nivo_slider_wrapper' => array(
-    	'render element' => 'nivo_slider',
+      'render element' => 'nivo_slider',
       'template' => 'nivo-slider-wrapper',
     ),
   );
@@ -151,7 +151,7 @@ function nivo_slider_image_default_styles() {
 }
 
 /**
- * Implementation of hook_nivo_slider_theme().
+ * Implements hook_nivo_slider_theme().
  */
 function nivo_slider_nivo_slider_theme() {
   $library_path = libraries_get_path('nivo-slider');
@@ -161,7 +161,7 @@ function nivo_slider_nivo_slider_theme() {
       'name' => t('Default'),
       'description' => t('The default Nivo Slider theme.'),
       'resources' => array(
-        'css' => array (
+        'css' => array(
           $library_path . '/themes/default/default.css',
         ),
       ),
@@ -170,7 +170,7 @@ function nivo_slider_nivo_slider_theme() {
       'name' => t('Orman'),
       'description' => t('Description of Orman style.'),
       'resources' => array(
-        'css' => array (
+        'css' => array(
           $library_path . '/themes/orman/orman.css',
         ),
       ),
@@ -179,7 +179,7 @@ function nivo_slider_nivo_slider_theme() {
       'name' => t('Pascal'),
       'description' => t('Description of Orman style.'),
       'resources' => array(
-        'css' => array (
+        'css' => array(
           $library_path . '/themes/pascal/pascal.css',
         ),
       ),

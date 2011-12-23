@@ -93,7 +93,7 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
     ),
     '#default_value' => variable_get('nivo_slider_effect', 'random'),
     '#description' => t('Select an effect. The chosen effect will be used to transition between slides.'),
-   );
+  );
   $form['effects']['effect_properties'] = array(
     '#type' => 'fieldset',
     '#title' => t('Effect properties'),
