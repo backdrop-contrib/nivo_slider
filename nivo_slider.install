@@ -90,6 +90,10 @@ function nivo_slider_install() {
  * Implements hook_uninstall().
  */
 function nivo_slider_uninstall() {
+  // Banner images
+  $banner_folder = 'public://banner/';
+  file_unmanaged_delete_recursive($banner_folder);
+
   // Banner
   variable_del('nivo_slider_banner_settings');
 
