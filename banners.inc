@@ -78,6 +78,7 @@ function nivo_slider_banner_markup($banners) {
         'class' => 'slide' . $i,
         'id' => 'slide-number-' . $i,
         'rel' => image_style_url('nivo_slider_thumbnail', check_plain($banner['image_path'])),
+        'data-transition' => check_plain($banner['image_transition']),
       ),
     );
     // Draw image
