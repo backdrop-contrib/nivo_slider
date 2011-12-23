@@ -7,7 +7,7 @@
 // Include the banner generation functions
 include_once('banners.inc');
 include_once('nivo_slider_slides.admin.inc');
- 
+
 /**
  * Implements hook_install().
  */
@@ -67,10 +67,10 @@ function nivo_slider_install() {
   $file = new stdClass;
   $banners = array();
   // Source base for images
-  
+
   $src_base_path = drupal_get_path('module', 'nivo_slider');
   $default_banners = $settings;
-  
+
   // Put all image as banners
   foreach ($default_banners as $i => $data) {
     $file->uri = $src_base_path . '/' . $data['image_path'];
@@ -130,4 +130,14 @@ function nivo_slider_enable() {
  */
 function nivo_slider_disable() {
   nivo_slider_enable();
+}
+
+/**
+ * Image previews are now generated using image styles. Delete the old banner thumbnails.
+ */
+function nivo_slider_update_7000() {
+  $banner_thumb_folder = 'public://banner/thumb/';
+  file_unmanaged_delete_recursive($banner_thumb_folder);
+
+  return t('Deleted the old banner thumbnails.');
 }

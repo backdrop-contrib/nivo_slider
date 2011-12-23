@@ -62,8 +62,6 @@ function nivo_slider_settings_submit($form, &$form_state) {
       if ($image['image_delete']) {
         // Delete banner file
         file_unmanaged_delete($image['image_path']);
-        // Delete banner thumbnail file
-        file_unmanaged_delete($image['image_thumb']);
       }
       else {
         // Update image
@@ -115,10 +113,9 @@ function _nivo_slider_check_dir($dir) {
  *    Array with file data.
  *    FALSE on error.
  */
-function _nivo_slider_save_image($file, $banner_folder = 'public://banner/', $banner_thumb_folder = 'public://banner/thumb/') {
-  // Check directory and create it (if not exist)
+function _nivo_slider_save_image($file, $banner_folder = 'public://banner/') {
+  // Create a directory to store the banner images if one doesn't already exist
   _nivo_slider_check_dir($banner_folder);
-  _nivo_slider_check_dir($banner_thumb_folder);
 
   $parts = pathinfo($file->filename);
   $destination = $banner_folder . $parts['basename'];
@@ -127,16 +124,10 @@ function _nivo_slider_save_image($file, $banner_folder = 'public://banner/', $ba
 
   // Copy temporary image into banner folder
   if ($img = file_copy($file, $destination, FILE_EXISTS_REPLACE)) {
-    // Generate image thumb
-    $image = image_load($destination);
-    $small_img = image_scale($image, 300, 100);
-    $image->source = $banner_thumb_folder . $parts['basename'];
-    image_save($image);
 
     // Create a variable to hold the settings for each image
     $setting = array(
       'image_path' => $destination,
-      'image_thumb' => $image->source,
       'image_title' => '',
       'image_description' => '',
       'image_url' => '',
@@ -161,15 +152,11 @@ function _nivo_slider_save_image($file, $banner_folder = 'public://banner/', $ba
  */
 function _nivo_slider_banner_form($image_data) {
   $img_form['image_preview'] = array(
-    '#markup' => theme('image', array('path' => $image_data['image_thumb'])),
+    '#markup' => theme('image', array('path' => image_style_url('nivo_slider_slide', ($image_data['image_path'])))),
   );
   $img_form['image_path'] = array(
     '#type' => 'hidden',
     '#value' => $image_data['image_path'],
-  );
-  $img_form['image_thumb'] = array(
-    '#type' => 'hidden',
-    '#value' => $image_data['image_thumb'],
   );
   $img_form['image_title'] = array(
     '#type' => 'textfield',
