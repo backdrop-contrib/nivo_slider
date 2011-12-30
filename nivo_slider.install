@@ -6,7 +6,6 @@
 
 // Include the banner generation functions
 include_once('banners.inc');
-include_once('nivo_slider_slides.admin.inc');
 
 /**
  * Implements hook_install().
@@ -72,8 +71,8 @@ function nivo_slider_install() {
   // Default data
   $file = new stdClass;
   $banners = array();
-  // Source base for images
 
+  // Source base for images
   $src_base_path = drupal_get_path('module', 'nivo_slider');
   $default_banners = $settings;
 

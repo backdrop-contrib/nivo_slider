@@ -1,8 +1,67 @@
 <?php
 /**
  * @file
- * Generate banner markup.
+ * Banner creation and generation functions.
  */
+
+/**
+ * Check if folder is available or create it.
+ *
+ * @param <string> $dir
+ *    Folder to check
+ */
+function _nivo_slider_check_dir($dir) {
+  // Normalize directory name
+  $dir = file_stream_wrapper_uri_normalize($dir);
+
+  // Create directory (if not exist)
+  file_prepare_directory($dir,  FILE_CREATE_DIRECTORY);
+}
+
+/**
+ * Save file uploaded by user and generate setting to save.
+ *
+ * @param <file> $file
+ *    File uploaded from user
+ *
+ * @param <string> $banner_folder
+ *    Folder where save image
+ *
+ * @param <string> $banner_thumb_folder
+ *    Folder where save image thumbnail
+ *
+ * @return <array>
+ *    Array with file data.
+ *    FALSE on error.
+ */
+function _nivo_slider_save_image($file, $banner_folder = 'public://banner/') {
+  // Create a directory to store the banner images if one doesn't already exist
+  _nivo_slider_check_dir($banner_folder);
+
+  $parts = pathinfo($file->filename);
+  $destination = $banner_folder . $parts['basename'];
+
+  $file->status = FILE_STATUS_PERMANENT;
+
+  // Copy temporary image into banner folder
+  if ($img = file_copy($file, $destination, FILE_EXISTS_REPLACE)) {
+
+    // Create a variable to hold the settings for each image
+    $setting = array(
+      'image_path' => $destination,
+      'image_title' => '',
+      'image_description' => '',
+      'image_url' => '',
+      'image_transition' => '',
+      'image_weight' => 0,
+      'image_published' => TRUE,
+      'image_visibility' => '*'
+    );
+
+    return $setting;
+  }
+  return FALSE;
+}
 
 /**
  * Get banner settings.
