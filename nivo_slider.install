@@ -150,3 +150,20 @@ function nivo_slider_update_7000() {
 
   return t('Deleted the old banner thumbnails.');
 }
+
+/**
+ * Add a default transition to each slide where applicable.
+ */
+function nivo_slider_update_7001() {
+  $slider = variable_get('nivo_slider_banner_settings', array());
+
+  foreach ($slider as &$slide) {
+    if (!isset($slide['image_transition'])) {
+      $slide['image_transition'] = '';
+    }
+  }
+
+  variable_set('nivo_slider_banner_settings', $slider);
+
+  return t('Added a default transition to each slide where applicable.');
+}
