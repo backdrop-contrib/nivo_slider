@@ -98,7 +98,7 @@ function nivo_slider_help($path, $arg) {
     case 'admin/structure/nivo-slider/options':
       $output = '';
       $output .= '<p>' . t('Configure slider options.') . '</p>';
-      $output .= '<p>' . t('Slider images are controlled by image styles. Resize or apply effects to slide or thumbnail images on the <a href="@styles">image styles</a> page.', array('@styles' => '/admin/config/media/image-styles')) . '</p>';
+      $output .= '<p>' . t('Slider images are controlled by image styles. Resize or apply effects to slide or thumbnail images on the <a href="@styles">image styles</a> page.', array('@styles' => 'admin/config/media/image-styles')) . '</p>';
       return $output;
   }
 }
