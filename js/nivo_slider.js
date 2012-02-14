@@ -1,6 +1,13 @@
+/**
+ * @file
+ * Attaches the behaviors for the Nivo Slider module.
+ */
+
 (function ($) {
-  $(document).ready(function(){
-    $('#block-nivo-slider-nivo-slider #slider').nivoSlider({
+  Drupal.behaviors.nivoSlider = {
+    attach: function (context, settings) {
+      // Initialize the slider
+      $('#slider').nivoSlider({
         'effect': Drupal.settings.nivo_slider.effect, // Specify sets like: 'fold,fade,sliceDown'
         'slices': Drupal.settings.nivo_slider.slices, // For slice animations
         'boxCols': Drupal.settings.nivo_slider.boxCols, // For box animations
@@ -20,6 +27,7 @@
         'prevText': Drupal.settings.nivo_slider.prevText, // Prev directionNav text
         'nextText': Drupal.settings.nivo_slider.nextText, // Next directionNav text
         'randomStart': Drupal.settings.nivo_slider.randomStart // Start on a random slide
-    });
-  });
-})(jQuery);
+      });
+    }
+  };
+}(jQuery));
