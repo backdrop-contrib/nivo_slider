@@ -209,8 +209,10 @@ function nivo_slider_block_view($delta = '') {
           '#theme' => 'nivo_slider_wrapper',
           '#attached' => array(
             'css' => array(
-              'data' => drupal_get_path('module', 'nivo_slider') . '/css/nivo_slider.css',
-              'type' => 'file',
+              array(
+                'data' => drupal_get_path('module', 'nivo_slider') . '/css/nivo_slider.css',
+                'type' => 'file',
+              ),
             ),
             'js' => array(
               array(
