@@ -134,8 +134,8 @@ function nivo_slider_banner_markup($banners) {
       'title' => t('@image_desc', array('@image_desc' => $banner['image_description'])),
       'alt' => t('@image_title', array('@image_title' => $banner['image_title'])),
       'attributes' => array(
-        'class' => 'slide' . $i,
-        'id' => 'slide-number-' . $i,
+        'class' => 'slide',
+        'id' => 'slide-' . $i,
         'rel' => image_style_url('nivo_slider_thumbnail', check_plain($banner['image_path'])),
         'data-transition' => check_plain($banner['image_transition']),
       ),
