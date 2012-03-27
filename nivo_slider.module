@@ -106,10 +106,16 @@ function nivo_slider_help($path, $arg) {
 /**
  * Implements hook_theme().
  */
-function nivo_slider_theme() {
+function nivo_slider_theme($existing, $type, $theme, $path) {
   return array(
     'nivo_slider_wrapper' => array(
+      'variables' => array(
+        'theme' => NULL,
+        'banners' => NULL,
+      ),
       'render element' => 'nivo_slider',
+      'file' => 'nivo_slider.theme.inc',
+      'path' => $path . '/themes',
       'template' => 'nivo-slider-wrapper',
     ),
   );
@@ -329,12 +335,4 @@ function nivo_slider_block_view($delta = '') {
       break;
   }
   return $block;
-}
-
-/**
- * Implements template_preprocess_hook().
- */
-function template_preprocess_nivo_slider_wrapper(&$variables) {
-  $variables['theme'] = variable_get('nivo_slider_theme', 'default');
-  $variables['banners'] = nivo_slider_banners_markup(nivo_slider_show_banners());
 }
