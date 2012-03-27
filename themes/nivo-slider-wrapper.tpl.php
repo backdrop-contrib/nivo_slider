@@ -10,6 +10,7 @@
  * Available variables:
  * - $theme: String containing the name of the currently active theme.
  * - $banners: String of HTML representing a banner.
+ * - $html_captions: String of HTML representing any HTML captions.
  *
  * @see template_preprocess()
  * @see template_process()
@@ -22,4 +23,7 @@
       <?php print $banners; ?>
     </div>
   </div>
+  <?php if ($html_captions): ?>
+    <?php print $html_captions; ?>
+  <?php endif; ?>
 <?php endif; ?>

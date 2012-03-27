@@ -101,6 +101,7 @@ function nivo_slider_uninstall() {
 
   // Banner
   variable_del('nivo_slider_banner_settings');
+  variable_del('nivo_slider_banner_html_captions');
 
   // Options
   variable_del('nivo_slider_theme');

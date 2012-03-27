@@ -125,14 +125,41 @@ function nivo_slider_banners_markup($banners) {
  *    HTML code to display banner markup.
  */
 function nivo_slider_banner_markup($banners) {
+  // Create a variable to hold the final banner output
   $output = '';
 
+  // Create a variable to hold any HTML captions
+  $description_html = '';
+
   foreach ($banners as $i => $banner) {
+    // Create a variable to hold the banner description
+    $description = '';
+
+    // Check the text format of the banner description
+    $text_format = $banner['image_description']['format'];
+
+    // Set the slide description directly when using plain text otherwise create an
+    // HTML caption
+    if ($text_format == 'plain_text') {
+      $description = $banner['image_description']['value'];
+    }
+    else {
+      $description = '#htmlcaption-' . $i;
+
+      $html_caption = '';
+      $html_caption .= '<div id="htmlcaption-' . $i . '" class="nivo-html-caption">';
+      $html_caption .= check_markup($banner['image_description']['value'], $banner['image_description']['format']);
+      $html_caption .= '</div>';
+
+      $description_html .= $html_caption;
+    }
+
+    // Create an array of settings to use while theming
     $variables = array(
       'style_name' => 'nivo_slider_slide',
       'path' => check_plain($banner['image_path']),
-      'title' => t('@image_desc', array('@image_desc' => $banner['image_description'])),
-      'alt' => t('@image_title', array('@image_title' => $banner['image_title'])),
+      'title' => check_plain($description),
+      'alt' => check_plain($banner['image_title']),
       'attributes' => array(
         'class' => 'slide',
         'id' => 'slide-' . $i,
@@ -140,6 +167,7 @@ function nivo_slider_banner_markup($banners) {
         'data-transition' => check_plain($banner['image_transition']),
       ),
     );
+
     // Draw image
     $image = theme('image_style', $variables);
 
@@ -149,6 +177,9 @@ function nivo_slider_banner_markup($banners) {
     // Add link (if required)
     $output .= $banner['image_url'] ? l($image, $banner['image_url'], array('html' => TRUE)) : $image;
   }
+
+  // Save all HTML descriptions
+  variable_set('nivo_slider_banner_html_captions', $description_html);
 
   // Set the slider's dimensions to those of the first banner image
   if (isset($banners[0])) {

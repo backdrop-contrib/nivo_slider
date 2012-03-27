@@ -110,9 +110,10 @@ function _nivo_slider_banner_form($image_data) {
     '#description' => t('The title is used as alternative text for the slide image.'),
   );
   $img_form['image_description'] = array(
-    '#type' => 'textarea',
+    '#type' => 'text_format',
     '#title' => t('Description'),
-    '#default_value' => $image_data['image_description'],
+    '#default_value' => $image_data['image_description']['value'],
+    '#format' => $image_data['image_description']['format'] ? $image_data['image_description']['format'] : NULL,
     '#description' => t('The description will be displayed with the slide image.'),
   );
   $img_form['image_url'] = array(
