@@ -214,12 +214,6 @@ function nivo_slider_block_view($delta = '') {
           '#type' => 'markup',
           '#theme' => 'nivo_slider_wrapper',
           '#attached' => array(
-            'css' => array(
-              array(
-                'data' => drupal_get_path('module', 'nivo_slider') . '/css/nivo_slider.css',
-                'type' => 'file',
-              ),
-            ),
             'js' => array(
               array(
                 'data' => drupal_get_path('module', 'nivo_slider') . '/js/nivo_slider.js',
@@ -238,6 +232,10 @@ function nivo_slider_block_view($delta = '') {
                     'directionNav' => check_plain(variable_get('nivo_slider_directional_navigation', 'true')) == 'true' ? TRUE : FALSE,
                     'directionNavHide' => check_plain(variable_get('nivo_slider_directional_navigation_hide', 'true')) == 'true' ? TRUE : FALSE,
                     'controlNav' => check_plain(variable_get('nivo_slider_control_navigation', 'true')) == 'true' ? TRUE : FALSE,
+                    'controlNavThumbs' => check_plain(variable_get('nivo_slider_control_nav_thumbs', 'false')) == 'true' ? TRUE : FALSE,
+                    'controlNavThumbsFromRel' => TRUE,
+                    'controlNavThumbsSearch' => '.jpg',
+                    'controlNavThumbsReplace' => '_thumb.jpg',
                     'keyboardNav' => check_plain(variable_get('nivo_slider_keyboard_navigation', 'true')) == 'true' ? TRUE : FALSE,
                     'pauseOnHover' => check_plain(variable_get('nivo_slider_pause_on_hover', 'true')) == 'true' ? TRUE : FALSE,
                     'manualAdvance' => check_plain(variable_get('nivo_slider_manual_advance', 'false')) == 'true' ? TRUE : FALSE,
@@ -245,6 +243,11 @@ function nivo_slider_block_view($delta = '') {
                     'prevText' => check_plain(variable_get('nivo_slider_previous_text', t('Prev'))),
                     'nextText' => check_plain(variable_get('nivo_slider_next_text', t('Next'))),
                     'randomStart' => check_plain(variable_get('nivo_slider_random_start', 'false')) == 'true' ? TRUE : FALSE,
+                    'beforeChange' => 'function(){}',
+                    'afterChange' => 'function(){}',
+                    'slideshowEnd' => 'function(){}',
+                    'lastSlide' => 'function(){}',
+                    'afterLoad' => 'function(){}',
                   ),
                 ),
                 'type' => 'setting',

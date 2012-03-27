@@ -216,7 +216,7 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
       'false' => t('No'),
     ),
     '#default_value' => variable_get('nivo_slider_control_nav_thumbs', 'false'),
-    '#description' => t('Use thumbnails of each slide as control navigation buttons.'),
+    '#description' => t('Use thumbnails of each slide as control navigation buttons. In order for thumbnails to be displayed, a compatible theme is required.'),
     '#states' => array(
       'visible' => array(
         ':input[name="nivo_slider_control_navigation"]' => array('value' => 'true'),
