@@ -26,7 +26,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     '#tree' => TRUE,
   );
 
-  $banners = nivo_slider_get_banners();
+  $banners = nivo_slider_get_slider_settings();
   $i = 0;
 
   foreach ($banners as $image_data) {
@@ -83,7 +83,7 @@ function nivo_slider_settings_submit($form, &$form_state) {
   }
 
   // Save settings
-  nivo_slider_set_banners($settings);
+  nivo_slider_set_slider_settings($settings);
 }
 
 /**

@@ -5,20 +5,6 @@
  */
 
 /**
- * Check if folder is available or create it.
- *
- * @param <string> $dir
- *    Folder to check
- */
-function _nivo_slider_check_dir($dir) {
-  // Normalize directory name
-  $dir = file_stream_wrapper_uri_normalize($dir);
-
-  // Create directory (if not exist)
-  file_prepare_directory($dir,  FILE_CREATE_DIRECTORY);
-}
-
-/**
  * Save file uploaded by user and generate setting to save.
  *
  * @param <file> $file
@@ -35,8 +21,11 @@ function _nivo_slider_check_dir($dir) {
  *    FALSE on error.
  */
 function _nivo_slider_save_image($file, $banner_folder = 'public://banner/') {
-  // Create a directory to store the banner images if one doesn't already exist
-  _nivo_slider_check_dir($banner_folder);
+  // Normalize directory name
+  $banner_folder = file_stream_wrapper_uri_normalize($banner_folder);
+
+  // Create directory (if not exist)
+  file_prepare_directory($banner_folder,  FILE_CREATE_DIRECTORY);
 
   $parts = pathinfo($file->filename);
   $destination = $banner_folder . $parts['basename'];
@@ -64,22 +53,26 @@ function _nivo_slider_save_image($file, $banner_folder = 'public://banner/') {
 }
 
 /**
- * Get banner settings.
- *
- * @param <bool> $all
- *    Return all banners or only active.
+ * Gets slider settings.
  *
  * @return <array>
- *    Settings information
+ *    Settings to get
  */
-function nivo_slider_get_banners($all = TRUE) {
-  // Get all banners
-  $banners = variable_get('nivo_slider_banner_settings', array());
+function nivo_slider_get_slider_settings() {
+  return variable_get('nivo_slider_banner_settings', array());
+}
 
+/**
+ * Sets slider settings.
+ *
+ * @param <array> $value
+ *    Settings to save
+ */
+function nivo_slider_set_slider_settings($value) {
   // Create list of banner to return
   $banners_value = array();
-  foreach ($banners as $banner) {
-    if ($all || $banner['image_published']) {
+  foreach ($value as $banner) {
+    if ($banner['image_published']) {
       // Add weight param to use `drupal_sort_weight`
       $banner['weight'] = $banner['image_weight'];
       $banners_value[] = $banner;
@@ -89,49 +82,46 @@ function nivo_slider_get_banners($all = TRUE) {
   // Sort image by weight
   usort($banners_value, 'drupal_sort_weight');
 
-  return $banners_value;
+  variable_set('nivo_slider_banner_settings', $banners_value);
 }
 
 /**
- * Set banner settings.
- *
- * @param <array> $value
- *    Settings to save
- */
-function nivo_slider_set_banners($value) {
-  variable_set('nivo_slider_banner_settings', $value);
-}
-
-/**
- * Generate markup for nivo_slider's banners.
+ * Generates slider markup.
  *
  * @return <string>
- *    HTML markup to printo into page
+ *    Slider HTML markup.
  */
-function nivo_slider_banners_markup($banners) {
-  if ($banners) {
-    // Generate HTML markup for banners
-    return nivo_slider_banner_markup($banners);
-  }
-  else {
-    return '';
-  }
-}
+function nivo_slider_slider() {
+  $banners = nivo_slider_get_slider_settings();
+  $display_banners = array();
 
-/**
- * Generate banners markup.
- *
- * @return <string>
- *    HTML code to display banner markup.
- */
-function nivo_slider_banner_markup($banners) {
+  // Current path alias
+  $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+
+  // Check visibility for each banner
+  foreach ($banners as $banner) {
+    // Pages
+    $pages = check_plain(drupal_strtolower($banner['image_visibility']));
+
+    // Check path for alias, and (if required) for path
+    $page_match = drupal_match_path($path, $pages);
+    if ($path != $_GET['q']) {
+      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+    }
+
+    // Add banner to visible banner
+    if ($page_match) {
+      $display_banners[] = $banner;
+    }
+  }
+
   // Create a variable to hold the final banner output
   $output = '';
 
   // Create a variable to hold any HTML captions
   $description_html = '';
 
-  foreach ($banners as $i => $banner) {
+  foreach ($display_banners as $i => $banner) {
     // Create a variable to hold the banner description
     $description = '';
 
@@ -182,8 +172,8 @@ function nivo_slider_banner_markup($banners) {
   variable_set('nivo_slider_banner_html_captions', $description_html);
 
   // Set the slider's dimensions to those of the first banner image
-  if (isset($banners[0])) {
-    $path = image_style_path('nivo_slider_slide', $banners[0]['image_path']); // Get the path to the banner's first image
+  if (isset($display_banners[0])) {
+    $path = image_style_path('nivo_slider_slide', $display_banners[0]['image_path']); // Get the path to the banner's first image
     $dimensions = image_get_info($path); // Find the image's dimensions
 
     $css = '';
@@ -198,36 +188,4 @@ function nivo_slider_banner_markup($banners) {
     );
   }
   return $output;
-}
-
-/**
- * Get banner to show into current page in accord with settings
- *
- * @return <array>
- *    Banners to show
- */
-function nivo_slider_show_banners() {
-  $banners = nivo_slider_get_banners(FALSE);
-  $display_banners = array();
-
-  // Current path alias
-  $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
-
-  // Check visibility for each banner
-  foreach ($banners as $banner) {
-    // Pages
-    $pages = check_plain(drupal_strtolower($banner['image_visibility']));
-
-    // Check path for alias, and (if required) for path
-    $page_match = drupal_match_path($path, $pages);
-    if ($path != $_GET['q']) {
-      $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
-    }
-
-    // Add banner to visible banner
-    if ($page_match) {
-      $display_banners[] = $banner;
-    }
-  }
-  return $display_banners;
 }

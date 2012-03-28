@@ -100,7 +100,7 @@ function nivo_slider_install() {
   }
 
   // Save banner data
-  nivo_slider_set_banners($banners);
+  nivo_slider_set_slider_settings($banners);
 }
 
 /**
