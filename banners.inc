@@ -100,11 +100,16 @@ function nivo_slider_slider() {
 
   // Check visibility for each banner
   foreach ($banners as $banner) {
-    // Pages
-    $pages = check_plain(drupal_strtolower($banner['image_visibility']));
+    // Convert path to lowercase. This allows comparison of the same path
+    // with different case. Ex: /Page, /page, /PAGE.
+    $pages = drupal_strtolower($banner['image_visibility']);
 
-    // Check path for alias, and (if required) for path
+    // Convert the Drupal path to lowercase
+    $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+
+    // Compare the lowercase internal and lowercase path alias (if any).
     $page_match = drupal_match_path($path, $pages);
+
     if ($path != $_GET['q']) {
       $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
     }
