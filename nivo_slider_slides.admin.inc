@@ -113,7 +113,7 @@ function _nivo_slider_banner_form($image_data) {
     '#type' => 'text_format',
     '#title' => t('Description'),
     '#default_value' => $image_data['image_description']['value'],
-    '#format' => $image_data['image_description']['format'] ? $image_data['image_description']['format'] : NULL,
+    '#format' => isset($image_data['image_description']['format']) ? $image_data['image_description']['format'] : NULL,
     '#description' => t('The description will be displayed with the slide image.'),
   );
   $img_form['image_url'] = array(

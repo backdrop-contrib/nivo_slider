@@ -11,60 +11,73 @@ include_once('banners.inc');
  * Implements hook_install().
  */
 function nivo_slider_install() {
+  $path = drupal_get_path('module', 'nivo_slider');
+
   $settings = array(
     1 => array(
-      'image_path' => 'images/1.jpg',
+      'image_path' => $path . '/images/1.jpg',
       'image_title' => 'Title for image 1',
-      'image_description' => 'Description for image 1',
-      'image_published' => 'TRUE',
+      'image_description' => array(
+        'value' => 'Description for image 1',
+      ),
+      'image_url' => '',
+      'image_visibility' => '*',
       'image_transition' => '',
       'image_weight' => 1,
       'image_published' => TRUE,
+      'image_delete' => '',
     ),
     2 => array(
-      'image_path' => 'images/2.jpg',
+      'image_path' => $path . '/images/2.jpg',
       'image_title' => 'Title for image 2',
-      'image_description' => 'Description for image 2',
-      'image_published' => 'TRUE',
+      'image_description' => array(
+        'value' => 'Description for image 2',
+      ),
+      'image_url' => '',
+      'image_visibility' => '*',
       'image_transition' => '',
       'image_weight' => 2,
       'image_published' => TRUE,
+      'image_delete' => '',
     ),
     3 => array(
-      'image_path' => 'images/3.jpg',
+      'image_path' => $path . '/images/3.jpg',
       'image_title' => 'Title for image 3',
-      'image_description' => 'Description for image 3',
-      'image_published' => 'TRUE',
+      'image_description' => array(
+        'value' => 'Description for image 3',
+      ),
+      'image_url' => '',
+      'image_visibility' => '*',
       'image_transition' => '',
       'image_weight' => 3,
       'image_published' => TRUE,
+      'image_delete' => '',
     ),
     4 => array(
-      'image_path' => 'images/4.jpg',
+      'image_path' => $path . '/images/4.jpg',
       'image_title' => 'Title for image 4',
-      'image_description' => 'Description for image 4',
-      'image_published' => 'TRUE',
+      'image_description' => array(
+        'value' => 'Description for image 4',
+      ),
+      'image_url' => '',
+      'image_visibility' => '*',
       'image_transition' => '',
       'image_weight' => 4,
       'image_published' => TRUE,
+      'image_delete' => '',
     ),
     5 => array(
-      'image_path' => 'images/5.jpg',
+      'image_path' => $path . '/images/5.jpg',
       'image_title' => 'Title for image 5',
-      'image_description' => 'Description for image 5',
-      'image_published' => 'TRUE',
+      'image_description' => array(
+        'value' => 'Description for image 5',
+      ),
+      'image_url' => '',
+      'image_visibility' => '*',
       'image_transition' => '',
       'image_weight' => 5,
       'image_published' => TRUE,
-    ),
-    6 => array(
-      'image_path' => 'images/6.jpg',
-      'image_title' => 'Title for image 6',
-      'image_description' => 'Description for image 6',
-      'image_published' => 'TRUE',
-      'image_transition' => '',
-      'image_weight' => 6,
-      'image_published' => TRUE,
+      'image_delete' => '',
     ),
   );
 
@@ -73,12 +86,11 @@ function nivo_slider_install() {
   $banners = array();
 
   // Source base for images
-  $src_base_path = drupal_get_path('module', 'nivo_slider');
   $default_banners = $settings;
 
   // Put all image as banners
   foreach ($default_banners as $i => $data) {
-    $file->uri = $src_base_path . '/' . $data['image_path'];
+    $file->uri = $data['image_path'];
     $file->filename = $file->uri;
 
     $banner = _nivo_slider_save_image($file);
