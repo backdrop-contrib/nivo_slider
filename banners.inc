@@ -13,9 +13,6 @@
  * @param <string> $banner_folder
  *    Folder where save image
  *
- * @param <string> $banner_thumb_folder
- *    Folder where save image thumbnail
- *
  * @return <array>
  *    Array with file data.
  *    FALSE on error.
@@ -37,14 +34,14 @@ function _nivo_slider_save_image($file, $banner_folder = 'public://banner/') {
 
     // Create a variable to hold the settings for each image
     $setting = array(
-      'image_path' => $destination,
-      'image_title' => '',
-      'image_description' => '',
-      'image_url' => '',
-      'image_transition' => '',
-      'image_weight' => 0,
-      'image_published' => TRUE,
-      'image_visibility' => '*'
+      'path' => $destination,
+      'title' => '',
+      'description' => '',
+      'url' => '',
+      'transition' => '',
+      'weight' => 0,
+      'published' => TRUE,
+      'visibility' => '*'
     );
 
     return $setting;
@@ -72,11 +69,7 @@ function nivo_slider_set_slider_settings($value) {
   // Create list of banner to return
   $banners_value = array();
   foreach ($value as $banner) {
-    if ($banner['image_published']) {
-      // Add weight param to use `drupal_sort_weight`
-      $banner['weight'] = $banner['image_weight'];
-      $banners_value[] = $banner;
-    }
+    $banners_value[] = $banner;
   }
 
   // Sort image by weight
@@ -102,7 +95,7 @@ function nivo_slider_slider() {
   foreach ($banners as $banner) {
     // Convert path to lowercase. This allows comparison of the same path
     // with different case. Ex: /Page, /page, /PAGE.
-    $pages = drupal_strtolower($banner['image_visibility']);
+    $pages = drupal_strtolower($banner['visibility']);
 
     // Convert the Drupal path to lowercase
     $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
@@ -131,19 +124,19 @@ function nivo_slider_slider() {
     $description = '';
 
     // Check the text format of the banner description
-    $text_format = $banner['image_description']['format'];
+    $text_format = $banner['description']['format'];
 
     // Set the slide description directly when using plain text otherwise create an
     // HTML caption
     if ($text_format == 'plain_text') {
-      $description = $banner['image_description']['value'];
+      $description = $banner['description']['value'];
     }
     else {
       $description = '#htmlcaption-' . $i;
 
       $html_caption = '';
       $html_caption .= '<div id="htmlcaption-' . $i . '" class="nivo-html-caption">';
-      $html_caption .= check_markup($banner['image_description']['value'], $banner['image_description']['format']);
+      $html_caption .= check_markup($banner['description']['value'], $banner['description']['format']);
       $html_caption .= '</div>';
 
       $description_html .= $html_caption;
@@ -152,14 +145,14 @@ function nivo_slider_slider() {
     // Create an array of settings to use while theming
     $variables = array(
       'style_name' => 'nivo_slider_slide',
-      'path' => check_plain($banner['image_path']),
+      'path' => check_plain($banner['path']),
       'title' => check_plain($description),
-      'alt' => check_plain($banner['image_title']),
+      'alt' => check_plain($banner['title']),
       'attributes' => array(
         'class' => 'slide',
         'id' => 'slide-' . $i,
-        'rel' => image_style_url('nivo_slider_thumbnail', check_plain($banner['image_path'])),
-        'data-transition' => check_plain($banner['image_transition']),
+        'rel' => image_style_url('nivo_slider_thumbnail', check_plain($banner['path'])),
+        'data-transition' => check_plain($banner['transition']),
       ),
     );
 
@@ -167,10 +160,10 @@ function nivo_slider_slider() {
     $image = theme('image_style', $variables);
 
     // Remove link if is the same page
-    $banner['image_url'] = ($banner['image_url'] == current_path()) ? FALSE  : $banner['image_url'];
+    $banner['url'] = ($banner['url'] == current_path()) ? FALSE  : $banner['url'];
 
     // Add link (if required)
-    $output .= $banner['image_url'] ? l($image, $banner['image_url'], array('html' => TRUE)) : $image;
+    $output .= $banner['url'] ? l($image, $banner['url'], array('html' => TRUE)) : $image;
   }
 
   // Save all HTML descriptions
@@ -178,7 +171,7 @@ function nivo_slider_slider() {
 
   // Set the slider's dimensions to those of the first banner image
   if (isset($display_banners[0])) {
-    $path = image_style_path('nivo_slider_slide', $display_banners[0]['image_path']); // Get the path to the banner's first image
+    $path = image_style_path('nivo_slider_slide', $display_banners[0]['path']); // Get the path to the banner's first image
     $dimensions = image_get_info($path); // Find the image's dimensions
 
     $css = '';

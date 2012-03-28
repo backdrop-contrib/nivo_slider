@@ -15,69 +15,69 @@ function nivo_slider_install() {
 
   $settings = array(
     1 => array(
-      'image_path' => $path . '/images/1.jpg',
-      'image_title' => 'Title for image 1',
-      'image_description' => array(
+      'path' => $path . '/images/1.jpg',
+      'title' => 'Title for image 1',
+      'description' => array(
         'value' => 'Description for image 1',
       ),
-      'image_url' => '',
-      'image_visibility' => '*',
-      'image_transition' => '',
-      'image_weight' => 1,
-      'image_published' => TRUE,
-      'image_delete' => '',
+      'url' => '',
+      'visibility' => '*',
+      'transition' => '',
+      'weight' => 1,
+      'published' => TRUE,
+      'delete' => '',
     ),
     2 => array(
-      'image_path' => $path . '/images/2.jpg',
-      'image_title' => 'Title for image 2',
-      'image_description' => array(
+      'path' => $path . '/images/2.jpg',
+      'title' => 'Title for image 2',
+      'description' => array(
         'value' => 'Description for image 2',
       ),
-      'image_url' => '',
-      'image_visibility' => '*',
-      'image_transition' => '',
-      'image_weight' => 2,
-      'image_published' => TRUE,
-      'image_delete' => '',
+      'url' => '',
+      'visibility' => '*',
+      'transition' => '',
+      'weight' => 2,
+      'published' => TRUE,
+      'delete' => '',
     ),
     3 => array(
-      'image_path' => $path . '/images/3.jpg',
-      'image_title' => 'Title for image 3',
-      'image_description' => array(
+      'path' => $path . '/images/3.jpg',
+      'title' => 'Title for image 3',
+      'description' => array(
         'value' => 'Description for image 3',
       ),
-      'image_url' => '',
-      'image_visibility' => '*',
-      'image_transition' => '',
-      'image_weight' => 3,
-      'image_published' => TRUE,
-      'image_delete' => '',
+      'url' => '',
+      'visibility' => '*',
+      'transition' => '',
+      'weight' => 3,
+      'published' => TRUE,
+      'delete' => '',
     ),
     4 => array(
-      'image_path' => $path . '/images/4.jpg',
-      'image_title' => 'Title for image 4',
-      'image_description' => array(
+      'path' => $path . '/images/4.jpg',
+      'title' => 'Title for image 4',
+      'description' => array(
         'value' => 'Description for image 4',
       ),
-      'image_url' => '',
-      'image_visibility' => '*',
-      'image_transition' => '',
-      'image_weight' => 4,
-      'image_published' => TRUE,
-      'image_delete' => '',
+      'url' => '',
+      'visibility' => '*',
+      'transition' => '',
+      'weight' => 4,
+      'published' => TRUE,
+      'delete' => '',
     ),
     5 => array(
-      'image_path' => $path . '/images/5.jpg',
-      'image_title' => 'Title for image 5',
-      'image_description' => array(
+      'path' => $path . '/images/5.jpg',
+      'title' => 'Title for image 5',
+      'description' => array(
         'value' => 'Description for image 5',
       ),
-      'image_url' => '',
-      'image_visibility' => '*',
-      'image_transition' => '',
-      'image_weight' => 5,
-      'image_published' => TRUE,
-      'image_delete' => '',
+      'url' => '',
+      'visibility' => '*',
+      'transition' => '',
+      'weight' => 5,
+      'published' => TRUE,
+      'delete' => '',
     ),
   );
 
@@ -90,11 +90,11 @@ function nivo_slider_install() {
 
   // Put all image as banners
   foreach ($default_banners as $i => $data) {
-    $file->uri = $data['image_path'];
+    $file->uri = $data['path'];
     $file->filename = $file->uri;
 
     $banner = _nivo_slider_save_image($file);
-    unset($data['image_path']);
+    unset($data['path']);
     $banner = array_merge($banner, $data);
     $banners[$i] = $banner;
   }
