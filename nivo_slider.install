@@ -168,15 +168,51 @@ function nivo_slider_update_7000() {
  * Add a default transition to each slide where applicable.
  */
 function nivo_slider_update_7001() {
+  // Get the current slider settings
   $slider = variable_get('nivo_slider_banner_settings', array());
 
+  // Add a default transition to each existing slide
   foreach ($slider as &$slide) {
     if (!isset($slide['image_transition'])) {
       $slide['image_transition'] = '';
     }
   }
 
+  // Save the updated settings
   variable_set('nivo_slider_banner_settings', $slider);
 
   return t('Added a default transition to each slide where applicable.');
+}
+
+/**
+ * Update existing slide property names and add new properties.
+ */
+function nivo_slider_update_7002() {
+  // Create an array to hold the new slider settings
+  $new_slider = array();
+
+  // Get the old slider settings
+  $old_slider = variable_get('nivo_slider_banner_settings', array());
+
+  foreach ($old_slider as $old_slide) {
+    $new_slider[] = array(
+      'path' => isset($old_slide['image_path']) ? $old_slide['image_path'] : '',
+      'title' => isset($old_slide['image_title']) ? $old_slide['image_title'] : '',
+      'description' => array(
+        'value' => isset($old_slide['image_description']) ? $old_slide['image_description'] : '',
+        'format' => 'plain_text',
+      ),
+      'url' => isset($old_slide['image_url']) ? $old_slide['image_url'] : '',
+      'visibility' => isset($old_slide['image_visibility']) ? $old_slide['image_visibility'] : '*',
+      'transition' => isset($old_slide['image_transition']) ? $old_slide['image_transition'] : '',
+      'weight' => isset($old_slide['image_weight']) ? $old_slide['image_weight'] : 1,
+      'published' => isset($old_slide['image_published']) ? $old_slide['image_published'] : TRUE,
+      'delete' => isset($old_slide['image_delete']) ? $old_slide['image_delete'] : '',
+    );
+  }
+
+  // Save the new settings
+  variable_set('nivo_slider_banner_settings', $new_slider);
+
+  return t('Updated existing slide property names and added new properties.');
 }
