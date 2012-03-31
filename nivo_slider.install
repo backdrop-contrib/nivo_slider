@@ -4,118 +4,124 @@
  * Install, update and uninstall functions for the Nivo Slider module.
  */
 
-// Include the banner generation functions
-include_once('banners.inc');
+// Include the slider functions
+include_once('slider.inc');
 
 /**
  * Implements hook_install().
  */
 function nivo_slider_install() {
+  // Find the path to the Nivo Slider module
   $path = drupal_get_path('module', 'nivo_slider');
 
-  $settings = array(
-    1 => array(
-      'path' => $path . '/images/1.jpg',
-      'title' => 'Title for image 1',
-      'description' => array(
-        'value' => 'Description for image 1',
-      ),
-      'url' => '',
-      'visibility' => '*',
-      'transition' => '',
-      'weight' => 1,
-      'published' => TRUE,
-      'delete' => '',
+  // Create an array to hold example slides
+  $slides = array();
+
+  // Create a number of example slides
+  $slides[] = array(
+    'path' => $path . '/images/1.jpg',
+    'title' => 'Title for image 1',
+    'description' => array(
+      'value' => 'Description for image 1',
+      'format' => 'plain_text',
     ),
-    2 => array(
-      'path' => $path . '/images/2.jpg',
-      'title' => 'Title for image 2',
-      'description' => array(
-        'value' => 'Description for image 2',
-      ),
-      'url' => '',
-      'visibility' => '*',
-      'transition' => '',
-      'weight' => 2,
-      'published' => TRUE,
-      'delete' => '',
+    'url' => '',
+    'visibility' => '*',
+    'transition' => '',
+    'weight' => 1,
+    'published' => TRUE,
+    'delete' => '',
+  );
+  $slides[] = array(
+    'path' => $path . '/images/2.jpg',
+    'title' => 'Title for image 2',
+    'description' => array(
+      'value' => 'Description for image 2',
+      'format' => 'plain_text',
     ),
-    3 => array(
-      'path' => $path . '/images/3.jpg',
-      'title' => 'Title for image 3',
-      'description' => array(
-        'value' => 'Description for image 3',
-      ),
-      'url' => '',
-      'visibility' => '*',
-      'transition' => '',
-      'weight' => 3,
-      'published' => TRUE,
-      'delete' => '',
+    'url' => '',
+    'visibility' => '*',
+    'transition' => '',
+    'weight' => 2,
+    'published' => TRUE,
+    'delete' => '',
+  );
+  $slides[] = array(
+    'path' => $path . '/images/3.jpg',
+    'title' => 'Title for image 3',
+    'description' => array(
+      'value' => 'Description for image 3',
+      'format' => 'plain_text',
     ),
-    4 => array(
-      'path' => $path . '/images/4.jpg',
-      'title' => 'Title for image 4',
-      'description' => array(
-        'value' => 'Description for image 4',
-      ),
-      'url' => '',
-      'visibility' => '*',
-      'transition' => '',
-      'weight' => 4,
-      'published' => TRUE,
-      'delete' => '',
+    'url' => '',
+    'visibility' => '*',
+    'transition' => '',
+    'weight' => 3,
+    'published' => TRUE,
+    'delete' => '',
+  );
+  $slides[] = array(
+    'path' => $path . '/images/4.jpg',
+    'title' => 'Title for image 4',
+    'description' => array(
+      'value' => 'Description for image 4',
+      'format' => 'plain_text',
     ),
-    5 => array(
-      'path' => $path . '/images/5.jpg',
-      'title' => 'Title for image 5',
-      'description' => array(
-        'value' => 'Description for image 5',
-      ),
-      'url' => '',
-      'visibility' => '*',
-      'transition' => '',
-      'weight' => 5,
-      'published' => TRUE,
-      'delete' => '',
+    'url' => '',
+    'visibility' => '*',
+    'transition' => '',
+    'weight' => 4,
+    'published' => TRUE,
+    'delete' => '',
+  );
+  $slides[] = array(
+    'path' => $path . '/images/5.jpg',
+    'title' => 'Title for image 5',
+    'description' => array(
+      'value' => 'Description for image 5',
+      'format' => 'plain_text',
     ),
+    'url' => '',
+    'visibility' => '*',
+    'transition' => '',
+    'weight' => 5,
+    'published' => TRUE,
+    'delete' => '',
   );
 
-  // Default data
+  // Create a file object to hold slide image files
   $file = new stdClass;
-  $banners = array();
 
-  // Source base for images
-  $default_banners = $settings;
-
-  // Put all image as banners
-  foreach ($default_banners as $i => $data) {
-    $file->uri = $data['path'];
+  // Save all slide images
+  foreach ($slides as $slide => &$settings) {
+    // Build a file using the slide image path
+    $file->uri = $settings['path'];
     $file->filename = $file->uri;
 
-    $banner = _nivo_slider_save_image($file);
-    unset($data['path']);
-    $banner = array_merge($banner, $data);
-    $banners[$i] = $banner;
+    // Save the file and get the new path to the slide image
+    $path_to_slide_image = _nivo_slider_save_image($file);
+
+    // Update the slide image path
+    $settings['path'] = $path_to_slide_image;
   }
 
-  // Save banner data
-  nivo_slider_set_slider_settings($banners);
+  // Save the slides
+  variable_set('nivo_slider_banner_settings', $slides);
 }
 
 /**
  * Implements hook_uninstall().
  */
 function nivo_slider_uninstall() {
-  // Banner images
+  // Remove slide images
   $banner_folder = 'public://banner/';
   file_unmanaged_delete_recursive($banner_folder);
 
-  // Banner
+  // Remove slide variables
   variable_del('nivo_slider_banner_settings');
   variable_del('nivo_slider_banner_html_captions');
 
-  // Options
+  // Remove option variables
   variable_del('nivo_slider_theme');
   variable_del('nivo_slider_random_start');
   variable_del('nivo_slider_start_slide');

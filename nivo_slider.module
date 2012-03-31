@@ -4,16 +4,19 @@
  * Primarily Drupal hooks.
  */
 
-// Include the banner generation functions
-include_once('banners.inc');
+// Include the slider functions
+include_once('slider.inc');
 
 /**
  * Implements hook_requirements().
  */
 function nivo_slider_requirements($phase) {
+  // Create an array to hold Nivo Slider requirements
   $requirements = array();
+
+  // Check requirements during the runtime phase
   if ($phase == 'runtime') {
-    // The Nivo Slider jQuery plugin library is available
+    // Check if the Nivo Slider jQuery plugin library is available
     if (file_exists(libraries_get_path('nivo-slider'))) {
       $requirements['nivo_slider_library'] = array(
         'title' => t('Nivo Slider jQuery plugin'),
@@ -21,7 +24,6 @@ function nivo_slider_requirements($phase) {
         'severity' => REQUIREMENT_OK,
       );
     }
-    // The Nivo Slider jQuery plugin library is unavailable
     else {
       $requirements['nivo_slider_library'] = array(
         'title' => t('Nivo Slider jQuery plugin'),
@@ -125,6 +127,7 @@ function nivo_slider_theme($existing, $type, $theme, $path) {
  * Implements hook_image_default_styles().
  */
 function nivo_slider_image_default_styles() {
+  // Create an array to hold Nivo Slider image styles
   $styles = array();
 
   $styles['nivo_slider_slide'] = array(
@@ -160,6 +163,7 @@ function nivo_slider_image_default_styles() {
  * Implements hook_nivo_slider_theme().
  */
 function nivo_slider_nivo_slider_theme() {
+  // Find the path to the Nivo Slider jQuery plugin
   $library_path = libraries_get_path('nivo-slider');
 
   return array(
@@ -334,7 +338,6 @@ function nivo_slider_block_view($delta = '') {
           $block['content']['nivo_slider']['#attached']['js'][] = $available_themes[$current_theme]['resources']['js'][$index];
         }
       }
-
       break;
   }
   return $block;
