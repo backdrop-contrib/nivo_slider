@@ -6,3 +6,5 @@ dependencies[] = block
 dependencies[] = image
 dependencies[] = libraries
 dependencies[] = menu
+
+files[] = nivo_slider.test

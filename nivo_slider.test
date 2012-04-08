@@ -1,0 +1,42 @@
+<?php
+/**
+ * @file
+ * Simpletest tests for the Nivo Slider module.
+ */
+
+/**
+ * The NivoSliderTestCase is a functional test case, meaning that it
+ * actually exercises a particular sequence of actions through the web UI.
+ *
+ * @see DrupalWebTestCase
+ */
+class NivoSliderTestCase extends DrupalWebTestCase {
+  protected $privileged_user;
+
+  public static function getInfo() {
+    return array(
+      'name' => 'Nivo Slider',
+      'description' => 'Ensure that the nivo_slider slider functions properly.',
+      'group' => 'Nivo Slider',
+    );
+  }
+
+  public function setUp() {
+    // Enable any modules required for the test
+    parent::setUp('nivo_slider');
+
+    // Create and log in our user. The user has the arbitrary privilege
+    // 'administer nivo slider' which the code uses to grant access.
+    $this->privileged_user = $this->drupalCreateUser(array('administer nivo slider'));
+    $this->drupalLogin($this->privileged_user);
+  }
+
+  // Create a nivo_slider slide using the slides form
+  public function testCreateSlide() {
+    // Upload a new slide
+    $edit = array();
+    $edit['files[upload]'] = realpath('sites/all/modules/nivo_slider/images/1.jpg');
+    $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
+    $this->assertText(t('The configuration options have been saved.'));
+  }
+}
