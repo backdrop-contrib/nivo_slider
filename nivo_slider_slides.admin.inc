@@ -21,8 +21,6 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
   $form['images'] = array(
     '#type' => 'vertical_tabs',
     '#title' => t('Slider images'),
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
     '#tree' => TRUE,
   );
 
@@ -35,7 +33,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
       '#type' => 'fieldset',
       '#title' => t('Image !number: !title', array(
         '!number' => $slide + 1,
-        '!title' => $settings['title'],
+        '!title' => isset($settings['title']) ? $settings['title'] : '',
         )
       ),
       '#weight' => $slide,
@@ -45,31 +43,31 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     );
     $form['images'][$slide]['path'] = array(
       '#type' => 'hidden',
-      '#value' => $settings['path'],
+      '#value' => isset($settings['path']) ? $settings['path'] : '',
     );
     $form['images'][$slide]['title'] = array(
       '#type' => 'textfield',
       '#title' => t('Title'),
-      '#default_value' => $settings['title'],
+      '#default_value' => isset($settings['title']) ? $settings['title'] : '',
       '#description' => t('The title is used as alternative text for the slide image.'),
     );
     $form['images'][$slide]['description'] = array(
       '#type' => 'text_format',
       '#title' => t('Description'),
-      '#default_value' => $settings['description']['value'],
+      '#default_value' => isset($settings['description']['value']) ? $settings['description']['value'] : '',
       '#format' => isset($settings['description']['format']) ? $settings['description']['format'] : NULL,
       '#description' => t('The description will be displayed with the slide image.'),
     );
     $form['images'][$slide]['url'] = array(
       '#type' => 'textfield',
       '#title' => t('Link slide to URL'),
-      '#default_value' => $settings['url'],
+      '#default_value' => isset($settings['url']) ? $settings['url'] : '',
     );
     $form['images'][$slide]['visibility'] = array(
       '#type' => 'textarea',
       '#title' => t('Show slide on specific pages'),
       '#description' => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard. Example paths are %blog for the blog page and %blog-wildcard for every personal blog. %front is the front page.", array('%blog' => 'blog', '%blog-wildcard' => 'blog/*', '%front' => '<front>')),
-      '#default_value' => $settings['visibility'],
+      '#default_value' => isset($settings['visibility']) ? $settings['visibility'] : '*',
     );
     $form['images'][$slide]['transition'] = array(
     	'#type' => 'select',
@@ -94,17 +92,17 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
   	    'boxRainGrowReverse' => t('Box Rain Grow Reverse'),
     	),
     	'#description' => t('Select a transition. Selecting an option other than %default will force this slide to use the selected transition every time it appears. It overrides all other effect settings.', array('%default' => '- Default -')),
-    	'#default_value' => $settings['transition'],
+    	'#default_value' => isset($settings['transition']) ? $settings['transition'] : '',
     );
     $form['images'][$slide]['weight'] = array(
       '#type' => 'weight',
       '#title' => t('Weight'),
-      '#default_value' => $settings['weight'],
+      '#default_value' => isset($settings['weight']) ? $settings['weight'] : 1,
     );
     $form['images'][$slide]['published'] = array(
       '#type' => 'checkbox',
       '#title' => t('Published'),
-      '#default_value' => $settings['published'],
+      '#default_value' => isset($settings['published']) ? $settings['published'] : TRUE,
     );
     $form['images'][$slide]['delete'] = array(
       '#type' => 'checkbox',
@@ -131,29 +129,32 @@ function nivo_slider_settings_submit($form, &$form_state) {
 
   // Process the available slides
   foreach ($form_state['input']['images'] as $slide => $settings) {
-    // Delete the slide if required otherwise add it to the array of slides
-    if ($settings['delete']) {
-      // Find the URI of the slide to be deleted
-      $uri = $settings['path'];
+    // Ensure that only slide settings are processed
+    if (is_array($settings)) {
+      // Delete the slide if required otherwise add it to the array of slides
+      if ($settings['delete']) {
+        // Find the URI of the slide to be deleted
+        $uri = $settings['path'];
 
-      // Find the file ID of the file with the URI
-      $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
+        // Find the file ID of the file with the URI
+        $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
 
-      // Load the file with the file ID
-      if (!empty($fid)) {
-        $file_object = file_load($fid);
+        // Load the file with the file ID
+        if (!empty($fid)) {
+          $file_object = file_load($fid);
+        }
+        else {
+          $file_object = FALSE;
+        }
+
+        // Delete the file
+        if (!empty($file_object)) {
+          $result = file_delete($file_object);
+        }
       }
       else {
-        $file_object = FALSE;
+        $slides[] = $settings;
       }
-
-      // Delete the file
-      if (!empty($file_object)) {
-        $result = file_delete($file_object);
-      }
-    }
-    else {
-      $slides[] = $settings;
     }
   }
 
@@ -165,17 +166,6 @@ function nivo_slider_settings_submit($form, &$form_state) {
     // Create a new slide
     $slides[] = array(
       'path' => $path_to_slide_image,
-      'title' => '',
-      'description' => array(
-        'value' => '',
-        'format' => 'plain_text',
-      ),
-      'url' => '',
-      'visibility' => '*',
-      'transition' => '',
-      'weight' => 1,
-      'published' => TRUE,
-      'delete' => '',
     );
   }
 
