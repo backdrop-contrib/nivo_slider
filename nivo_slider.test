@@ -16,27 +16,103 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   public static function getInfo() {
     return array(
       'name' => 'Nivo Slider',
-      'description' => 'Ensure that the nivo_slider slider functions properly.',
+      'description' => 'Create slides, configure options and test slider generation.',
       'group' => 'Nivo Slider',
     );
   }
 
   public function setUp() {
-    // Enable any modules required for the test
+    // Enable the Nivo Slider module
     parent::setUp('nivo_slider');
 
-    // Create and log in our user. The user has the arbitrary privilege
-    // 'administer nivo slider' which the code uses to grant access.
-    $this->privileged_user = $this->drupalCreateUser(array('administer nivo slider'));
+    // Create and log in a test user with a number of permission
+    $this->privileged_user = $this->drupalCreateUser(array('access administration pages', 'administer blocks', 'administer nivo slider'));
     $this->drupalLogin($this->privileged_user);
+
+    // Add the Nivo Slider block to the page
+    $edit = array(
+      'blocks[nivo_slider_nivo_slider][region]' => 'header',
+    );
+    $this->drupalPost('admin/structure/block', $edit, t('Save blocks'));
   }
 
-  // Create a nivo_slider slide using the slides form
-  public function testCreateSlide() {
-    // Upload a new slide
+  /**
+   * Test adding new slides to the slider.
+   */
+  public function testAddSlides() {
+    // Delete all default slides
     $edit = array();
-    $edit['files[upload]'] = realpath('sites/all/modules/nivo_slider/images/1.jpg');
+    $edit['images[0][delete]'] = TRUE;
+    $edit['images[1][delete]'] = TRUE;
+    $edit['images[2][delete]'] = TRUE;
+    $edit['images[3][delete]'] = TRUE;
+    $edit['images[4][delete]'] = TRUE;
     $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
+
+    // Add five new slides
+    foreach (array(1, 2, 3, 4, 5) as $slide) {
+      $edit = array();
+      $edit['files[upload]'] = realpath('sites/all/modules/nivo_slider/images/' . $slide . '.jpg');
+      $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
+      $this->assertText(t('The configuration options have been saved.'));
+    }
+  }
+
+  /**
+   * Test configuring slider slides.
+   */
+  public function testConfigureSlide() {
+    // Configure slide settings
+    $edit = array();
+    $edit['images[0][title]'] = 'Catchy title';
+    $edit['images[0][description][value]'] = 'Nivo Slider is the best module ever!';
+    $edit['images[0][url]'] = 'http://www.drupal.org';
+    $edit['images[0][transition]'] = 'fade';
+    $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
+
+    $this->drupalGet('<front>');
+
+    // Check that the title can be found in the image alternate text
+    $title = $this->xpath('//img[@alt="Catchy title"]');
+    $this->assertTrue($title, t('Slide 1: the title is incorrect.'));
+
+    // Check that the description can be found in the image title
+    $description = $this->xpath('//img[@title="Nivo Slider is the best module ever!"]');
+    $this->assertTrue($description, t('Slide 1: the description is incorrect.'));
+
+    // Check that a link to the image URL can be found
+    $this->assertLinkByHref('http://www.drupal.org', 0, 'Slide 1: the slide links to drupal.org');
+
+    // Check that the transition method can be found in the image data-transition
+    $transition = $this->xpath('//img[@data-transition="fade"]');
+    $this->assertTrue($transition, t('Slide 1: the transition is incorrect.'));
+  }
+
+  /**
+   * Test configuring slider options.
+   */
+  public function testConfigureOption() {
+    $edit = array();
+    $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
     $this->assertText(t('The configuration options have been saved.'));
+  }
+
+  /**
+   * Test slider theme selection.
+   */
+  public function testConfigureTheme() {
+    // Set the theme to Orman
+    $edit = array();
+    $edit['nivo_slider_theme'] = 'orman';
+    $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
+    $this->drupalGet('<front>');
+    $this->assertRaw('<div class="slider-wrapper theme-orman">');
+
+    // Set the theme to Pascal
+    $edit = array();
+    $edit['nivo_slider_theme'] = 'pascal';
+    $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
+    $this->drupalGet('<front>');
+    $this->assertRaw('<div class="slider-wrapper theme-pascal">');
   }
 }

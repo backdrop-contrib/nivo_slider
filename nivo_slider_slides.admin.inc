@@ -166,6 +166,17 @@ function nivo_slider_settings_submit($form, &$form_state) {
     // Create a new slide
     $slides[] = array(
       'path' => $path_to_slide_image,
+      'title' => '',
+      'description' => array(
+        'value' => '',
+        'format' => NULL,
+      ),
+      'url' => '',
+      'visibility' => '*',
+      'transition' => '',
+      'weight' => 1,
+      'published' => TRUE,
+      'delete' => FALSE,
     );
   }
 
