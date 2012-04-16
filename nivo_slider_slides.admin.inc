@@ -17,7 +17,10 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     '#title' => t('Upload a new slide image'),
   );
 
-  // Images
+  // Draggable table
+  $form['order'] = array();
+
+  // Vertical tab
   $form['images'] = array(
     '#type' => 'vertical_tabs',
     '#title' => t('Slider images'),
@@ -27,7 +30,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
   // Get all available slides
   $slides = variable_get('nivo_slider_banner_settings', array());
 
-  // Create a vertical tab filled with slide settings for each slide
+  // Create a vertical tab for each slide
   foreach ($slides as $slide => $settings) {
     $form['images'][$slide] = array(
       '#type' => 'fieldset',
@@ -37,6 +40,29 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
         )
       ),
       '#weight' => $slide,
+    );
+    $form['images'][$slide]['name'] = array(
+      '#markup' => t('Image !number: !title', array(
+        '!number' => $slide + 1,
+        '!title' => isset($settings['title']) ? $settings['title'] : '',
+        )
+      ),
+    );
+    $form['images'][$slide]['weight'] = array(
+      '#type' => 'weight',
+      '#delta' => 10,
+      '#default_value' => isset($settings['weight']) ? $settings['weight'] : 1,
+      '#attributes' => array(
+        'class' => array('slide-weight'),
+      ),
+    );
+    $form['images'][$slide]['published'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => isset($settings['published']) ? $settings['published'] : '',
+    );
+    $form['images'][$slide]['delete'] = array(
+      '#type' => 'checkbox',
+      '#default_value' => FALSE,
     );
     $form['images'][$slide]['preview'] = array(
       '#markup' => theme('image', array('path' => image_style_url('nivo_slider_slide', ($settings['path'])))),
@@ -94,22 +120,10 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     	'#description' => t('Select a transition. Selecting an option other than %default will force this slide to use the selected transition every time it appears. It overrides all other effect settings.', array('%default' => '- Default -')),
     	'#default_value' => isset($settings['transition']) ? $settings['transition'] : '',
     );
-    $form['images'][$slide]['weight'] = array(
-      '#type' => 'weight',
-      '#title' => t('Weight'),
-      '#default_value' => isset($settings['weight']) ? $settings['weight'] : 1,
-    );
-    $form['images'][$slide]['published'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Published'),
-      '#default_value' => isset($settings['published']) ? $settings['published'] : TRUE,
-    );
-    $form['images'][$slide]['delete'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Delete slide'),
-      '#default_value' => FALSE,
-    );
   }
+
+  // Add a theme function to theme the form
+  $form['#theme'][] = 'nivo_slider_slide_configuration_form';
 
   // Add a submit handler to save the slide settings
   $form['#submit'][] = 'nivo_slider_settings_submit';
@@ -130,30 +144,32 @@ function nivo_slider_settings_submit($form, &$form_state) {
   // Process the available slides
   foreach ($form_state['input']['images'] as $slide => $settings) {
     // Ensure that only slide settings are processed
-    if (is_array($settings)) {
-      // Delete the slide if required otherwise add it to the array of slides
-      if ($settings['delete']) {
-        // Find the URI of the slide to be deleted
-        $uri = $settings['path'];
+    if (is_numeric($slide)){
+      if (is_array($settings)) {
+        // Delete the slide if required otherwise add it to the array of slides
+        if ($settings['delete']) {
+          // Find the URI of the slide to be deleted
+          $uri = $settings['path'];
 
-        // Find the file ID of the file with the URI
-        $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
+          // Find the file ID of the file with the URI
+          $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
 
-        // Load the file with the file ID
-        if (!empty($fid)) {
-          $file_object = file_load($fid);
+          // Load the file with the file ID
+          if (!empty($fid)) {
+            $file_object = file_load($fid);
+          }
+          else {
+            $file_object = FALSE;
+          }
+
+          // Delete the file
+          if (!empty($file_object)) {
+            $result = file_delete($file_object);
+          }
         }
         else {
-          $file_object = FALSE;
+          $slides[] = $settings;
         }
-
-        // Delete the file
-        if (!empty($file_object)) {
-          $result = file_delete($file_object);
-        }
-      }
-      else {
-        $slides[] = $settings;
       }
     }
   }

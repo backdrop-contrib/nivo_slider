@@ -110,6 +110,11 @@ function nivo_slider_help($path, $arg) {
  */
 function nivo_slider_theme($existing, $type, $theme, $path) {
   return array(
+    'nivo_slider_slide_configuration_form' => array(
+      'render element' => 'form',
+      'file' => 'nivo_slider.theme.inc',
+      'path' => $path . '/themes',
+    ),
     'nivo_slider_wrapper' => array(
       'variables' => array(
         'theme' => NULL,
