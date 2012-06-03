@@ -55,14 +55,6 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
       ),
     ),
   );
-  $form['general']['nivo_slider_caption_opacity'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Caption opacity'),
-    '#maxlength' => 3,
-    '#size' => 3,
-    '#default_value' => variable_get('nivo_slider_caption_opacity', '0.8'),
-    '#description' => t('Specify the transparency of slide captions. Enter a number between 0 and 1 where 0 is fully transparent and 1 is fully opaque.'),
-  );
   // Effects
   $form['effects'] = array(
     '#type' => 'fieldset',
@@ -223,16 +215,6 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
       ),
     ),
   );
-  $form['navigation']['nivo_slider_keyboard_navigation'] = array(
-    '#type' => 'radios',
-    '#title' => t('Enable keyboard navigation'),
-    '#options' => array(
-      'true' => t('Yes'),
-      'false' => t('No'),
-    ),
-    '#default_value' => variable_get('nivo_slider_keyboard_navigation', 'true'),
-    '#description' => t('Allow slideshow navigation using the left and right keyboard arrow keys.'),
-  );
   $form['navigation']['nivo_slider_manual_advance'] = array(
     '#type' => 'radios',
     '#title' => t('Disable automatic slide transitions'),
@@ -259,11 +241,4 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
   );
 
   return system_settings_form($form);
-}
-
-function nivo_slider_option_configuration_form_validate($form, &$form_state) {
-  // Opacity must be between 0 and 1
-  if ($form_state['values']['nivo_slider_caption_opacity'] < 0 || $form_state['values']['nivo_slider_caption_opacity'] > 1) {
-    form_set_error('nivo_slider_caption_opacity', t('Caption opacity must be between 0 and 1.'));
-  }
 }

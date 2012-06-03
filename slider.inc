@@ -117,7 +117,7 @@ function nivo_slider_slider() {
       'attributes' => array(
         'class' => 'slide',
         'id' => 'slide-' . $slide,
-        'rel' => image_style_url('nivo_slider_thumbnail', check_plain($settings['path'])),
+        'data-thumb' => image_style_url('nivo_slider_thumbnail', check_plain($settings['path'])),
         'data-transition' => check_plain($settings['transition']),
       ),
     );

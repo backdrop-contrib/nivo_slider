@@ -96,23 +96,4 @@ class NivoSliderTestCase extends DrupalWebTestCase {
     $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
     $this->assertText(t('The configuration options have been saved.'));
   }
-
-  /**
-   * Test slider theme selection.
-   */
-  public function testConfigureTheme() {
-    // Set the theme to Orman
-    $edit = array();
-    $edit['nivo_slider_theme'] = 'orman';
-    $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
-    $this->drupalGet('<front>');
-    $this->assertRaw('<div class="slider-wrapper theme-orman">');
-
-    // Set the theme to Pascal
-    $edit = array();
-    $edit['nivo_slider_theme'] = 'pascal';
-    $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
-    $this->drupalGet('<front>');
-    $this->assertRaw('<div class="slider-wrapper theme-pascal">');
-  }
 }

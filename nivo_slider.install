@@ -125,7 +125,6 @@ function nivo_slider_uninstall() {
   variable_del('nivo_slider_theme');
   variable_del('nivo_slider_random_start');
   variable_del('nivo_slider_start_slide');
-  variable_del('nivo_slider_caption_opacity');
   variable_del('nivo_slider_effect');
   variable_del('nivo_slider_slices');
   variable_del('nivo_slider_box_columns');
@@ -138,7 +137,6 @@ function nivo_slider_uninstall() {
   variable_del('nivo_slider_directional_navigation_hide');
   variable_del('nivo_slider_control_navigation');
   variable_del('nivo_slider_control_nav_thumbs');
-  variable_del('nivo_slider_keyboard_navigation');
   variable_del('nivo_slider_manual_advance');
   variable_del('nivo_slider_pause_time');
 }
@@ -221,4 +219,14 @@ function nivo_slider_update_7002() {
   variable_set('nivo_slider_banner_settings', $new_slider);
 
   return t('Updated existing slide property names and added new properties.');
+}
+
+/**
+ * Remove obsolete variables.
+ */
+function nivo_slider_update_7003() {
+  variable_del('nivo_slider_caption_opacity');
+  variable_del('nivo_slider_keyboard_navigation');
+
+  return t('Removed obsolete variables.');
 }
