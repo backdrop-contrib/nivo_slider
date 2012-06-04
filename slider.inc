@@ -110,20 +110,21 @@ function nivo_slider_slider() {
 
     // Create an array of image settings
     $variables = array(
-      'style_name' => 'nivo_slider_slide',
       'path' => check_plain($settings['path']),
-      'title' => check_plain($description),
+      'width' => NULL,
+      'height' => NULL,
       'alt' => check_plain($settings['title']),
+      'title' => check_plain($description),
       'attributes' => array(
         'class' => 'slide',
         'id' => 'slide-' . $slide,
-        'data-thumb' => image_style_url('nivo_slider_thumbnail', check_plain($settings['path'])),
+        'data-thumb' => check_plain($settings['path']),
         'data-transition' => check_plain($settings['transition']),
       ),
     );
 
     // Create the slide image
-    $image = theme('image_style', $variables);
+    $image = theme('image', $variables);
 
     // Add a link to the slide image when required
     $output .= !empty($settings['url']) ? l($image, $settings['url'], array('html' => TRUE)) : $image;
@@ -135,7 +136,7 @@ function nivo_slider_slider() {
   // Set the slider's dimensions to those of the first slider image
   if (isset($visible_slides[0])) {
     // Get the path to the first slider image
-    $path = image_style_path('nivo_slider_slide', $visible_slides[0]['path']);
+    $path = $visible_slides[0]['path'];
 
     // Find the image's dimensions
     $dimensions = image_get_info($path);

@@ -142,23 +142,6 @@ function nivo_slider_uninstall() {
 }
 
 /**
- * Implements hook_enable().
- */
-function nivo_slider_enable() {
-  $styles = image_styles();
-  foreach ($styles as $style) {
-    image_style_flush($style);
-  }
-}
-
-/**
- * Implements hook_disable().
- */
-function nivo_slider_disable() {
-  nivo_slider_enable();
-}
-
-/**
  * Image previews are now generated using image styles. Delete the old banner thumbnails.
  */
 function nivo_slider_update_7000() {

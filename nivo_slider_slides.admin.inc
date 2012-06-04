@@ -65,7 +65,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
       '#default_value' => FALSE,
     );
     $form['images'][$slide]['preview'] = array(
-      '#markup' => theme('image', array('path' => image_style_url('nivo_slider_slide', ($settings['path'])))),
+      '#markup' => theme('image', array('path' => $settings['path'])),
     );
     $form['images'][$slide]['path'] = array(
       '#type' => 'hidden',

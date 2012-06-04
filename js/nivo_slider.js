@@ -19,11 +19,8 @@
         'directionNavHide': Drupal.settings.nivo_slider.directionNavHide, // Only show on hover
         'controlNav': Drupal.settings.nivo_slider.controlNav, // 1,2,3... navigation
         'controlNavThumbs': Drupal.settings.nivo_slider.controlNavThumbs, // Use thumbnails for Control Nav
-        'controlNavThumbsFromRel': true, // Use image rel for thumbs
-        'keyboardNav': Drupal.settings.nivo_slider.keyboardNav, // Use left & right arrows
         'pauseOnHover': Drupal.settings.nivo_slider.pauseOnHover, // Stop animation while hovering
         'manualAdvance': Drupal.settings.nivo_slider.manualAdvance, // Force manual transitions
-        'captionOpacity': Drupal.settings.nivo_slider.captionOpacity, // Universal caption opacity
         'prevText': Drupal.settings.nivo_slider.prevText, // Prev directionNav text
         'nextText': Drupal.settings.nivo_slider.nextText, // Next directionNav text
         'randomStart': Drupal.settings.nivo_slider.randomStart // Start on a random slide
