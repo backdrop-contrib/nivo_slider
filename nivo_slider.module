@@ -177,12 +177,12 @@ function nivo_slider_block_view($delta = '') {
                 'data' => array(
                   'nivo_slider' => array(
                     'effect' => check_plain(variable_get('nivo_slider_effect', 'random')),
-                    'slices' => check_plain(variable_get('nivo_slider_slices', '15')),
-                    'boxCols' => check_plain(variable_get('nivo_slider_box_columns', '8')),
-                    'boxRows' => check_plain(variable_get('nivo_slider_box_rows', '4')),
-                    'animSpeed' => check_plain(variable_get('nivo_slider_animation_speed', '500')),
-                    'pauseTime' => check_plain(variable_get('nivo_slider_pause_time', '3000')),
-                    'startSlide' => check_plain(variable_get('nivo_slider_start_slide', '0')),
+                    'slices' => (int) check_plain(variable_get('nivo_slider_slices', '15')),
+                    'boxCols' => (int) check_plain(variable_get('nivo_slider_box_columns', '8')),
+                    'boxRows' => (int) check_plain(variable_get('nivo_slider_box_rows', '4')),
+                    'animSpeed' => (int) check_plain(variable_get('nivo_slider_animation_speed', '500')),
+                    'pauseTime' => (int) check_plain(variable_get('nivo_slider_pause_time', '3000')),
+                    'startSlide' => (int) check_plain(variable_get('nivo_slider_start_slide', '0')),
                     'directionNav' => check_plain(variable_get('nivo_slider_directional_navigation', 'true')) == 'true' ? TRUE : FALSE,
                     'directionNavHide' => check_plain(variable_get('nivo_slider_directional_navigation_hide', 'true')) == 'true' ? TRUE : FALSE,
                     'controlNav' => check_plain(variable_get('nivo_slider_control_navigation', 'true')) == 'true' ? TRUE : FALSE,

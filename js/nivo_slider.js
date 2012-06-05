@@ -23,7 +23,12 @@
         'manualAdvance': Drupal.settings.nivo_slider.manualAdvance, // Force manual transitions
         'prevText': Drupal.settings.nivo_slider.prevText, // Prev directionNav text
         'nextText': Drupal.settings.nivo_slider.nextText, // Next directionNav text
-        'randomStart': Drupal.settings.nivo_slider.randomStart // Start on a random slide
+        'randomStart': Drupal.settings.nivo_slider.randomStart, // Start on a random slide
+        'beforeChange': Drupal.settings.nivo_slider.beforeChange, // Triggers before a slide transition
+        'afterChange': Drupal.settings.nivo_slider.afterChange, // Triggers after a slide transition
+        'slideshowEnd': Drupal.settings.nivo_slider.slideshowEnd, // Triggers after all slides have been shown
+        'lastSlide': Drupal.settings.nivo_slider.lastSlide, // Triggers when last slide is shown
+        'afterLoad': Drupal.settings.nivo_slider.afterLoad // Triggers when slider has loaded
       });
     }
   };
