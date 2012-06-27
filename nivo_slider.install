@@ -113,7 +113,31 @@ function nivo_slider_install() {
  * Implements hook_uninstall().
  */
 function nivo_slider_uninstall() {
-  // Remove slide images
+  // Get the current banner settings
+  $slides = variable_get('nivo_slider_banner_settings', array());
+
+  // Delete all of the slide images
+  foreach ($slides as $slide) {
+    // Check if the slide has a URI
+    if (isset($slide['path'])) {
+      // Get the slide's URI
+      $uri = $slide['path'];
+
+      // Find the file ID of the file that corresponds to the URI 
+      $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
+
+      // Check if a file ID was found
+      if (!empty($fid)) {
+        // Load the file that corresponds to the file ID
+        $file_object = file_load($fid);
+
+        // Delete the file
+        file_delete($file_object);
+      }
+    }
+  }
+
+  // Delete the folder the slide images were contained in
   $banner_folder = 'public://banner/';
   file_unmanaged_delete_recursive($banner_folder);
 
