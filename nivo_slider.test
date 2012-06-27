@@ -37,22 +37,21 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Test adding new slides to the slider.
+   * Test adding and removing slider images.
    */
-  public function testAddSlides() {
-    // Delete all default slides
-    $edit = array();
-    $edit['images[0][delete]'] = TRUE;
-    $edit['images[1][delete]'] = TRUE;
-    $edit['images[2][delete]'] = TRUE;
-    $edit['images[3][delete]'] = TRUE;
-    $edit['images[4][delete]'] = TRUE;
-    $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
-
-    // Add five new slides
+  public function testAddRemoveSlides() {
+    // Add five slides
     foreach (array(1, 2, 3, 4, 5) as $slide) {
       $edit = array();
       $edit['files[upload]'] = realpath('sites/all/modules/nivo_slider/images/' . $slide . '.jpg');
+      $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
+      $this->assertText(t('The configuration options have been saved.'));
+    }
+
+    // Delete five slides
+    foreach (array(1, 2, 3, 4, 5) as $slide) {
+      $edit = array();
+      $edit['images[0][delete]'] = TRUE;
       $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
       $this->assertText(t('The configuration options have been saved.'));
     }
@@ -61,13 +60,21 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   /**
    * Test configuring slider slides.
    */
-  public function testConfigureSlide() {
+  public function testConfigureSlides() {
+    // Add five new slides
+    foreach (array(1, 2, 3, 4, 5) as $slide) {
+      $edit = array();
+      $edit['files[upload]'] = realpath('sites/all/modules/nivo_slider/images/' . $slide . '.jpg');
+      $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
+    }
+
     // Configure slide settings
     $edit = array();
-    $edit['images[0][title]'] = 'Catchy title';
-    $edit['images[0][description][value]'] = 'Nivo Slider is the best module ever!';
-    $edit['images[0][url]'] = 'http://www.drupal.org';
-    $edit['images[0][transition]'] = 'fade';
+    $edit['images[1][title]'] = 'Catchy title';
+    $edit['images[1][description][format]'] = 'plain_text';
+    $edit['images[1][description][value]'] = 'Nivo Slider is the best module ever!';
+    $edit['images[1][url]'] = 'http://www.drupal.org';
+    $edit['images[1][transition]'] = 'fade';
     $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
 
     $this->drupalGet('<front>');
@@ -91,7 +98,7 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   /**
    * Test configuring slider options.
    */
-  public function testConfigureOption() {
+  public function testConfigureOptions() {
     $edit = array();
     $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
     $this->assertText(t('The configuration options have been saved.'));

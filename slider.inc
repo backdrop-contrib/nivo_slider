@@ -5,40 +5,6 @@
  */
 
 /**
- * Save uploaded slide images.
- *
- * @param <file> $file
- *    Uploaded slide image file
- *
- * @return <string>
- *    Path to saved image
- *    FALSE on error
- */
-function _nivo_slider_save_image($file) {
-  // Store slide images in a folder named 'banner'
-  $banner_folder = 'public://banner';
-
-  // Create the banner directory if it does not currently exist
-  file_prepare_directory($banner_folder, FILE_CREATE_DIRECTORY);
-
-  // Find information about the file
-  $parts = pathinfo($file->filename);
-
-  // Create a destination for the slide image
-  $destination = $banner_folder . '/' . $parts['basename'];
-
-  // Indicate that the slide image is permanent
-  $file->status = FILE_STATUS_PERMANENT;
-
-  // Copy the slide image into the banner folder
-  if (file_copy($file, $destination, FILE_EXISTS_REPLACE != FALSE)) {
-    return $destination;
-  }
-
-  return FALSE;
-}
-
-/**
  * Generates slider markup.
  *
  * @return <string>
@@ -108,9 +74,13 @@ function nivo_slider_slider() {
       $description_html .= $html_caption;
     }
 
+    if (isset($settings['fid'])) {
+      $file = file_load($settings['fid']);
+    }
+
     // Create an array of image settings
     $variables = array(
-      'path' => check_plain($settings['path']),
+      'path' => file_create_url(check_plain($file->uri)),
       'width' => NULL,
       'height' => NULL,
       'alt' => check_plain($settings['title']),
@@ -118,7 +88,7 @@ function nivo_slider_slider() {
       'attributes' => array(
         'class' => 'slide',
         'id' => 'slide-' . $slide,
-        'data-thumb' => check_plain($settings['path']),
+        'data-thumb' => file_create_url(check_plain($file->uri)),
         'data-transition' => check_plain($settings['transition']),
       ),
     );
@@ -132,21 +102,6 @@ function nivo_slider_slider() {
 
   // Save all HTML descriptions
   variable_set('nivo_slider_banner_html_captions', $description_html);
-
-  // Set the slider's dimensions to those of the first slider image
-  if (isset($visible_slides[0])) {
-    // Get the path to the first slider image
-    $path = $visible_slides[0]['path'];
-
-    // Find the image's dimensions
-    $dimensions = image_get_info($path);
-
-    // Create a CSS selector to assign the height and width to the slider
-    $css = '.nivoSlider {width: ' . $dimensions['width'] . 'px; height: ' . $dimensions['height'] . 'px;}';
-
-    // Add the CSS
-    drupal_add_css($css, array('type' => 'inline'));
-  }
 
   return $output;
 }

@@ -64,12 +64,13 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
       '#type' => 'checkbox',
       '#default_value' => FALSE,
     );
+    $file = file_load($settings['fid']);
     $form['images'][$slide]['preview'] = array(
-      '#markup' => theme('image', array('path' => $settings['path'])),
+      '#markup' => theme('image', array('path' => file_create_url($file->uri))),
     );
-    $form['images'][$slide]['path'] = array(
+    $form['images'][$slide]['fid'] = array(
       '#type' => 'hidden',
-      '#value' => isset($settings['path']) ? $settings['path'] : '',
+      '#value' => isset($settings['fid']) ? $settings['fid'] : '',
     );
     $form['images'][$slide]['title'] = array(
       '#type' => 'textfield',
@@ -148,23 +149,14 @@ function nivo_slider_settings_submit($form, &$form_state) {
       if (is_array($settings)) {
         // Delete the slide if required otherwise add it to the array of slides
         if ($settings['delete']) {
-          // Find the URI of the slide to be deleted
-          $uri = $settings['path'];
-
-          // Find the file ID of the file with the URI
-          $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
-
           // Load the file with the file ID
-          if (!empty($fid)) {
-            $file_object = file_load($fid);
-          }
-          else {
-            $file_object = FALSE;
-          }
+          if (isset($settings['fid'])) {
+            $file = file_load($settings['fid']);
 
-          // Delete the file
-          if (!empty($file_object)) {
-            $result = file_delete($file_object);
+            // Delete the file
+            if (!empty($file)) {
+              file_delete($file);
+            }
           }
         }
         else {
@@ -176,12 +168,27 @@ function nivo_slider_settings_submit($form, &$form_state) {
 
   // Create a new slide if an image was uploaded
   if ($file = file_save_upload('upload')) {
-    // Save the file and get the new path to the slide image
-    $path_to_slide_image = _nivo_slider_save_image($file);
+    // Store slide images in a folder named 'banner'
+    $banner_folder = 'public://banner';
+
+    // Create the banner directory if it does not currently exist
+    file_prepare_directory($banner_folder, FILE_CREATE_DIRECTORY);
+
+    // Find information about the file
+    $parts = pathinfo($file->filename);
+
+    // Create a destination for the slide image
+    $destination = $banner_folder . '/' . $parts['basename'];
+
+    // Indicate that the slide image is permanent
+    $file->status = FILE_STATUS_PERMANENT;
+
+    // Copy the slide image into the banner folder
+    $file = file_copy($file, $destination, FILE_EXISTS_REPLACE);
 
     // Create a new slide
     $slides[] = array(
-      'path' => $path_to_slide_image,
+      'fid' => $file->fid,
       'title' => '',
       'description' => array(
         'value' => '',

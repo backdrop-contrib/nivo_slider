@@ -4,111 +4,6 @@
  * Install, update and uninstall functions for the Nivo Slider module.
  */
 
-// Include the slider functions
-include_once('slider.inc');
-
-/**
- * Implements hook_install().
- */
-function nivo_slider_install() {
-  // Find the path to the Nivo Slider module
-  $path = drupal_get_path('module', 'nivo_slider');
-
-  // Create an array to hold example slides
-  $slides = array();
-
-  // Create a number of example slides
-  $slides[] = array(
-    'path' => $path . '/images/1.jpg',
-    'title' => 'Title for image 1',
-    'description' => array(
-      'value' => 'Description for image 1',
-      'format' => 'plain_text',
-    ),
-    'url' => '',
-    'visibility' => '*',
-    'transition' => '',
-    'weight' => 1,
-    'published' => TRUE,
-    'delete' => '',
-  );
-  $slides[] = array(
-    'path' => $path . '/images/2.jpg',
-    'title' => 'Title for image 2',
-    'description' => array(
-      'value' => 'Description for image 2',
-      'format' => 'plain_text',
-    ),
-    'url' => '',
-    'visibility' => '*',
-    'transition' => '',
-    'weight' => 2,
-    'published' => TRUE,
-    'delete' => '',
-  );
-  $slides[] = array(
-    'path' => $path . '/images/3.jpg',
-    'title' => 'Title for image 3',
-    'description' => array(
-      'value' => 'Description for image 3',
-      'format' => 'plain_text',
-    ),
-    'url' => '',
-    'visibility' => '*',
-    'transition' => '',
-    'weight' => 3,
-    'published' => TRUE,
-    'delete' => '',
-  );
-  $slides[] = array(
-    'path' => $path . '/images/4.jpg',
-    'title' => 'Title for image 4',
-    'description' => array(
-      'value' => 'Description for image 4',
-      'format' => 'plain_text',
-    ),
-    'url' => '',
-    'visibility' => '*',
-    'transition' => '',
-    'weight' => 4,
-    'published' => TRUE,
-    'delete' => '',
-  );
-  $slides[] = array(
-    'path' => $path . '/images/5.jpg',
-    'title' => 'Title for image 5',
-    'description' => array(
-      'value' => 'Description for image 5',
-      'format' => 'plain_text',
-    ),
-    'url' => '',
-    'visibility' => '*',
-    'transition' => '',
-    'weight' => 5,
-    'published' => TRUE,
-    'delete' => '',
-  );
-
-  // Create a file object to hold slide image files
-  $file = new stdClass;
-
-  // Save all slide images
-  foreach ($slides as $slide => &$settings) {
-    // Build a file using the slide image path
-    $file->uri = $settings['path'];
-    $file->filename = $file->uri;
-
-    // Save the file and get the new path to the slide image
-    $path_to_slide_image = _nivo_slider_save_image($file);
-
-    // Update the slide image path
-    $settings['path'] = $path_to_slide_image;
-  }
-
-  // Save the slides
-  variable_set('nivo_slider_banner_settings', $slides);
-}
-
 /**
  * Implements hook_uninstall().
  */
@@ -118,22 +13,13 @@ function nivo_slider_uninstall() {
 
   // Delete all of the slide images
   foreach ($slides as $slide) {
-    // Check if the slide has a URI
-    if (isset($slide['path'])) {
-      // Get the slide's URI
-      $uri = $slide['path'];
+    // Check if the slide has a file ID
+    if (isset($slide['fid'])) {
+      // Load the file that corresponds to the file ID
+      $file_object = file_load($fid);
 
-      // Find the file ID of the file that corresponds to the URI 
-      $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
-
-      // Check if a file ID was found
-      if (!empty($fid)) {
-        // Load the file that corresponds to the file ID
-        $file_object = file_load($fid);
-
-        // Delete the file
-        file_delete($file_object);
-      }
+      // Delete the file
+      file_delete($file_object);
     }
   }
 
