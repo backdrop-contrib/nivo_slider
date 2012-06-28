@@ -33,6 +33,7 @@ function nivo_slider_requirements($phase) {
       );
     }
   }
+
   return $requirements;
 }
 
@@ -81,6 +82,7 @@ function nivo_slider_menu() {
     'type' => MENU_LOCAL_TASK,
     'weight' => 2,
   );
+
   return $items;
 }
 
@@ -166,6 +168,7 @@ function nivo_slider_block_info() {
   $blocks['nivo_slider'] = array(
     'info' => t('Nivo Slider'),
   );
+
   return $blocks;
 }
 
@@ -292,5 +295,6 @@ function nivo_slider_block_view($delta = '') {
       }
       break;
   }
+
   return $block;
 }

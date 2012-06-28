@@ -1,7 +1,24 @@
 <?php
 /**
  * @file
- * Hook to register a Nivo Slider theme.
+ * Hooks provided by the Nivo Slider module.
+ *
+ * Modules and themes may implement any of the available hooks to interact with
+ * the slider.
+ */
+
+/**
+ * Register a custom slider theme.
+ *
+ * This hook can be used to register a custom theme for the slider. Custom
+ * themes will be displayed and made selectable on the slider options
+ * administration page.
+ *
+ * Custom slider themes get a unique CSS class to use for styling and can
+ * specify an unlimited number of CSS and JS files to include when the slider
+ * is displayed. Themes may also choose to override the default CSS and JS
+ * added by the Nivo Slider jQuery plugin. This is useful when heavy
+ * customization of the slider is required.
  */
 function hook_nivo_slider_theme() {
   return array(

@@ -8,7 +8,7 @@
  * Implements hook_uninstall().
  */
 function nivo_slider_uninstall() {
-  // Get the current banner settings
+  // Get the current slider settings
   $slides = variable_get('nivo_slider_banner_settings', array());
 
   // Delete all of the slide images
@@ -23,7 +23,7 @@ function nivo_slider_uninstall() {
     }
   }
 
-  // Delete the folder the slide images were contained in
+  // Delete the folder the slider images were contained in
   $banner_folder = 'public://banner/';
   file_unmanaged_delete_recursive($banner_folder);
 
@@ -131,7 +131,9 @@ function nivo_slider_update_7004() {
   // Get the current slider settings
   $slider = variable_get('nivo_slider_banner_settings', array());
 
+  // Process each of the slides
   foreach ($slider as &$slide) {
+    // If the slide has a URI continue processing, otherwise delete the slide
     if (isset($slide['path'])) {
       // Find the URI of the current slide
       $uri = $slide['path'];
@@ -147,14 +149,17 @@ function nivo_slider_update_7004() {
 
         // Add the file ID to the slide settings
         $slide['fid'] = $file->fid;
+
+        // Remove the existing path setting
+        unset($slide['path']);
       }
       else {
         unset($slide);
       }
     }
-
-    // Remove the existing path setting
-    unset($slide['path']);
+    else {
+      unset($slide);
+    }
   }
 
   // Save the updated settings

@@ -75,7 +75,9 @@ function nivo_slider_slider() {
         $description_html .= $html_caption;
       }
 
+      // Check if the slide has a file ID
       if (isset($settings['fid'])) {
+        // Load the file that corresponds to the file ID
         $file = file_load($settings['fid']);
 
         // Create an array of image settings
