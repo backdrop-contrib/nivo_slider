@@ -123,3 +123,42 @@ function nivo_slider_update_7003() {
 
   return t('Removed obsolete variables.');
 }
+
+/**
+ * Convert existing slide URIs to file IDs.
+ */
+function nivo_slider_update_7004() {
+  // Get the current slider settings
+  $slider = variable_get('nivo_slider_banner_settings', array());
+
+  foreach ($slider as &$slide) {
+    if (isset($slide['path'])) {
+      // Find the URI of the current slide
+      $uri = $slide['path'];
+
+      // Find the file ID of the file with the URI
+      $fid = db_query('SELECT fid FROM {file_managed} WHERE uri = :uri', array(':uri' => $uri))->fetchField();
+
+      // If the ID of the slide's image file can be found then load the file
+      // otherwise, delete the slide
+      if (!empty($fid)) {
+        // Load the file with the file ID
+        $file = file_load($fid);
+
+        // Add the file ID to the slide settings
+        $slide['fid'] = $file->fid;
+      }
+      else {
+        unset($slide);
+      }
+    }
+
+    // Remove the existing path setting
+    unset($slide['path']);
+  }
+
+  // Save the updated settings
+  variable_set('nivo_slider_banner_settings', $slider);
+
+  return t('Converted existing slide URIs to file IDs.');
+}
