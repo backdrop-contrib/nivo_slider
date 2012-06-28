@@ -3,9 +3,7 @@ description = Provides a user interface for building a rotating banner powered b
 core = 7.x
 
 dependencies[] = block
-dependencies[] = image
 dependencies[] = libraries
-dependencies[] = menu
 
 files[] = nivo_slider.test
 

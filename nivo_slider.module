@@ -89,6 +89,18 @@ function nivo_slider_menu() {
  */
 function nivo_slider_help($path, $arg) {
   switch ($path) {
+    case 'admin/help#nivo_slider':
+      $output = '';
+      $output .= '<p>' . t('<a href="@project_page">Nivo Slider</a> provides an easy and eye-catching way to showcase featured content.', array('@project_page' => 'http://drupal.org/project/nivo_slider')) . '</p>';
+      $output .= '<h2>' . t('Usage') . '</h2>';
+      $output .= '<p>' . t('Nivo Slider provides a block which will determine where the slider is placed. Administrators or users with the Administer Nivo Slider permission will be able to configure slider settings by visiting the <a href="nivo_slider">Nivo Slider</a> administration page.', array('@nivo_slider' => url('admin/structure/nivo-slider'))) . '</p>';
+      $output .= '<h2>' . t('Configuration') . '</h2>';
+      $output .= '<p>' . t('Nivo Slider provides two configuration pages: slides and options.') . '</p>';
+      $output .= '<h3>' . t('Slides') . '</h3>';
+      $output .= '<p>' . t('The <a href="@slides">slides</a> page provides an interface for managing the content of the slider. Slider content can be given a title or description, made into a link, reordered or restricted to displaying on a specific path.', array('@slides' => url('admin/structure/nivo-slider'))) . '</p>';
+      $output .= '<h3>' . t('Options') . '</h3>';
+      $output .= '<p>' . t('The <a href="@options">options</a> page provides an interface for configuring the slider. Slider options include general options, transitions and navigation.', array('@options' => url('admin/structure/nivo-slider/options'))) . '</p>';
+      return $output;
     case 'admin/structure/nivo-slider':
       $output = '';
       $output .= '<p>' . t('Configure slider content.') . '</p>';
