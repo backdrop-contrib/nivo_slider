@@ -52,52 +52,54 @@ function nivo_slider_slider() {
   $description_html = '';
 
   foreach ($visible_slides as $slide => $settings) {
-    // Create a variable to hold the slide description
-    $description = '';
+    if (isset($settings['description']['value']) && isset($settings['description']['format'])) {
+      // Create a variable to hold the slide description
+      $description = '';
 
-    // Set the slide description directly when using plain text otherwise create an
-    // HTML caption
-    if ($settings['description']['format'] == 'plain_text') {
-      $description = $settings['description']['value'];
+      // Set the slide description directly when using plain text otherwise create an
+      // HTML caption
+      if ($settings['description']['format'] == 'plain_text') {
+        $description = $settings['description']['value'];
+      }
+      else {
+        // Generate a unique anchor to reference the HTML caption
+        $description = '#htmlcaption-' . $slide;
+
+        // Create the HTML caption markup
+        $html_caption = '';
+        $html_caption .= '<div id="htmlcaption-' . $slide . '" class="nivo-html-caption">';
+        $html_caption .= check_markup($settings['description']['value'], $settings['description']['format']);
+        $html_caption .= '</div>';
+
+        // Add the HTML caption markup
+        $description_html .= $html_caption;
+      }
+
+      if (isset($settings['fid'])) {
+        $file = file_load($settings['fid']);
+
+        // Create an array of image settings
+        $variables = array(
+          'path' => file_create_url(check_plain($file->uri)),
+          'width' => NULL,
+          'height' => NULL,
+          'alt' => check_plain($settings['title']),
+          'title' => check_plain($description),
+          'attributes' => array(
+            'class' => 'slide',
+            'id' => 'slide-' . $slide,
+            'data-thumb' => file_create_url(check_plain($file->uri)),
+            'data-transition' => check_plain($settings['transition']),
+          ),
+        );
+
+        // Create the slide image
+        $image = theme('image', $variables);
+
+        // Add a link to the slide image when required
+        $output .= !empty($settings['url']) ? l($image, $settings['url'], array('html' => TRUE)) : $image;
+      }
     }
-    else {
-      // Generate a unique anchor to reference the HTML caption
-      $description = '#htmlcaption-' . $slide;
-
-      // Create the HTML caption markup
-      $html_caption = '';
-      $html_caption .= '<div id="htmlcaption-' . $slide . '" class="nivo-html-caption">';
-      $html_caption .= check_markup($settings['description']['value'], $settings['description']['format']);
-      $html_caption .= '</div>';
-
-      // Add the HTML caption markup
-      $description_html .= $html_caption;
-    }
-
-    if (isset($settings['fid'])) {
-      $file = file_load($settings['fid']);
-    }
-
-    // Create an array of image settings
-    $variables = array(
-      'path' => file_create_url(check_plain($file->uri)),
-      'width' => NULL,
-      'height' => NULL,
-      'alt' => check_plain($settings['title']),
-      'title' => check_plain($description),
-      'attributes' => array(
-        'class' => 'slide',
-        'id' => 'slide-' . $slide,
-        'data-thumb' => file_create_url(check_plain($file->uri)),
-        'data-transition' => check_plain($settings['transition']),
-      ),
-    );
-
-    // Create the slide image
-    $image = theme('image', $variables);
-
-    // Add a link to the slide image when required
-    $output .= !empty($settings['url']) ? l($image, $settings['url'], array('html' => TRUE)) : $image;
   }
 
   // Save all HTML descriptions
