@@ -97,29 +97,29 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
       '#default_value' => isset($settings['visibility']) ? $settings['visibility'] : '*',
     );
     $form['images'][$slide]['transition'] = array(
-    	'#type' => 'select',
-    	'#title' => t('Transition'),
-    	'#options' => array(
-    		'' => t('- Default -'),
-  	    'sliceDown' => t('Slice Down'),
-  	    'sliceDownLeft' => t('Slice Down Left'),
-  	    'sliceUp' => t('Slice Up'),
-  	    'sliceUpLeft' => t('Slice Up Left'),
-  	    'sliceUpDown' => t('Slice Up Down'),
-  	    'sliceUpDownLeft' => t('Slice Up Down Left'),
-  	    'fold' => t('Fold'),
-  	    'fade' => t('Fade'),
-  	    'random' => t('Random'),
-  	    'slideInRight' => t('Slide In Right'),
-  	    'slideInLeft' => t('Slide in Left'),
-  	    'boxRandom' => t('Box Random'),
-  	    'boxRain' => t('Box Rain'),
-  	    'boxRainReverse' => t('Box Rain Reverse'),
-  	    'boxRainGrow' => t('Box Rain Grow'),
-  	    'boxRainGrowReverse' => t('Box Rain Grow Reverse'),
-    	),
-    	'#description' => t('Select a transition. Selecting an option other than %default will force this slide to use the selected transition every time it appears. It overrides all other effect settings.', array('%default' => '- Default -')),
-    	'#default_value' => isset($settings['transition']) ? $settings['transition'] : '',
+      '#type' => 'select',
+      '#title' => t('Transition'),
+      '#options' => array(
+        '' => t('- Default -'),
+        'sliceDown' => t('Slice Down'),
+        'sliceDownLeft' => t('Slice Down Left'),
+        'sliceUp' => t('Slice Up'),
+        'sliceUpLeft' => t('Slice Up Left'),
+        'sliceUpDown' => t('Slice Up Down'),
+        'sliceUpDownLeft' => t('Slice Up Down Left'),
+        'fold' => t('Fold'),
+        'fade' => t('Fade'),
+        'random' => t('Random'),
+        'slideInRight' => t('Slide In Right'),
+        'slideInLeft' => t('Slide in Left'),
+        'boxRandom' => t('Box Random'),
+        'boxRain' => t('Box Rain'),
+        'boxRainReverse' => t('Box Rain Reverse'),
+        'boxRainGrow' => t('Box Rain Grow'),
+        'boxRainGrowReverse' => t('Box Rain Grow Reverse'),
+      ),
+      '#description' => t('Select a transition. Selecting an option other than %default will force this slide to use the selected transition every time it appears. It overrides all other effect settings.', array('%default' => '- Default -')),
+      '#default_value' => isset($settings['transition']) ? $settings['transition'] : '',
     );
   }
 
@@ -145,7 +145,7 @@ function nivo_slider_settings_submit($form, &$form_state) {
   // Process the available slides
   foreach ($form_state['input']['images'] as $slide => $settings) {
     // Ensure that only slide settings are processed
-    if (is_numeric($slide)){
+    if (is_numeric($slide)) {
       if (is_array($settings)) {
         // Delete the slide if required otherwise add it to the array of slides
         if ($settings['delete']) {

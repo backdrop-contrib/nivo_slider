@@ -24,7 +24,7 @@ function theme_nivo_slider_slide_configuration_form($variables) {
   $rows = array();
 
   // Generate an array of table rows from the available slides
-  foreach($form['images'] as $slide => &$property) {
+  foreach ($form['images'] as $slide => &$property) {
     if (is_numeric($slide)) {
       // Create an array to hold the table row for the current slide
       $row = array();

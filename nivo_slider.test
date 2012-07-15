@@ -7,8 +7,6 @@
 /**
  * The NivoSliderTestCase is a functional test case, meaning that it
  * actually exercises a particular sequence of actions through the web UI.
- *
- * @see DrupalWebTestCase
  */
 class NivoSliderTestCase extends DrupalWebTestCase {
   protected $privileged_user;
