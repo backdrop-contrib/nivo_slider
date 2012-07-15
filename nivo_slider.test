@@ -35,27 +35,6 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   }
 
   /**
-   * Test adding and removing slider images.
-   */
-  public function testAddRemoveSlides() {
-    // Add five slides
-    foreach (array(1, 2, 3, 4, 5) as $slide) {
-      $edit = array();
-      $edit['files[upload]'] = realpath('sites/all/modules/nivo_slider/images/' . $slide . '.jpg');
-      $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
-      $this->assertText(t('The configuration options have been saved.'));
-    }
-
-    // Delete five slides
-    foreach (array(1, 2, 3, 4, 5) as $slide) {
-      $edit = array();
-      $edit['images[0][delete]'] = TRUE;
-      $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
-      $this->assertText(t('The configuration options have been saved.'));
-    }
-  }
-
-  /**
    * Test configuring slider slides.
    */
   public function testConfigureSlides() {
