@@ -20,14 +20,10 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   }
 
   public function setUp() {
-    parent::setUp();
-
-    // Enable the Libraries and Nivo Slider modules
-    $module_list = array('libraries', 'nivo_slider');
-    module_enable($module_list);
+    parent::setUp('libraries', 'nivo_slider');
 
     // Create and log in a test user with a number of permission
-    $this->privileged_user = $this->drupalCreateUser(array('access administration pages', 'administer blocks', 'administer nivo slider'));
+    $this->privileged_user = $this->drupalCreateUser(array('administer nivo slider'));
     $this->drupalLogin($this->privileged_user);
 
     // Add the Nivo Slider block to the page
