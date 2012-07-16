@@ -38,14 +38,6 @@ class NivoSliderTestCase extends DrupalWebTestCase {
       $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
       $this->assertText(t('The configuration options have been saved.'));
     }
-
-    // Delete five slides
-    foreach (array(1, 2, 3, 4, 5) as $slide) {
-      $edit = array();
-      $edit['images[0][delete]'] = 1;
-      $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
-      $this->assertText(t('The configuration options have been saved.'));
-    }
   }
 
   /**
@@ -57,33 +49,8 @@ class NivoSliderTestCase extends DrupalWebTestCase {
       $edit = array();
       $edit['files[upload]'] = realpath('sites/all/modules/nivo_slider/images/' . $slide . '.jpg');
       $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
+      $this->assertText(t('The configuration options have been saved.'));
     }
-
-    // Configure slide settings
-    $edit = array();
-    $edit['images[0][title]'] = 'Catchy title';
-    $edit['images[0][description][format]'] = 'plain_text';
-    $edit['images[0][description][value]'] = 'Nivo Slider is the best module ever!';
-    $edit['images[0][url]'] = 'http://www.drupal.org';
-    $edit['images[0][transition]'] = 'fade';
-    $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
-
-    $this->drupalGet('<front>');
-
-    // Check that the title can be found in the image alternate text
-    $title = $this->xpath('//img[@alt="Catchy title"]');
-    $this->assertTrue($title, t('Slide 1: the title is incorrect.'));
-
-    // Check that the description can be found in the image title
-    $description = $this->xpath('//img[@title="Nivo Slider is the best module ever!"]');
-    $this->assertTrue($description, t('Slide 1: the description is incorrect.'));
-
-    // Check that a link to the image URL can be found
-    $this->assertLinkByHref('http://www.drupal.org', 0, 'Slide 1: the slide links to drupal.org');
-
-    // Check that the transition method can be found in the image data-transition
-    $transition = $this->xpath('//img[@data-transition="fade"]');
-    $this->assertTrue($transition, t('Slide 1: the transition is incorrect.'));
   }
 
   /**
