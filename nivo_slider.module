@@ -167,6 +167,9 @@ function nivo_slider_nivo_slider_theme() {
 function nivo_slider_block_info() {
   $blocks['nivo_slider'] = array(
     'info' => t('Nivo Slider'),
+    'cache' => DRUPAL_CACHE_PER_PAGE,
+    'status' => 1,
+    'region' => 'featured',
   );
 
   return $blocks;

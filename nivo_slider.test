@@ -25,12 +25,6 @@ class NivoSliderTestCase extends DrupalWebTestCase {
     // Create and log in a test user with a number of permission
     $this->privileged_user = $this->drupalCreateUser(array('administer nivo slider'));
     $this->drupalLogin($this->privileged_user);
-
-    // Add the Nivo Slider block to the page
-    $edit = array(
-      'blocks[nivo_slider_nivo_slider][region]' => 'header',
-    );
-    $this->drupalPost('admin/structure/block', $edit, t('Save blocks'));
   }
 
   /**
