@@ -42,7 +42,7 @@ class NivoSliderTestCase extends DrupalWebTestCase {
     // Delete five slides
     foreach (array(1, 2, 3, 4, 5) as $slide) {
       $edit = array();
-      $edit['images[0][delete]'] = TRUE;
+      $edit['images[0][delete]'] = 1;
       $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
       $this->assertText(t('The configuration options have been saved.'));
     }
@@ -61,11 +61,11 @@ class NivoSliderTestCase extends DrupalWebTestCase {
 
     // Configure slide settings
     $edit = array();
-    $edit['images[1][title]'] = 'Catchy title';
-    $edit['images[1][description][format]'] = 'plain_text';
-    $edit['images[1][description][value]'] = 'Nivo Slider is the best module ever!';
-    $edit['images[1][url]'] = 'http://www.drupal.org';
-    $edit['images[1][transition]'] = 'fade';
+    $edit['images[0][title]'] = 'Catchy title';
+    $edit['images[0][description][format]'] = 'plain_text';
+    $edit['images[0][description][value]'] = 'Nivo Slider is the best module ever!';
+    $edit['images[0][url]'] = 'http://www.drupal.org';
+    $edit['images[0][transition]'] = 'fade';
     $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
 
     $this->drupalGet('<front>');
