@@ -5,7 +5,7 @@
  */
 
 // Include the slider functions
-include_once('slider.inc');
+include_once('includes/nivo_slider_slider.inc');
 
 /**
  * Implements hook_requirements().

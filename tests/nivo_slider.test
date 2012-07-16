@@ -20,17 +20,24 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   }
 
   function setUp() {
+    // Install the Libraries and Nivo Slider modules
     parent::setUp('libraries', 'nivo_slider');
 
-    // Create and log in a test user with a number of permission
+    // Create users
     $this->privileged_user = $this->drupalCreateUser(array('administer nivo slider'));
-    $this->drupalLogin($this->privileged_user);
   }
 
   /**
    * Test adding and removing slider images.
    */
   function testAddRemoveSlides() {
+    // Login as the privileged user
+    $this->drupalLogin($this->privileged_user);
+
+    // Load the slider slides administration page
+    $this->drupalGet('admin/structure/nivo-slider');
+    $this->assertResponse(200, t('The privileged user can access the slider slides administration page.'));
+
     // Add five slides
     foreach (array(1, 2, 3, 4, 5) as $slide) {
       $edit = array();
@@ -44,6 +51,13 @@ class NivoSliderTestCase extends DrupalWebTestCase {
    * Test configuring slider slides.
    */
   function testConfigureSlides() {
+    // Login as the privileged user
+    $this->drupalLogin($this->privileged_user);
+
+    // Load the slider slides administration page
+    $this->drupalGet('admin/structure/nivo-slider');
+    $this->assertResponse(200, t('The privileged user can access the slider slides administration page.'));
+
     // Add five new slides
     foreach (array(1, 2, 3, 4, 5) as $slide) {
       $edit = array();
@@ -57,6 +71,13 @@ class NivoSliderTestCase extends DrupalWebTestCase {
    * Test configuring slider options.
    */
   function testConfigureOptions() {
+    // Login as the privileged user
+    $this->drupalLogin($this->privileged_user);
+
+    // Load the slider options administration page
+    $this->drupalGet('admin/structure/nivo-slider/options');
+    $this->assertResponse(200, t('The privileged user can access the slider options administration page.'));
+
     $edit = array();
     $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
     $this->assertText(t('The configuration options have been saved.'));

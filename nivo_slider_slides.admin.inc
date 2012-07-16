@@ -4,9 +4,6 @@
  * Generate configuration form and save settings.
  */
 
-// Include the slider functions
-include_once('slider.inc');
-
 /**
  * Implements hook_form().
  */
