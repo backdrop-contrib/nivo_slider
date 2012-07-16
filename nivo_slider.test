@@ -19,7 +19,7 @@ class NivoSliderTestCase extends DrupalWebTestCase {
     );
   }
 
-  public function setUp() {
+  function setUp() {
     parent::setUp('libraries', 'nivo_slider');
 
     // Create and log in a test user with a number of permission
@@ -30,7 +30,7 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   /**
    * Test adding and removing slider images.
    */
-  public function testAddRemoveSlides() {
+  function testAddRemoveSlides() {
     // Add five slides
     foreach (array(1, 2, 3, 4, 5) as $slide) {
       $edit = array();
@@ -51,7 +51,7 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   /**
    * Test configuring slider slides.
    */
-  public function testConfigureSlides() {
+  function testConfigureSlides() {
     // Add five new slides
     foreach (array(1, 2, 3, 4, 5) as $slide) {
       $edit = array();
@@ -89,7 +89,7 @@ class NivoSliderTestCase extends DrupalWebTestCase {
   /**
    * Test configuring slider options.
    */
-  public function testConfigureOptions() {
+  function testConfigureOptions() {
     $edit = array();
     $this->drupalPost('admin/structure/nivo-slider/options', $edit, t('Save configuration'));
     $this->assertText(t('The configuration options have been saved.'));
