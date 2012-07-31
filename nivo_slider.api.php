@@ -25,6 +25,7 @@ function hook_nivo_slider_theme() {
     'theme_name' => array(
       'name' => t('Theme name'), // Human readable theme name
       'description' => t('Theme description.'), // Description of the theme
+      'thumb_support' => TRUE, // Theme supports thumbnail navigation
       'override' => array(
         'css' => FALSE, // Override the default Nivo Slider jQuery plugin cascading style sheet
         'js' => FALSE, // Override the default Nivo Slider jQuery plugin javascript

@@ -175,21 +175,6 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
       ),
     ),
   );
-  $form['navigation']['nivo_slider_directional_navigation_hide'] = array(
-    '#type' => 'radios',
-    '#title' => t('Only display directional navigation on hover'),
-    '#options' => array(
-      'true' => t('Yes'),
-      'false' => t('No'),
-    ),
-    '#default_value' => variable_get('nivo_slider_directional_navigation_hide', 'true'),
-    '#description' => t('Hide the directional navigation buttons until the user hovers over the slide.'),
-    '#states' => array(
-      'visible' => array(
-        ':input[name="nivo_slider_directional_navigation"]' => array('value' => 'true'),
-      ),
-    ),
-  );
   $form['navigation']['nivo_slider_control_navigation'] = array(
     '#type' => 'radios',
     '#title' => t('Display control navigation'),

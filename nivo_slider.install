@@ -44,7 +44,6 @@ function nivo_slider_uninstall() {
   variable_del('nivo_slider_directional_navigation');
   variable_del('nivo_slider_next_text');
   variable_del('nivo_slider_previous_text');
-  variable_del('nivo_slider_directional_navigation_hide');
   variable_del('nivo_slider_control_navigation');
   variable_del('nivo_slider_control_nav_thumbs');
   variable_del('nivo_slider_manual_advance');
@@ -166,4 +165,13 @@ function nivo_slider_update_7004() {
   variable_set('nivo_slider_banner_settings', $slider);
 
   return t('Converted existing slide URIs to file IDs.');
+}
+
+/**
+ * Remove obsolete variables.
+ */
+function nivo_slider_update_7005() {
+  variable_del('nivo_slider_directional_navigation_hide');
+
+  return t('Removed obsolete variables.');
 }
