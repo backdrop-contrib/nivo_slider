@@ -119,6 +119,22 @@ function nivo_slider_help($path, $arg) {
 }
 
 /**
+ * Implements hook_contextual_links_view_alter().
+ */
+function nivo_slider_contextual_links_view_alter(&$element, &$items) {
+  if (isset($element['#element']['#block']) && $element['#element']['#block']->delta == 'nivo_slider') {
+    $element['#links']['slides'] = array(
+      'title' => t('Configure slider slides'),
+      'href' => 'admin/structure/nivo-slider/slides',
+    );
+    $element['#links']['options'] = array(
+      'title' => t('Configure slider options'),
+      'href' => 'admin/structure/nivo-slider/options',
+    );
+  }
+}
+
+/**
  * Implements hook_theme().
  */
 function nivo_slider_theme($existing, $type, $theme, $path) {
