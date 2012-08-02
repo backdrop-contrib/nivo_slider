@@ -1,11 +1,12 @@
 <?php
+
 /**
  * @file
  * Generate configuration form and save settings.
  */
 
 /**
- * Implements hook_form().
+ * Configuration form for slider slides.
  */
 function nivo_slider_slide_configuration_form($form, &$form_state) {
   // Upload
@@ -61,9 +62,27 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
       '#type' => 'checkbox',
       '#default_value' => FALSE,
     );
+
+    // Load the slide's image file
     $file = file_load($settings['fid']);
+
+    // Create a preview image of the slide using an image style if appropriate
+    if (variable_get('nivo_slider_image_style', 0) == FALSE) {
+      $variables = array(
+        'path' => file_create_url($file->uri),
+      );
+      $image = theme('image', $variables);
+    }
+    else {
+      $variables = array(
+        'path' => $file->uri,
+        'style_name' => variable_get('nivo_slider_image_style_slide', 'large')
+      );
+      $image = theme('image_style', $variables);
+    }
+
     $form['images'][$slide]['preview'] = array(
-      '#markup' => theme('image', array('path' => file_create_url($file->uri))),
+      '#markup' =>  $image,
     );
     $form['images'][$slide]['fid'] = array(
       '#type' => 'hidden',

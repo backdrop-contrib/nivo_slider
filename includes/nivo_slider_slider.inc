@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * Slider creation and generation functions.
@@ -80,23 +81,44 @@ function nivo_slider_slider() {
         // Load the file that corresponds to the file ID
         $file = file_load($settings['fid']);
 
-        // Create an array of image settings
-        $variables = array(
-          'path' => file_create_url(check_plain($file->uri)),
-          'width' => NULL,
-          'height' => NULL,
-          'alt' => check_plain($settings['title']),
-          'title' => check_plain($description),
-          'attributes' => array(
-            'class' => 'slide',
-            'id' => 'slide-' . $slide,
-            'data-thumb' => file_create_url(check_plain($file->uri)),
-            'data-transition' => check_plain($settings['transition']),
-          ),
-        );
+        // Create the slide image directly or using image styles
+        if (variable_get('nivo_slider_image_style', 0) == FALSE) {
+          // Create an array of image settings
+          $variables = array(
+            'path' => file_create_url(check_plain($file->uri)),
+            'width' => NULL,
+            'height' => NULL,
+            'alt' => check_plain($settings['title']),
+            'title' => check_plain($description),
+            'attributes' => array(
+              'class' => 'slide',
+              'id' => 'slide-' . $slide,
+              'data-thumb' => file_create_url(check_plain($file->uri)),
+              'data-transition' => check_plain($settings['transition']),
+            ),
+          );
 
-        // Create the slide image
-        $image = theme('image', $variables);
+          // Create the slide image
+          $image = theme('image', $variables);
+        }
+        else {
+          // Create an array of image settings
+          $variables = array(
+            'style_name' => variable_get('nivo_slider_image_style_slide', 'large'),
+            'path' => check_plain($file->uri),
+            'title' => check_plain($description),
+            'alt' => check_plain($settings['title']),
+            'attributes' => array(
+              'class' => 'slide',
+              'id' => 'slide-' . $slide,
+              'data-thumb' => image_style_url(variable_get('nivo_slider_image_style_thumb', 'thumbnail'), check_plain($file->uri)),
+              'data-transition' => check_plain($settings['transition']),
+            ),
+          );
+
+          // Create the slide image
+          $image = theme('image_style', $variables);
+        }
 
         // Add a link to the slide image when required
         $output .= !empty($settings['url']) ? l($image, $settings['url'], array('html' => TRUE)) : $image;

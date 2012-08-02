@@ -1,3 +1,4 @@
+
 /**
  * @file
  * Attaches the behaviors for the Nivo Slider module.
