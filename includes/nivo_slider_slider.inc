@@ -63,17 +63,27 @@ function nivo_slider_slider() {
         $description = $settings['description']['value'];
       }
       else {
-        // Generate a unique anchor to reference the HTML caption
-        $description = '#htmlcaption-' . $slide;
+        // WYSIWYG editors are often used with formats other than plain text
+        // These editors often automatically add an empty paragraph <p></p>
+        // even if no text has been entered which causes the Nivo Slider
+        // jQuery Plugin to display an "empty" caption
+        // To prevent this from happening, strip all HTML tags from the caption
+        // and check to see that some actual text has been entered
+        $description_text_only = strip_tags($settings['description']['value']);
 
-        // Create the HTML caption markup
-        $html_caption = '';
-        $html_caption .= '<div id="htmlcaption-' . $slide . '" class="nivo-html-caption">';
-        $html_caption .= check_markup($settings['description']['value'], $settings['description']['format']);
-        $html_caption .= '</div>';
+        if (!empty($description_text_only)) {
+          // Generate a unique anchor to reference the HTML caption
+          $description = '#htmlcaption-' . $slide;
 
-        // Add the HTML caption markup
-        $description_html .= $html_caption;
+          // Create the HTML caption markup
+          $html_caption = '';
+          $html_caption .= '<div id="htmlcaption-' . $slide . '" class="nivo-html-caption">';
+          $html_caption .= check_markup($settings['description']['value'], $settings['description']['format']);
+          $html_caption .= '</div>';
+
+          // Add the HTML caption markup
+          $description_html .= $html_caption;
+        }
       }
 
       // Check if the slide has a file ID
