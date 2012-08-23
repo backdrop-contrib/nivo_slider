@@ -159,7 +159,7 @@ function nivo_slider_settings_submit($form, &$form_state) {
   $file = new stdClass;
 
   // Process the available slides
-  foreach ($form_state['input']['images'] as $slide => $settings) {
+  foreach ($form_state['values']['images'] as $slide => $settings) {
     // Ensure that only slide settings are processed
     if (is_numeric($slide)) {
       if (is_array($settings)) {
