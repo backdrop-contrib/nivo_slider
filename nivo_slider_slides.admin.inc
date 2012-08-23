@@ -209,14 +209,14 @@ function nivo_slider_settings_submit($form, &$form_state) {
       'title' => '',
       'description' => array(
         'value' => '',
-        'format' => NULL,
+        'format' => filter_fallback_format(),
       ),
       'url' => '',
       'visibility' => '*',
       'transition' => '',
       'weight' => 1,
-      'published' => TRUE,
-      'delete' => FALSE,
+      'published' => 1,
+      'delete' => 0,
     );
   }
 
