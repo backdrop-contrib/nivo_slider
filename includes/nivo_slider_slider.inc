@@ -18,9 +18,6 @@ function nivo_slider_slider() {
   // Create an array to hold visible slides
   $visible_slides = array();
 
-  // Find the current path alias
-  $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
-
   // Determine which slides should be visible
   foreach ($slides as $slide) {
     // Only display published slides
