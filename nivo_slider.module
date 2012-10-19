@@ -150,7 +150,6 @@ function nivo_slider_theme($existing, $type, $theme, $path) {
         'theme' => NULL,
         'banners' => NULL,
       ),
-      'render element' => 'nivo_slider',
       'file' => 'nivo_slider.theme.inc',
       'path' => $path . '/themes',
       'template' => 'nivo-slider-wrapper',
@@ -230,37 +229,35 @@ function nivo_slider_block_view($delta = '') {
   switch ($delta) {
     case 'nivo_slider':
       $block['content'] = array(
-        'nivo_slider' => array(
-          '#type' => 'markup',
-          '#theme' => 'nivo_slider_wrapper',
-          '#attached' => array(
-            'js' => array(
-              array(
-                'data' => drupal_get_path('module', 'nivo_slider') . '/js/nivo_slider.js',
-                'type' => 'file',
-              ),
-              array(
-                'data' => array(
-                  'nivo_slider' => array(
-                    'effect' => check_plain(variable_get('nivo_slider_effect', 'random')),
-                    'slices' => (int) check_plain(variable_get('nivo_slider_slices', '15')),
-                    'boxCols' => (int) check_plain(variable_get('nivo_slider_box_columns', '8')),
-                    'boxRows' => (int) check_plain(variable_get('nivo_slider_box_rows', '4')),
-                    'animSpeed' => (int) check_plain(variable_get('nivo_slider_animation_speed', '500')),
-                    'pauseTime' => (int) check_plain(variable_get('nivo_slider_pause_time', '3000')),
-                    'startSlide' => (int) check_plain(variable_get('nivo_slider_start_slide', '0')),
-                    'directionNav' => check_plain(variable_get('nivo_slider_directional_navigation', 1)) == 1 ? TRUE : FALSE,
-                    'controlNav' => check_plain(variable_get('nivo_slider_control_navigation', 1)) == 1 ? TRUE : FALSE,
-                    'controlNavThumbs' => check_plain(variable_get('nivo_slider_control_nav_thumbs', 0)) == 1 ? TRUE : FALSE,
-                    'pauseOnHover' => check_plain(variable_get('nivo_slider_pause_on_hover', 1)) == 1 ? TRUE : FALSE,
-                    'manualAdvance' => check_plain(variable_get('nivo_slider_manual_advance', 0)) == 1 ? TRUE : FALSE,
-                    'prevText' => check_plain(variable_get('nivo_slider_previous_text', t('Prev'))),
-                    'nextText' => check_plain(variable_get('nivo_slider_next_text', t('Next'))),
-                    'randomStart' => check_plain(variable_get('nivo_slider_random_start', 0)) == 1 ? TRUE : FALSE,
-                  ),
+        '#type' => 'markup',
+        '#theme' => 'nivo_slider_wrapper',
+        '#attached' => array(
+          'js' => array(
+            array(
+              'data' => drupal_get_path('module', 'nivo_slider') . '/js/nivo_slider.js',
+              'type' => 'file',
+            ),
+            array(
+              'data' => array(
+                'nivo_slider' => array(
+                  'effect' => check_plain(variable_get('nivo_slider_effect', 'random')),
+                  'slices' => (int) check_plain(variable_get('nivo_slider_slices', '15')),
+                  'boxCols' => (int) check_plain(variable_get('nivo_slider_box_columns', '8')),
+                  'boxRows' => (int) check_plain(variable_get('nivo_slider_box_rows', '4')),
+                  'animSpeed' => (int) check_plain(variable_get('nivo_slider_animation_speed', '500')),
+                  'pauseTime' => (int) check_plain(variable_get('nivo_slider_pause_time', '3000')),
+                  'startSlide' => (int) check_plain(variable_get('nivo_slider_start_slide', '0')),
+                  'directionNav' => check_plain(variable_get('nivo_slider_directional_navigation', 1)) == 1 ? TRUE : FALSE,
+                  'controlNav' => check_plain(variable_get('nivo_slider_control_navigation', 1)) == 1 ? TRUE : FALSE,
+                  'controlNavThumbs' => check_plain(variable_get('nivo_slider_control_nav_thumbs', 0)) == 1 ? TRUE : FALSE,
+                  'pauseOnHover' => check_plain(variable_get('nivo_slider_pause_on_hover', 1)) == 1 ? TRUE : FALSE,
+                  'manualAdvance' => check_plain(variable_get('nivo_slider_manual_advance', 0)) == 1 ? TRUE : FALSE,
+                  'prevText' => check_plain(variable_get('nivo_slider_previous_text', t('Prev'))),
+                  'nextText' => check_plain(variable_get('nivo_slider_next_text', t('Next'))),
+                  'randomStart' => check_plain(variable_get('nivo_slider_random_start', 0)) == 1 ? TRUE : FALSE,
                 ),
-                'type' => 'setting',
               ),
+              'type' => 'setting',
             ),
           ),
         ),
