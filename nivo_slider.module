@@ -17,19 +17,19 @@ function nivo_slider_requirements($phase) {
 
   // Check requirements during the runtime phase
   if ($phase == 'runtime') {
-    // Check if the Nivo Slider jQuery plugin library is available
-    if (file_exists(libraries_get_path('nivo-slider'))) {
+    // Check if the Nivo Slider jQuery plugin library is installed
+    if (($library = libraries_detect('nivo-slider')) && !empty($library['installed'])) {
       $requirements['nivo_slider_library'] = array(
         'title' => t('Nivo Slider jQuery plugin'),
-        'value' => t('Available'),
+        'value' => t('Installed'),
         'severity' => REQUIREMENT_OK,
       );
     }
     else {
       $requirements['nivo_slider_library'] = array(
         'title' => t('Nivo Slider jQuery plugin'),
-        'value' => t('Unavailable'),
-        'description' => t('The Nivo Slider jQuery plugin is missing. Download the latest version of the Nivo Slider jQuery plugin and extract it to %sites/all or %sites/sitename.', array('%sites/all' => 'sites/all/libraries', '%sites/sitename' => 'sites/sitename/libraries')),
+        'value' => t('Not installed'),
+        'description' => $library['error message'],
         'severity' => REQUIREMENT_ERROR,
       );
     }
@@ -158,6 +158,33 @@ function nivo_slider_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_libraries_info().
+ */
+function nivo_slider_libraries_info() {
+  $libraries['nivo-slider'] = array(
+    'name' => 'Nivo Slider',
+    'vendor url' => 'http://nivo.dev7studios.com',
+    'download url' => 'http://nivo.dev7studios.com/pricing',
+    'version arguments' => array(
+      'file' => 'jquery.nivo.slider.pack.js',
+      // 3.x: jQuery Nivo Slider v3.1
+      'pattern' => '/jQuery Nivo Slider v(\d+\.+\d+)/',
+      'lines' => 2,
+    ),
+    'files' => array(
+      'js' => array(
+        'jquery.nivo.slider.pack.js',
+      ),
+      'css' => array(
+        'nivo-slider.css',
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
  * Implements hook_nivo_slider_theme().
  */
 function nivo_slider_nivo_slider_theme() {
@@ -228,6 +255,9 @@ function nivo_slider_block_info() {
 function nivo_slider_block_view($delta = '') {
   switch ($delta) {
     case 'nivo_slider':
+      // Load the Nivo Slider jQuery library
+      libraries_load('nivo-slider');
+
       $block['content'] = array(
         '#type' => 'markup',
         '#theme' => 'nivo_slider_wrapper',
@@ -260,84 +290,22 @@ function nivo_slider_block_view($delta = '') {
               'type' => 'setting',
             ),
           ),
+          'css' => array(),
         ),
       );
 
       $themes = module_invoke_all('nivo_slider_theme'); // Collect all themes
-      $available_themes = array();
-
-      // Create a list of the currently available themes and their properties
-      foreach ($themes as $theme => $properties) {
-        // Name
-        if (isset($properties['name'])) {
-          $available_themes[$theme]['name'] = $properties['name'];
-        }
-
-        // Description
-        if (isset($properties['description'])) {
-          $available_themes[$theme]['description'] = $properties['description'];
-        }
-
-        // Override
-        if (isset($properties['override'])) {
-          $available_themes[$theme]['override'] = $properties['override'];
-          if (isset($properties['override']['css'])) {
-            $available_themes[$theme]['override']['css'] = $properties['override']['css'];
-          }
-          if (isset($properties['override']['js'])) {
-            $available_themes[$theme]['override']['js'] = $properties['override']['js'];
-          }
-        }
-
-        // Resources
-        if (isset($properties['resources'])) {
-          $available_themes[$theme]['resources'] = $properties['resources'];
-
-          if (isset($properties['resources']['css'])) {
-            $i = 0;
-            $available_themes[$theme]['resources']['css'] = $properties['resources']['css'];
-            foreach ($available_themes[$theme]['resources']['css'] as $file) {
-              $available_themes[$theme]['resources']['css'][$i] = $file;
-              $i++;
-            }
-          }
-
-          if (isset($properties['resources']['js'])) {
-            $i = 0;
-            $available_themes[$theme]['resources']['js'] = $properties['resources']['js'];
-            foreach ($available_themes[$theme]['resources']['js'] as $file) {
-              $available_themes[$theme]['resources']['js'][$i] = $file;
-              $i++;
-            }
-          }
-        }
-      }
-
-      // The theme currently in use
       $current_theme = variable_get('nivo_slider_theme', 'default'); // Current theme
 
-      // Add slider resources
-      $library_path = libraries_get_path('nivo-slider');
-
-      // Add the Nivo Slider jQuery plugin's resources
-      if (!isset($available_themes[$current_theme]['override']['css']) || $available_themes[$current_theme]['override']['css'] == FALSE) {
-        $block['content']['nivo_slider']['#attached']['css'][] = $library_path . '/nivo-slider.css';
-      }
-
-      if (!isset($available_themes[$current_theme]['override']['js']) || $available_themes[$current_theme]['override']['js'] == FALSE) {
-        $block['content']['nivo_slider']['#attached']['js'][] = $library_path . '/jquery.nivo.slider.pack.js';
-      }
+      // Get the current theme's settings
+      $theme = $themes[$current_theme];
 
       // Add the theme's resources
-      if (isset($available_themes[$current_theme]['resources']['css'])) {
-        foreach ($available_themes[$current_theme]['resources']['css'] as $index => $file_path) {
-          $block['content']['nivo_slider']['#attached']['css'][] = $available_themes[$current_theme]['resources']['css'][$index];
-        }
-      }
-
-      if (isset($available_themes[$current_theme]['resources']['js'])) {
-        foreach ($available_themes[$current_theme]['resources']['js'] as $index => $file_path) {
-          $block['content']['nivo_slider']['#attached']['js'][] = $available_themes[$current_theme]['resources']['js'][$index];
+      foreach (array('js', 'css') as $type) {
+        if (!empty($theme['resources'][$type])) {
+          foreach ($theme['resources'][$type] as $file_path) {
+            $block['content']['#attached'][$type][] = $file_path;
+          }
         }
       }
       break;
