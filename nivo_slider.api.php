@@ -17,9 +17,7 @@
  *
  * Custom slider themes get a unique CSS class to use for styling and can
  * specify an unlimited number of CSS and JS files to include when the slider
- * is displayed. Themes may also choose to override the default CSS and JS
- * added by the Nivo Slider jQuery plugin. This is useful when heavy
- * customization of the slider is required.
+ * is displayed.
  */
 function hook_nivo_slider_theme() {
   return array(
@@ -27,10 +25,6 @@ function hook_nivo_slider_theme() {
       'name' => t('Theme name'), // Human readable theme name
       'description' => t('Theme description.'), // Description of the theme
       'thumb_support' => TRUE, // Theme supports thumbnail navigation
-      'override' => array(
-        'css' => FALSE, // Override the default Nivo Slider jQuery plugin cascading style sheet
-        'js' => FALSE, // Override the default Nivo Slider jQuery plugin javascript
-      ),
       'resources' => array(
         'css' => array(
           drupal_get_path('module', 'module_name') . '/css/example.css', // Full path to a CSS file to include with the theme
