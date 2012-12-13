@@ -136,6 +136,65 @@ function nivo_slider_contextual_links_view_alter(&$element, &$items) {
 }
 
 /**
+ * Implements hook_i18n_string_info()
+ */
+function nivo_slider_i18n_string_info() {
+  $groups['nivo_slider'] = array(
+    'title' => t('Nivo Slider'),
+    'description' => t('Slide titles and descriptions.'),
+    'format' => TRUE,
+    'list' => FALSE,
+    'refresh callback' => 'nivo_slider_locale_refresh',
+  );
+
+  return $groups;
+}
+
+/**
+ * Update / create translation source for user defined slide strings.
+ * 
+ * @param $slides
+ *   An array of slider slides.
+ */
+function nivo_slider_locale_refresh($slides = NULL) {
+  if (!isset($slides)) {
+    $slides = variable_get('nivo_slider_banner_settings', array());
+  }
+
+  foreach ($slides as $slide => $settings) {
+    foreach ($settings as $setting => $value) {
+      switch ($setting) {
+        case 'title':
+          i18n_string_update('nivo_slider:slide:' . $slide . ':title', $value);
+          break;
+        case 'description':
+          i18n_string_update('nivo_slider:slide:' . $slide . ':description', $value['value'], array('format' => $value['format']));
+          break;
+      }
+    }
+  }
+}
+
+/**
+ * Translates a user defined slide string.
+ * 
+ * @param $name
+ *   Location glued with ':'.
+ * @param $string
+ *   String in default language. Default language may or may not be English.
+ * @param $langcode
+ *  The language code if it is different from the page request one.
+ * @param $textgroup
+ *  Textgroup.
+ * 
+ * @return $string
+ *   Translated string, $string if not found.
+ */
+function nivo_slider_translate($name, $string, $langcode = NULL, $textgroup = 'nivo_slider') {
+  return function_exists('i18n_string') ? i18n_string($textgroup . ':' . $name, $string, array('langcode' => $langcode)) : $string;  
+}
+
+/**
  * Implements hook_theme().
  */
 function nivo_slider_theme($existing, $type, $theme, $path) {

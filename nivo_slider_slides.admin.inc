@@ -183,6 +183,9 @@ function nivo_slider_settings_submit($form, &$form_state) {
     }
   }
 
+  // Update / create translation source for user defined slide strings
+  nivo_slider_locale_refresh($slides);
+
   // Create a new slide if an image was uploaded
   if ($file = file_save_upload('upload')) {
     // Store slide images in a folder named 'banner'

@@ -75,7 +75,7 @@ function nivo_slider_slider() {
           // Create the HTML caption markup
           $html_caption = '';
           $html_caption .= '<div id="htmlcaption-' . $slide . '" class="nivo-html-caption">';
-          $html_caption .= check_markup($settings['description']['value'], $settings['description']['format']);
+          $html_caption .= check_markup(nivo_slider_translate('slide:' . $slide . ':description', $settings['description']['value']), $settings['description']['format']);
           $html_caption .= '</div>';
 
           // Add the HTML caption markup
@@ -95,8 +95,8 @@ function nivo_slider_slider() {
             'path' => file_create_url(check_plain($file->uri)),
             'width' => NULL,
             'height' => NULL,
-            'alt' => check_plain($settings['title']),
-            'title' => check_plain($description),
+            'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
+            'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
             'attributes' => array(
               'class' => 'slide',
               'id' => 'slide-' . $slide,
@@ -113,8 +113,8 @@ function nivo_slider_slider() {
           $variables = array(
             'style_name' => variable_get('nivo_slider_image_style_slide', 'large'),
             'path' => check_plain($file->uri),
-            'title' => check_plain($description),
-            'alt' => check_plain($settings['title']),
+            'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
+            'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
             'attributes' => array(
               'class' => 'slide',
               'id' => 'slide-' . $slide,
