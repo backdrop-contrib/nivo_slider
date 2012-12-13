@@ -314,13 +314,13 @@ function nivo_slider_block_info() {
 function nivo_slider_block_view($delta = '') {
   switch ($delta) {
     case 'nivo_slider':
-      // Load the Nivo Slider jQuery library
-      libraries_load('nivo-slider');
-
       $block['content'] = array(
         '#type' => 'markup',
         '#theme' => 'nivo_slider_wrapper',
         '#attached' => array(
+          'libraries_load' => array(
+            array('nivo-slider'),
+          ),
           'js' => array(
             array(
               'data' => drupal_get_path('module', 'nivo_slider') . '/js/nivo_slider.js',
