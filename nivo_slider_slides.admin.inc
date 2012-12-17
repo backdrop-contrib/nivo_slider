@@ -184,7 +184,9 @@ function nivo_slider_settings_submit($form, &$form_state) {
   }
 
   // Update / create translation source for user defined slide strings
-  nivo_slider_locale_refresh($slides);
+  if (function_exists('i18n_string_update')) {
+    nivo_slider_locale_refresh($slides);
+  }
 
   // Create a new slide if an image was uploaded
   if ($file = file_save_upload('upload')) {
