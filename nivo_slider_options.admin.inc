@@ -11,6 +11,10 @@
 function nivo_slider_option_configuration_form($form, &$form_state) {
   // Create a list of the currently available themes
   $themes = module_invoke_all('nivo_slider_theme');
+
+  // Allow theme information to be altered
+  drupal_alter('nivo_slider_theme_info', $themes);
+
   $available_themes = array();
 
   foreach ($themes as $theme => $properties) {

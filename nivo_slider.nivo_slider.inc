@@ -6,9 +6,9 @@
  */
 
 /**
- * Implements hook_nivo_slider_theme().
+ * Implements hook_nivo_slider_theme_info().
  */
-function nivo_slider_nivo_slider_theme() {
+function nivo_slider_nivo_slider_theme_info() {
   // Find the path to the Nivo Slider jQuery plugin
   $library_path = libraries_get_path('nivo-slider');
 

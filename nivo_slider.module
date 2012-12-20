@@ -247,7 +247,10 @@ function nivo_slider_libraries_info() {
  * Implements hook_hook_info().
  */
 function nivo_slider_hook_info() {
-  $hooks['nivo_slider_theme'] = array(
+  $hooks['nivo_slider_theme_info'] = array(
+    'group' => 'nivo_slider',
+  );
+  $hooks['nivo_slider_theme_info_alter'] = array(
     'group' => 'nivo_slider',
   );
 
@@ -313,8 +316,14 @@ function nivo_slider_block_view($delta = '') {
         ),
       );
 
-      $themes = module_invoke_all('nivo_slider_theme'); // Collect all themes
-      $current_theme = variable_get('nivo_slider_theme', 'default'); // Current theme
+      // Collect all themes
+      $themes = module_invoke_all('nivo_slider_theme_info');
+
+      // Allow theme information to be altered
+      drupal_alter('nivo_slider_theme_info', $themes);
+
+      // Find the currently selected theme
+      $current_theme = variable_get('nivo_slider_theme', 'default');
 
       // Get the current theme's settings
       $theme = $themes[$current_theme];
