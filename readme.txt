@@ -26,26 +26,26 @@ Nivo Slider gives administrators three important tools:
 REQUIREMENTS
 ------------
 
-Nivo Slider has two dependencies.
+Nivo Slider has three dependencies.
 
 Drupal core modules
  * Block
 
 Contributed modules
  * Libraries API
+ * jQuery Update - Configured to use jQuery 1.7 or higher.
 
 INSTALLATION
 ------------
 
 To install Nivo Slider:
 
- * Copy the Libraries API module to sites/all/modules or sites/sitename/modules
-   as you require.
  * Download the latest version of the Nivo Slider jQuery plugin
-   (http://nivo.dev7studios.com/pricing/) and extract it to
+   (http://dev7studios.com/nivo-slider/) and extract it to
    sites/all/libraries or sites/sitename/libraries as you require. The
    extracted folder must be named nivo-slider.
  * Enable Nivo Slider and all of the modules that it requires.
+ *Configure the jQuery Update module to use jQuery 1.7 or higher.
 
 PERMISSIONS
 ------------

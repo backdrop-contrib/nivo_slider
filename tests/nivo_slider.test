@@ -22,7 +22,7 @@ class NivoSliderTestCase extends DrupalWebTestCase {
 
   function setUp() {
     // Install the Libraries and Nivo Slider modules
-    parent::setUp('libraries', 'nivo_slider');
+    parent::setUp('libraries', 'nivo_slider', 'jquery_update');
 
     // Create users
     $this->privileged_user = $this->drupalCreateUser(array('administer nivo slider'));

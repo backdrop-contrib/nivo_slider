@@ -3,6 +3,7 @@ description = Provides a user interface for building a rotating banner powered b
 core = 7.x
 
 dependencies[] = block
+dependencies[] = jquery_update
 dependencies[] = libraries
 
 files[] = tests/nivo_slider.test
