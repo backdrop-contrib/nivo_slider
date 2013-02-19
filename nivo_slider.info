@@ -6,6 +6,6 @@ dependencies[] = block
 dependencies[] = jquery_update
 dependencies[] = libraries
 
-files[] = tests/nivo_slider.test
+files[] = nivo_slider.test
 
 configure = admin/structure/nivo-slider
