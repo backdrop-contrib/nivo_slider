@@ -32,7 +32,7 @@ Drupal core modules
  * Block
 
 Contributed modules
- * Libraries API
+ * Libraries API - 2.x
  * jQuery Update - Configured to use jQuery 1.7 or higher.
 
 INSTALLATION
