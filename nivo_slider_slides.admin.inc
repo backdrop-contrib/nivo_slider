@@ -32,17 +32,17 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
   foreach ($slides as $slide => $settings) {
     $form['images'][$slide] = array(
       '#type' => 'fieldset',
-      '#title' => t('Image !number: !title', array(
+      '#title' => t('Image !number: @title', array(
         '!number' => $slide + 1,
-        '!title' => isset($settings['title']) ? $settings['title'] : '',
+        '@title' => isset($settings['title']) ? $settings['title'] : '',
         )
       ),
       '#weight' => $slide,
     );
     $form['images'][$slide]['name'] = array(
-      '#markup' => t('Image !number: !title', array(
+      '#markup' => t('Image !number: @title', array(
         '!number' => $slide + 1,
-        '!title' => isset($settings['title']) ? $settings['title'] : '',
+        '@title' => isset($settings['title']) ? $settings['title'] : '',
         )
       ),
     );
