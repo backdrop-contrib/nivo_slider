@@ -8,7 +8,7 @@
 /**
  * Defines a base class for testing the Nivo Slider module.
  */
-class NivoSliderWebTestCase extends DrupalWebTestCase {
+class NivoSliderWebTestCase extends BackdropWebTestCase {
   function setUp() {
     parent::setUp('libraries', 'nivo_slider', 'jquery_update');
     $web_user = $this->drupalCreateUser(array('administer nivo slider'));
@@ -59,7 +59,7 @@ class SlideTest extends NivoSliderWebTestCase {
     // Create five new slide.
     for ($i = 0; $i <= 5; $i++) {
       $edit = array();
-      $edit['files[upload]'] = drupal_realpath($file->uri);
+      $edit['files[upload]'] = backdrop_realpath($file->uri);
       $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
       $this->assertText(t('The configuration options have been saved.'));
     }
@@ -103,7 +103,7 @@ class OptionTest extends NivoSliderWebTestCase {
 
     // Create a new slide.
     $edit = array();
-    $edit['files[upload]'] = drupal_realpath($file->uri);
+    $edit['files[upload]'] = backdrop_realpath($file->uri);
     $this->drupalPost('admin/structure/nivo-slider', $edit, t('Save configuration'));
 
     // Load the slider options administration page.

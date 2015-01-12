@@ -26,12 +26,12 @@ function hook_nivo_slider_theme_info() {
       'thumb_support' => TRUE, // Theme supports thumbnail navigation
       'resources' => array(
         'css' => array(
-          drupal_get_path('module', 'module_name') . '/css/example.css', // Full path to a CSS file to include with the theme
-          drupal_get_path('module', 'module_name') . '/css/demonstration.css',
+          backdrop_get_path('module', 'module_name') . '/css/example.css', // Full path to a CSS file to include with the theme
+          backdrop_get_path('module', 'module_name') . '/css/demonstration.css',
         ),
         'js' => array(
-          drupal_get_path('module', 'module_name') . '/js/example.css', // Full path to a JS file to include with the theme
-          drupal_get_path('module', 'module_name') . '/js/demonstration.css',
+          backdrop_get_path('module', 'module_name') . '/js/example.css', // Full path to a JS file to include with the theme
+          backdrop_get_path('module', 'module_name') . '/js/demonstration.css',
         ),
       ),
     )
@@ -56,5 +56,5 @@ function hook_nivo_slider_theme_info_alter(&$themes) {
   $themes['light']['thumb_support'] = FALSE;
 
   // Replace the default theme styling
-  $themes['dark']['resources']['css'] = drupal_get_path('module', 'my_module') . '/my_theme.css';
+  $themes['dark']['resources']['css'] = backdrop_get_path('module', 'my_module') . '/my_theme.css';
 }

@@ -21,14 +21,14 @@ Nivo Slider gives administrators three important tools:
 
  * A simple method of adding slides to the slideshow.
  * An administration interface to configure slideshow settings.
- * Simple slider positioning using the Drupal block system.
+ * Simple slider positioning using the Backdrop block system.
 
 REQUIREMENTS
 ------------
 
 Nivo Slider has three dependencies.
 
-Drupal core modules
+Backdrop core modules
  * Block
 
 Contributed modules

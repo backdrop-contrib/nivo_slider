@@ -13,8 +13,7 @@
  */
 function nivo_slider_slider() {
   // Get all available slides
-  $slides = variable_get('nivo_slider_banner_settings', array());
-
+  $slides = config_get('nivo_slider.settings', 'nivo_slider_banner_settings');
   // Create an array to hold visible slides
   $visible_slides = array();
 
@@ -24,16 +23,16 @@ function nivo_slider_slider() {
     if ($slide['published'] == TRUE) {
       // Convert path to lowercase. This allows comparison of the same path
       // with different case. Ex: /Page, /page, /PAGE.
-      $pages = drupal_strtolower($slide['visibility']);
+      $pages = backdrop_strtolower($slide['visibility']);
 
-      // Convert the Drupal path to lowercase
-      $path = drupal_strtolower(drupal_get_path_alias($_GET['q']));
+      // Convert the Backdrop path to lowercase
+      $path = backdrop_strtolower(backdrop_get_path_alias($_GET['q']));
 
       // Compare the lowercase internal and lowercase path alias (if any).
-      $page_match = drupal_match_path($path, $pages);
+      $page_match = backdrop_match_path($path, $pages);
 
       if ($path != $_GET['q']) {
-        $page_match = $page_match || drupal_match_path($_GET['q'], $pages);
+        $page_match = $page_match || backdrop_match_path($_GET['q'], $pages);
       }
 
       // Add the slide if a match was found
@@ -89,10 +88,10 @@ function nivo_slider_slider() {
         $file = file_load($settings['fid']);
 
         // Create the slide image directly or using image styles
-        if (variable_get('nivo_slider_image_style', 0) == FALSE) {
+        if (config_get('nivo_slider.settings', 'nivo_slider_image_style') == FALSE) {
           // Create an array of image settings
           $variables = array(
-            'path' => file_create_url(check_plain($file->uri)),
+            'uri' => file_create_url(check_plain($file->uri)),
             'width' => NULL,
             'height' => NULL,
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
@@ -111,14 +110,14 @@ function nivo_slider_slider() {
         else {
           // Create an array of image settings
           $variables = array(
-            'style_name' => variable_get('nivo_slider_image_style_slide', 'large'),
-            'path' => check_plain($file->uri),
+            'style_name' => config_get('nivo_slider.settings', 'nivo_slider_image_style_slide'),
+            'uri' => check_plain($file->uri),
             'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
             'attributes' => array(
               'class' => 'slide',
               'id' => 'slide-' . $slide,
-              'data-thumb' => image_style_url(variable_get('nivo_slider_image_style_thumb', 'thumbnail'), check_plain($file->uri)),
+              'data-thumb' => image_style_url(config_get('nivo_slider.settings', 'nivo_slider_image_style_thumb'), check_plain($file->uri)),
               'data-transition' => check_plain($settings['transition']),
             ),
           );
@@ -134,7 +133,7 @@ function nivo_slider_slider() {
   }
 
   // Save all HTML descriptions
-  variable_set('nivo_slider_banner_html_captions', $description_html);
-
+  config_set('nivo_slider.settings', 'nivo_slider_banner_html_captions', $description_html);
+  
   return $output;
 }

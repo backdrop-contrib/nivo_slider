@@ -19,7 +19,7 @@ function theme_nivo_slider_slide_configuration_form($variables) {
   $form = $variables['form'];
 
   // Add the tableDrag JavaScript behavior
-  drupal_add_tabledrag('nivo-slider-slides', 'order', 'sibling', 'slide-weight');
+  backdrop_add_tabledrag('nivo-slider-slides', 'order', 'sibling', 'slide-weight');
 
   // Create an array to hold the table rows
   $rows = array();
@@ -33,28 +33,28 @@ function theme_nivo_slider_slide_configuration_form($variables) {
       // Add a column containing the slide's title to the current row
       $name = $property['name'];
       $row[] = array(
-        'data' => drupal_render($name),
+        'data' => backdrop_render($name),
       );
       unset($property['name']);
 
       // Add a column containing the slide's weight to the current row
       $weight = $property['weight'];
       $row[] = array(
-        'data' => drupal_render($weight),
+        'data' => backdrop_render($weight),
       );
       unset($property['weight']);
 
       // Add a column containing the slide's weight to the current row
       $published = $property['published'];
       $row[] = array(
-        'data' => drupal_render($published),
+        'data' => backdrop_render($published),
       );
       unset($property['published']);
 
       // Add a column containing the slide's weight to the current row
       $delete = $property['delete'];
       $row[] = array(
-        'data' => drupal_render($delete),
+        'data' => backdrop_render($delete),
       );
       unset($property['delete']);
 
@@ -87,14 +87,14 @@ function theme_nivo_slider_slide_configuration_form($variables) {
     );
   }
 
-  return drupal_render_children($form);
+  return backdrop_render_children($form);
 }
 
 /**
  * Implements template_preprocess_hook().
  */
 function template_preprocess_nivo_slider_wrapper(&$variables) {
-  $variables['theme'] = variable_get('nivo_slider_theme', 'default');
+  $variables['theme'] = config_get('nivo_slider.settings', 'nivo_slider_theme');
   $variables['banners'] = nivo_slider_slider();
-  $variables['html_captions'] = variable_get('nivo_slider_banner_html_captions', '');
+  $variables['html_captions'] = config_get('nivo_slider.settings', 'nivo_slider_banner_html_captions');
 }

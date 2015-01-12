@@ -26,7 +26,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
   );
 
   // Get all available slides
-  $slides = variable_get('nivo_slider_banner_settings', array());
+  $slides = config_get('nivo_slider.settings', 'nivo_slider_banner_settings');
 
   // Create a vertical tab for each slide
   foreach ($slides as $slide => $settings) {
@@ -67,16 +67,16 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     $file = file_load($settings['fid']);
 
     // Create a preview image of the slide using an image style if appropriate
-    if (variable_get('nivo_slider_image_style', 0) == FALSE) {
+    if (config_get('nivo_slider.settings', 'nivo_slider_image_style') == FALSE) {
       $variables = array(
-        'path' => file_create_url($file->uri),
+        'uri' => file_create_url($file->uri),
       );
       $image = theme('image', $variables);
     }
     else {
       $variables = array(
-        'path' => $file->uri,
-        'style_name' => variable_get('nivo_slider_image_style_slide', 'large')
+        'uri' => $file->uri,
+        'style_name' => config_get('nivo_slider.settings', 'nivo_slider_image_style_slide')
       );
       $image = theme('image_style', $variables);
     }
@@ -105,7 +105,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
       '#type' => 'textfield',
       '#title' => t('Link slide to URL'),
       '#default_value' => isset($settings['url']) ? $settings['url'] : '',
-      '#description' => t('Specify a path or an absolute URL. An example path is %blog for the blog page. An example absolute URL is %url for the Drupal website. %front is the front page.', array('%blog' => 'blog', '%url' => 'http://drupal.org', '%front' => '<front>')),
+      '#description' => t('Specify a path or an absolute URL. An example path is %blog for the blog page. An example absolute URL is %url for the Backdrop website. %front is the front page.', array('%blog' => 'blog', '%url' => 'http://drupal.org', '%front' => '<front>')),
     );
     $form['images'][$slide]['visibility'] = array(
       '#type' => 'textarea',
@@ -143,21 +143,24 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
   // Add a theme function to theme the form
   $form['#theme'][] = 'nivo_slider_slide_configuration_form';
 
-  // Add a submit handler to save the slide settings
-  $form['#submit'][] = 'nivo_slider_settings_submit';
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
 
-  return system_settings_form($form);
+  return $form;
 }
+
 
 /**
  * Save settings data.
  */
-function nivo_slider_settings_submit($form, &$form_state) {
+function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
   // Create an array to hold slides
   $slides = array();
 
   // Create a file object to hold the slide image file
-  $file = new stdClass;
+  $file = entity_create('file', array());
 
   // Process the available slides
   foreach ($form_state['values']['images'] as $slide => $settings) {
@@ -168,12 +171,7 @@ function nivo_slider_settings_submit($form, &$form_state) {
         if ($settings['delete']) {
           // Load the file with the file ID
           if (isset($settings['fid'])) {
-            $file = file_load($settings['fid']);
-
-            // Delete the file
-            if (!empty($file)) {
-              file_delete($file);
-            }
+            file_delete($settings['fid']);
           }
         }
         else {
@@ -226,8 +224,7 @@ function nivo_slider_settings_submit($form, &$form_state) {
   }
 
   // Sort the slides by weight
-  usort($slides, 'drupal_sort_weight');
-
+  backdrop_sort($slides, array('#weight'));
   // Save the slides
-  variable_set('nivo_slider_banner_settings', $slides);
+  config_set('nivo_slider.settings', 'nivo_slider_banner_settings', $slides);
 }
