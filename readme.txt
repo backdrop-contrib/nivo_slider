@@ -41,7 +41,7 @@ INSTALLATION
 To install Nivo Slider:
 
  * Download the latest version of the Nivo Slider jQuery plugin
-   (http://dev7studios.com/nivo-slider/) and extract it to
+   (https://github.com/gilbitron/Nivo-Slider) and extract it to
    sites/all/libraries or sites/sitename/libraries as you require. The
    extracted folder must be named nivo-slider.
  * Enable Nivo Slider and all of the modules that it requires.
