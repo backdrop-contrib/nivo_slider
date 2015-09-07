@@ -3,16 +3,4 @@ description = Provides a user interface for building a rotating banner powered b
 backdrop = 1.x
 
 dependencies[] = block
-;dependencies[] = jquery_update
-;dependencies[] = libraries (2.x)
-
-files[] = nivo_slider.test
-
-configure = admin/structure/nivo-slider
-
-; Information added by Backdrop.org packaging script on 2014-03-18
-;version = "7.x-1.11"
-;core = "7.x"
-;project = "nivo_slider"
-;datestamp = "1395166474"
-
+type = module
