@@ -1,3 +1,5 @@
+Nivo Slider provides an easy and eye-catching way to showcase featured content.
+
 NIVO SLIDER
 ===========
 
@@ -39,7 +41,12 @@ To install Nivo Slider:
    (http://dev7studios.com/nivo-slider/) and extract it to a 
    /libraries folder in the root of your Backdrop install. The
    extracted folder must be named nivo_slider.
- - Enable Nivo Slider and all of the modules that it requires.
+ - Enable Nivo Slider.
+ - Add a 'Nivo Slider' block to your desired layout and region in Layout 
+   Builder using the 'Add Block' button. Choose a name for this slider instance.
+ - Go to the Layout's path and, in the region you placed your block find the
+   link which says "No slides yet. Add slides." and follow this link to add 
+   slides. Use the "Options" local tasks tab to change options.
 
 PERMISSIONS
 ------------

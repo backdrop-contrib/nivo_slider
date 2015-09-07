@@ -67,24 +67,6 @@ function nivo_slider_requirements($phase) {
         'severity' => REQUIREMENT_ERROR,
       );
     }
-    // Check if the site is running >= jQuery 1.7
-    if (($library = backdrop_get_library('system', 'jquery')) && $library['version'] >= 1.7) {
-      $requirements['nivo_slider_jquery'] = array(
-        'title' => t('Nivo Slider jQuery version'),
-        'value' => t('jQuery @version', array('@version' => $library['version'])),
-        'severity' => REQUIREMENT_OK,
-      );
-    }
-    else {
-      $destination = backdrop_get_destination();
-
-      $requirements['nivo_slider_jquery'] = array(
-        'title' => t('Nivo Slider jQuery version'),
-        'value' => t('jQuery @version', array('@version' => $library['version'])),
-        'description' => t('Nivo Slider requires jQuery 1.7 or greater. Configure <a href="@jquery_update">jQuery Update</a>.', array('@jquery_update' => url('admin/config/development/jquery_update', array('query' => $destination)))),
-        'severity' => REQUIREMENT_ERROR,
-      );
-    }
   }
 
   return $requirements;
@@ -108,51 +90,77 @@ function nivo_slider_permission() {
 function nivo_slider_menu() {
   $items['admin/structure/nivo-slider'] = array(
     'title' => 'Nivo Slider',
+    'description' => 'Nivo Sliders.',
+    'page callback' => 'nivo_slider_slider_list',
+    'access callback' => TRUE,
+    'access arguments' => array('administer nivo slider'),
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/structure/nivo-slider/%slider'] = array(
+    'title' => 'Nivo Slider',
     'description' => 'Configure slider content and options.',
     'page callback' => 'backdrop_get_form',
-    'page arguments' => array('nivo_slider_slide_configuration_form'),
+    'access callback' => TRUE,
+    'page arguments' => array('nivo_slider_slide_configuration_form', 3),
     'access arguments' => array('administer nivo slider'),
     'file' => 'nivo_slider_slides.admin.inc',
-    'type' => MENU_NORMAL_ITEM,
+    'type' => MENU_CALLBACK,
   );
-  $items['admin/structure/nivo-slider/slides'] = array(
+  $items['admin/structure/nivo-slider/%slider/slides'] = array(
     'title' => 'Slides',
     'description' => 'Configure slider content.',
     'page callback' => 'backdrop_get_form',
-    'page arguments' => array('nivo_slider_slide_configuration_form'),
-    'access arguments' => array('administer nivo slider'),
+    'page arguments' => array('nivo_slider_slide_configuration_form', 3),
+    'access callback' => TRUE,
+    //'access arguments' => array('administer nivo slider'),
     'file' => 'nivo_slider_slides.admin.inc',
-    'type' => MENU_DEFAULT_LOCAL_TASK,
     'weight' => 1,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
   );
-  $items['admin/structure/nivo-slider/options'] = array(
+  $items['admin/structure/nivo-slider/%slider/options'] = array(
     'title' => 'Options',
     'description' => 'Configure slider options.',
     'page callback' => 'backdrop_get_form',
-    'page arguments' => array('nivo_slider_option_configuration_form'),
+    'page arguments' => array('nivo_slider_option_configuration_form', 3),
     'access arguments' => array('administer nivo slider'),
     'file' => 'nivo_slider_options.admin.inc',
-    'type' => MENU_LOCAL_TASK,
     'weight' => 2,
+    'type' => MENU_LOCAL_TASK,
   );
 
   return $items;
 }
 
+/**
+ * Loads a slider.
+ */
+function slider_load($slider_id) {
+  $config = config('nivo_slider.settings');
+  $slider = $config->get($slider_id);
+  return $slider;
+}
 
 /**
- * Implements hook_contextual_links_view_alter().
+ *  Implements hook_menu_contextual_links_alter
  */
-function nivo_slider_contextual_links_view_alter(&$element, &$items) {
-  if (isset($element['#element']['#block']) && $element['#element']['#block']->delta == 'nivo_slider') {
-    $element['#links']['slides'] = array(
-      'title' => t('Configure slider slides'),
-      'href' => 'admin/structure/nivo-slider/slides',
-    );
-    $element['#links']['options'] = array(
-      'title' => t('Configure slider options'),
-      'href' => 'admin/structure/nivo-slider/options',
-    );
+function nivo_slider_menu_contextual_links_alter(&$links, $router_item, $root_path) {
+  if ($root_path == 'admin/structure/layouts/manage/%') {
+    $uuid = $router_item['page_arguments'][3];
+    $layout = $router_item['page_arguments'][1];
+    $block = $layout->content[$uuid];
+    if($block->module == 'nivo_slider'){
+      $slider_id = $block->settings['block_settings']['slider_id'];
+      $links['slider-edit'] = array(
+        'title' => 'Edit Slides',
+        'href' => 'admin/structure/nivo-slider/' . $slider_id . '/slides',
+        'localized_options' => array(),
+      );
+      $links['ls-reorder'] = array(
+        'title' => 'Edit Slider Options',
+        'href' => 'admin/structure/nivo-slider/' . $slider_id . '/options',
+        'localized_options' => array(),
+      );
+    }
   }
 }
 
@@ -171,6 +179,34 @@ function nivo_slider_i18n_string_info() {
   return $groups;
 }
 
+/**
+ * Returns default slide options.
+ */
+function nivo_slider_default_options() {
+  return array(
+  'effect' => 'random',
+  'image_style' => 0,
+  'image_style_slide' => 'large',
+  'image_style_thumb' => 'thumbnail',
+  'slices' => '15',
+  'box_columns' => '8',
+  'box_rows' => '4',
+  'animation_speed' => '500',
+  'pause_time' => '3000',
+  'start_slide' => '0',
+  'directional_navigation' => 1,
+  'control_navigation' => 1,
+  'control_nav_thumbs' => 0,
+  'pause_on_hover' => 1,
+  'manual_advance' => 0,
+  'previous_text' => 'Prev',
+  'next_text' => 'Next',
+  'random_start' => 0,
+  'theme' => 'default',
+  'banner_settings' => array(),
+  'banner_html_captions' => '',
+  );
+}
 /**
  * Update / create translation source for user defined slide strings.
  * 
@@ -229,6 +265,8 @@ function nivo_slider_theme($existing, $type, $theme, $path) {
       'variables' => array(
         'theme' => NULL,
         'banners' => NULL,
+        'value' => NULL,
+        'slider_id' => NULL,
       ),
       'file' => 'nivo_slider.theme.inc',
       'path' => $path . '/themes',
@@ -267,71 +305,182 @@ function nivo_slider_block_info() {
 }
 
 /**
+ * Implements hook_block_info().
+ */
+function nivo_slider_block_configure($delta = '', $settings = array()) {
+  $form = array();
+  if ($delta == 'nivo_slider') {
+    $form['slider_name'] = array(
+      '#type' => 'textfield',
+      '#required' => TRUE,
+      '#title' => t('Slider Name'),
+      '#description' => t('A unique name for this slider.'),
+      '#default_value' => isset($settings['slider_name']) ? $settings['slider_name'] : '',
+    );
+    $form['slider_id'] = array(
+      '#required' => TRUE,
+      '#type' => 'machine_name',
+      '#title' => t('Slider ID'),
+      '#default_value' => isset($settings['slider_id']) ? $settings['slider_id'] : '',
+      '#description' => t('A unique name for this slider. It must only contain lowercase letters, numbers and hyphens.'),
+      '#machine_name' => array(
+        'exists' => 'slider_load',
+        'source' => array('block_settings', 'slider_name'),
+      ),
+    );
+  }
+  return $form;
+}
+
+function nivo_slider_block_save($delta, &$edit = array()) {
+  if ($delta == 'nivo_slider') {
+    $slider = array(
+      'slider_id' => $edit['slider_id'],
+      'slider_name' => $edit['slider_name'],
+      'options' => nivo_slider_default_options(),
+      'slides' => array(),
+    );
+    config_set('nivo_slider.settings', $edit['slider_id'], $slider);
+  }
+}
+
+/**
+ *  Implementation of hook_cron()
+ *  
+ *  Deletes unused slider settings. Sliders are added via Layout builder and 
+ *  their settings are saved in hook_block_save to nivo_slider.settings.json.
+ *  
+ *  When a block is removed from Layout builder, there is no way to tell this
+ *  happened immediately. This may change; see https://github.com/backdrop/backdrop-issues/issues/767.
+ *  
+ *  Until then this checks for removed layout blocks to delete their settings on 
+ *  cron run.
+ *  
+ */
+function nivo_slider_cron() {
+  $all_layouts = layout_get_all_configs('layout');
+  $layouts = array();
+  foreach($all_layouts as $layout_name => $active_layouts) {
+    foreach($active_layouts['content'] as $uuid => $block) {
+      if($block['data']['module'] == 'nivo_slider') {
+        $layouts[] = $block['data']['settings']['block_settings']['slider_id'];
+      }
+    }
+  }
+  $settings = config('nivo_slider.settings');
+  $data = $settings->get();
+  foreach($data as $key => $setting) {
+    if(is_null($setting) || (is_array($setting) && !in_array($key, $layouts))) {
+      unset($data[$key]);
+    }
+  }
+  $settings->setData($data);
+  $settings->save();
+}
+
+/**
  * Implements hook_block_view().
  */
-function nivo_slider_block_view($delta = '') {
+function nivo_slider_block_view($delta = '', $settings = array(), $contexts = array()) {
+  $block = array();
   switch ($delta) {
     case 'nivo_slider':
-      $block['content'] = array(
-        '#type' => 'markup',
-        '#theme' => 'nivo_slider_wrapper',
-        '#attached' => array(
-          'library' => array(
-            array('nivo_slider', 'nivo-slider'),
-          ),
-          'js' => array(
-            array(
-              'data' => backdrop_get_path('module', 'nivo_slider') . '/js/nivo_slider.js',
-              'type' => 'file',
+      $config = config('nivo_slider.settings');
+      $slider = $config->get($settings['slider_id']);
+      if(!empty($slider['slides'])) {
+        $block['content'] = array(
+          '#type' => 'markup',
+          '#theme' => 'nivo_slider_wrapper',
+          '#value' => $slider['slides'],
+          '#slider_id' => $slider['slider_id'],
+          '#attached' => array(
+            'library' => array(
+              array('nivo_slider', 'nivo-slider'),
             ),
-            array(
-              'data' => array(
-                'nivo_slider' => array(
-                  'effect' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_effect')),
-                  'slices' => (int) check_plain(config_get('nivo_slider.settings', 'nivo_slider_slices')),
-                  'boxCols' => (int) check_plain(config_get('nivo_slider.settings', 'nivo_slider_box_columns')),
-                  'boxRows' => (int) check_plain(config_get('nivo_slider.settings', 'nivo_slider_box_rows')),
-                  'animSpeed' => (int) check_plain(config_get('nivo_slider.settings', 'nivo_slider_animation_speed')),
-                  'pauseTime' => (int) check_plain(config_get('nivo_slider.settings', 'nivo_slider_pause_time')),
-                  'startSlide' => (int) check_plain(config_get('nivo_slider.settings', 'nivo_slider_start_slide')),
-                  'directionNav' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_directional_navigation')) == 1 ? TRUE : FALSE,
-                  'controlNav' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_control_navigation')) == 1 ? TRUE : FALSE,
-                  'controlNavThumbs' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_control_nav_thumbs')) == 1 ? TRUE : FALSE,
-                  'pauseOnHover' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_pause_on_hover')) == 1 ? TRUE : FALSE,
-                  'manualAdvance' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_manual_advance')) == 1 ? TRUE : FALSE,
-                  'prevText' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_previous_text')),
-                  'nextText' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_next_text')),
-                  'randomStart' => check_plain(config_get('nivo_slider.settings', 'nivo_slider_random_start')) == 1 ? TRUE : FALSE,
-                ),
+            'js' => array(
+              array(
+                'data' => backdrop_get_path('module', 'nivo_slider') . '/js/nivo_slider.js',
+                'type' => 'file',
               ),
-              'type' => 'setting',
+              array(
+                'data' => array(
+                  'nivo_slider' => array(
+                    'effect' => $slider['options']['effect'],
+                    'slices' => (int) $slider['options']['slices'],
+                    'boxCols' => (int) $slider['options']['box_columns'],
+                    'boxRows' => (int) $slider['options']['box_rows'],
+                    'animSpeed' => (int) $slider['options']['animation_speed'],
+                    'pauseTime' => (int) $slider['options']['pause_time'],
+                    'startSlide' => (int) $slider['options']['start_slide'],
+                    'directionNav' => $slider['options']['directional_navigation'] == 1 ? TRUE : FALSE,
+                    'controlNav' => $slider['options']['control_navigation'] == 1 ? TRUE : FALSE,
+                    'controlNavThumbs' => $slider['options']['control_nav_thumbs'] == 1 ? TRUE : FALSE,
+                    'pauseOnHover' => $slider['options']['pause_on_hover'] == 1 ? TRUE : FALSE,
+                    'manualAdvance' => $slider['options']['manual_advance'] == 1 ? TRUE : FALSE,
+                    'prevText' => $slider['options']['previous_text'],
+                    'nextText' => $slider['options']['next_text'],
+                    'randomStart' => $slider['options']['random_start'] == 1 ? TRUE : FALSE,
+                  ),
+                ),
+                'type' => 'setting',
+              ),
             ),
+            'css' => array(),
           ),
-          'css' => array(),
-        ),
-      );
+        );
 
-      // Collect all themes
-      $themes = module_invoke_all('nivo_slider_theme_info');
-      // Allow theme information to be altered
-      backdrop_alter('nivo_slider_theme_info', $themes);
+        // Collect all themes
+        $themes = module_invoke_all('nivo_slider_theme_info');
+        // Allow theme information to be altered
+        backdrop_alter('nivo_slider_theme_info', $themes);
 
-      // Find the currently selected theme
-      $current_theme = config_get('nivo_slider.settings', 'nivo_slider_theme');
+        // Find the currently selected theme
+        $current_theme = $slider['options']['theme'];
 
-      // Get the current theme's settings
-      $theme = $themes[$current_theme];
+        // Get the current theme's settings
+        $theme = $themes[$current_theme];
 
-      // Add the theme's resources
-      foreach (array('js', 'css') as $type) {
-        if (!empty($theme['resources'][$type])) {
-          foreach ($theme['resources'][$type] as $file_path) {
-            $block['content']['#attached'][$type][] = $file_path;
+        // Add the theme's resources
+        foreach (array('js', 'css') as $type) {
+          if (!empty($theme['resources'][$type])) {
+            foreach ($theme['resources'][$type] as $file_path) {
+              $block['content']['#attached'][$type][] = $file_path;
+            }
           }
         }
+      }
+      else {
+        $block['content'] = l('No slides yet. Add slides.', 'admin/structure/nivo-slider/' . $settings['slider_id'] . '/slides');
       }
       break;
   }
 
   return $block;
+}
+
+/**
+ * Menu callback which shows an overview page of all the fanciblocks.
+ */
+function nivo_slider_slider_list() {
+  $result = config_get('nivo_slider.settings');
+  dpm($result);
+  
+  if($result) {
+    $header = array(t('Slider'), 'data' => t('Operations'));
+    $rows = array();
+    foreach ($result as $key => $slider) {
+      if(is_array($slider)) {
+        $row = array();
+        $row[] = check_plain($slider['slider_name']);
+        $row[] = array('data' => l(t('edit'), 'admin/structure/nivo-slider/' . $key . '/slides'));
+        $rows[] = $row;
+      }
+    }
+  }
+  else {
+    $header = array(t('Slider'), array('data' => t('Operations')));
+    $rows = array();
+    $rows[] = array(array('data' => t('There are no sliders yet.')));
+  }
+  return theme('table', array('header' => $header, 'rows' => $rows));
 }

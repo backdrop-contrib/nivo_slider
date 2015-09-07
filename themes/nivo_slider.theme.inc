@@ -94,7 +94,9 @@ function theme_nivo_slider_slide_configuration_form($variables) {
  * Implements template_preprocess_hook().
  */
 function template_preprocess_nivo_slider_wrapper(&$variables) {
-  $variables['theme'] = config_get('nivo_slider.settings', 'nivo_slider_theme');
-  $variables['banners'] = nivo_slider_slider();
-  $variables['html_captions'] = config_get('nivo_slider.settings', 'nivo_slider_banner_html_captions');
+  $config = config('nivo_slider.settings');
+  $slider = $config->get($variables['slider_id']);
+  $variables['theme'] = $slider['options']['nivo_slider_theme'];
+  $variables['banners'] = nivo_slider_slider($variables['slider_id']);
+  $variables['html_captions'] = $slider['options']['nivo_slider_banner_html_captions'];
 }

@@ -11,9 +11,11 @@
  * @return <string>
  *    Slider HTML markup
  */
-function nivo_slider_slider() {
+function nivo_slider_slider($slider_id) {
   // Get all available slides
-  $slides = config_get('nivo_slider.settings', 'nivo_slider_banner_settings');
+  $slider = config_get('nivo_slider.settings', $slider_id);
+  $slides = $slider['slides'];
+  $options = $slider['options'];
   // Create an array to hold visible slides
   $visible_slides = array();
 
@@ -88,7 +90,7 @@ function nivo_slider_slider() {
         $file = file_load($settings['fid']);
 
         // Create the slide image directly or using image styles
-        if (config_get('nivo_slider.settings', 'nivo_slider_image_style') == FALSE) {
+        if ($options['image_style'] == FALSE) {
           // Create an array of image settings
           $variables = array(
             'uri' => file_create_url(check_plain($file->uri)),
@@ -110,14 +112,14 @@ function nivo_slider_slider() {
         else {
           // Create an array of image settings
           $variables = array(
-            'style_name' => config_get('nivo_slider.settings', 'nivo_slider_image_style_slide'),
+            'style_name' => $options['image_style_slide'],
             'uri' => check_plain($file->uri),
             'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
             'attributes' => array(
               'class' => 'slide',
               'id' => 'slide-' . $slide,
-              'data-thumb' => image_style_url(config_get('nivo_slider.settings', 'nivo_slider_image_style_thumb'), check_plain($file->uri)),
+              'data-thumb' => image_style_url($options['image_style_thumb'], check_plain($file->uri)),
               'data-transition' => check_plain($settings['transition']),
             ),
           );
@@ -133,7 +135,8 @@ function nivo_slider_slider() {
   }
 
   // Save all HTML descriptions
-  config_set('nivo_slider.settings', 'nivo_slider_banner_html_captions', $description_html);
+  $slider['options']['banner_html_captions'] = $description_html;
+  config_set('nivo_slider.settings', $slider['slider_id'], $slider);
   
   return $output;
 }

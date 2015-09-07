@@ -8,7 +8,8 @@
 /**
  * Configuration form for slider slides.
  */
-function nivo_slider_slide_configuration_form($form, &$form_state) {
+function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
+  backdrop_set_title($slider['slider_name']);
   // Upload
   $form['upload'] = array(
     '#type' => 'file',
@@ -25,9 +26,14 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     '#tree' => TRUE,
   );
 
+  $form['slider'] = array(
+    '#type' => 'value',
+    '#value' => $slider,
+  );
   // Get all available slides
-  $slides = config_get('nivo_slider.settings', 'nivo_slider_banner_settings');
-
+  $slides = isset($slider['slides']) ? $slider['slides'] : array();
+  // Sort the slides by weight
+  backdrop_sort($slides, array('weight'));
   // Create a vertical tab for each slide
   foreach ($slides as $slide => $settings) {
     $form['images'][$slide] = array(
@@ -67,7 +73,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     $file = file_load($settings['fid']);
 
     // Create a preview image of the slide using an image style if appropriate
-    if (config_get('nivo_slider.settings', 'nivo_slider_image_style') == FALSE) {
+    if ($slider['options']['nivo_slider_image_style'] == FALSE) {
       $variables = array(
         'uri' => file_create_url($file->uri),
       );
@@ -76,7 +82,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     else {
       $variables = array(
         'uri' => $file->uri,
-        'style_name' => config_get('nivo_slider.settings', 'nivo_slider_image_style_slide')
+        'style_name' => $slider['options']['nivo_slider_image_style_slide']
       );
       $image = theme('image_style', $variables);
     }
@@ -222,9 +228,8 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
       'delete' => 0,
     );
   }
-
-  // Sort the slides by weight
-  backdrop_sort($slides, array('#weight'));
   // Save the slides
-  config_set('nivo_slider.settings', 'nivo_slider_banner_settings', $slides);
+  $save_slides = $form_state['values']['slider'];
+  $save_slides['slides'] = $slides;
+  config_set('nivo_slider.settings', $form_state['values']['slider']['slider_id'], $save_slides);
 }
