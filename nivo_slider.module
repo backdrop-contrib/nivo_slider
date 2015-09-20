@@ -334,13 +334,18 @@ function nivo_slider_block_configure($delta = '', $settings = array()) {
 
 function nivo_slider_block_save($delta, &$edit = array()) {
   if ($delta == 'nivo_slider') {
+    $config = config('nivo_slider.settings');
+    $data = $config->get($edit['slider_id']);
+    $options = $data['options'];
+    $slides = $data['slides'];
     $slider = array(
       'slider_id' => $edit['slider_id'],
       'slider_name' => $edit['slider_name'],
-      'options' => nivo_slider_default_options(),
-      'slides' => array(),
+      'options' => empty($options) ? nivo_slider_default_options() : $options,
+      'slides' => empty($slides) ? array() : $slides,
     );
-    config_set('nivo_slider.settings', $edit['slider_id'], $slider);
+    $config->set($edit['slider_id'], $slider);
+    $config->save();
   }
 }
 
@@ -463,7 +468,6 @@ function nivo_slider_block_view($delta = '', $settings = array(), $contexts = ar
  */
 function nivo_slider_slider_list() {
   $result = config_get('nivo_slider.settings');
-  dpm($result);
   
   if($result) {
     $header = array(t('Slider'), 'data' => t('Operations'));
