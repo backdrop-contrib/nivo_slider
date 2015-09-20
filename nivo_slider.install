@@ -32,6 +32,53 @@ function nivo_slider_uninstall() {
   }
 }
 
-function nivo_slider_update_last_removed() {
-  return 7005;
+
+function nivo_slider_update_2000() {
+  // Find all layouts and load the config.
+  $names = config_get_names_with_prefix('layout.layout');
+  $i = 1;
+  foreach ($names as $name) {
+    $config = config($name);
+    $layout = $config->get();
+    // Check each block for a Nivo Slider.
+    foreach ($layout['content'] as $uuid => $block) {
+      if ($block['data']['module'] == 'nivo_slider') {
+        // Add a Nivo Slider ID and name.
+        $layout['content'][$uuid]['data']['settings']['block_settings']['slider_id'] = 'nivo_block_' . $i;
+        $layout['content'][$uuid]['data']['settings']['block_settings']['slider_name'] = 'Nivo block ' . $i;
+      }
+    }
+    $config->setData($layout);
+    $config->save();
+    $i++;
+  }
+
+    // Now load the Nivo Slider config file.
+  $nivo_settings = config('nivo_slider.settings');
+  // Get the whole settings. Since Nivo only previously offered one Slider
+  // we're going to copy that slider's settings to each block we found.
+  $settings = $nivo_settings->get();
+  // Save the slide settings, then delete them.
+  $slides = $settings['nivo_slider_banner_settings'];
+  unset($settings['nivo_slider_banner_settings']);
+  $options = array();
+  // Now load all remaining settings. We're going to save them as '$options'.
+  foreach ($settings as $key => $setting) {
+    // Strip the 'nivo_slider_' from the beginning.
+    $new_key = substr($key, 12);
+    $options[$new_key] = $setting;
+    unset($settings[$key]);
+  }
+  
+  // Now for each block we found, save a Nivo Slider under a new ID.
+  while ($i >= 1)  {
+    $settings['nivo_block_' . $i]['slider_id'] = 'nivo_block_' . $i;
+    $settings['nivo_block_' . $i]['slider_name'] = 'Nivo block ' . $i;
+    $settings['nivo_block_' . $i]['options'] = $options;
+    $settings['nivo_block_' . $i]['slides'] = $slides;
+    $i--;
+  }
+
+  $nivo_settings->setData($settings);
+  $nivo_settings->save();
 }
