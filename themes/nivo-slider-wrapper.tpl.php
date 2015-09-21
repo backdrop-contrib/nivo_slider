@@ -19,7 +19,7 @@
 <?php if ($banners): ?>
   <div class="slider-wrapper theme-<?php print $theme; ?>">
     <div class="ribbon"></div>
-    <div id="slider" class="nivoSlider">
+    <div id="<?php print $slider_id; ?>" class="nivoSlider">
       <?php print $banners; ?>
     </div>
   </div>
