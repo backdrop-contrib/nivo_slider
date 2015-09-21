@@ -29,6 +29,54 @@ function nivo_slider_uninstall() {
   }
 }
 
+function nivo_slider_update_1000() {
+  $config = config('nivo_slider.settings');
+  $config->set('nivo_slider_effect', update_variable_get('nivo_slider_effect', 'random'));
+  $config->set('nivo_slider_image_style', update_variable_get('nivo_slider_image_style', 0));
+  $config->set('nivo_slider_image_style_slide', update_variable_get('nivo_slider_image_style_slide', 'large'));
+  $config->set('nivo_slider_image_style_thumb', update_variable_get('nivo_slider_image_style_thumb', 'thumbnail'));
+  $config->set('nivo_slider_slices', update_variable_get('nivo_slider_slices', '15'));
+  $config->set('nivo_slider_box_columns', update_variable_get('nivo_slider_box_columns', '8'));
+  $config->set('nivo_slider_box_rows', update_variable_get('nivo_slider_box_rows', '4'));
+  $config->set('nivo_slider_animation_speed', update_variable_get('nivo_slider_animation_speed', '500'));
+  $config->set('nivo_slider_pause_time', update_variable_get('nivo_slider_pause_time', '3000'));
+  $config->set('nivo_slider_start_slide', update_variable_get('nivo_slider_start_slide', '0'));
+  $config->set('nivo_slider_directional_navigation', update_variable_get('nivo_slider_directional_navigation', 1));
+  $config->set('nivo_slider_control_navigation', update_variable_get('nivo_slider_control_navigation', 1));
+  $config->set('nivo_slider_control_nav_thumbs', update_variable_get('nivo_slider_control_nav_thumbs', 0));
+  $config->set('nivo_slider_pause_on_hover', update_variable_get('nivo_slider_pause_on_hover', 1));
+  $config->set('nivo_slider_manual_advance', update_variable_get('nivo_slider_manual_advance', 0));
+  $config->set('nivo_slider_previous_text', update_variable_get('nivo_slider_previous_text', t('Prev')));
+  $config->set('nivo_slider_next_text', update_variable_get('nivo_slider_next_text', t('Next')));
+  $config->set('nivo_slider_random_start', update_variable_get('nivo_slider_random_start', 0));
+  $config->set('nivo_slider_theme', update_variable_get('nivo_slider_theme', 'default'));
+  $config->set('nivo_slider_banner_settings', update_variable_get('nivo_slider_banner_settings', array()));
+  $config->set('nivo_slider_banner_html_captions', update_variable_get('nivo_slider_banner_html_captions', ''));
+  $config->save();
+
+  // Remove slide variables
+  update_variable_del('nivo_slider_banner_settings');
+  update_variable_del('nivo_slider_banner_html_captions');
+  update_variable_del('nivo_slider_theme');
+  update_variable_del('nivo_slider_image_style');
+  update_variable_del('nivo_slider_image_style_slide');
+  update_variable_del('nivo_slider_image_style_thumb');
+  update_variable_del('nivo_slider_random_start');
+  update_variable_del('nivo_slider_start_slide');
+  update_variable_del('nivo_slider_effect');
+  update_variable_del('nivo_slider_slices');
+  update_variable_del('nivo_slider_box_columns');
+  update_variable_del('nivo_slider_box_rows');
+  update_variable_del('nivo_slider_animation_speed');
+  update_variable_del('nivo_slider_pause_on_hover');
+  update_variable_del('nivo_slider_directional_navigation');
+  update_variable_del('nivo_slider_next_text');
+  update_variable_del('nivo_slider_previous_text');
+  update_variable_del('nivo_slider_control_navigation');
+  update_variable_del('nivo_slider_control_nav_thumbs');
+  update_variable_del('nivo_slider_manual_advance');
+  update_variable_del('nivo_slider_pause_time');
+}
 
 function nivo_slider_update_1200() {
   // Find all layouts and load the config.
@@ -78,4 +126,8 @@ function nivo_slider_update_1200() {
 
   $nivo_settings->setData($settings);
   $nivo_settings->save();
+}
+
+function nivo_slider_update_last_removed() {
+  return 7005;
 }
