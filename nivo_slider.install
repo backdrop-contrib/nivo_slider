@@ -10,19 +10,16 @@
  */
 function nivo_slider_uninstall() {
    // Get the current slider settings
-  $all_slides = config_get('nivo_slider.settings');
+  $all_sliders = config_get('nivo_slider.settings');
   
-  foreach($all_slides as $slide_info) {
-    $slides = $slide_info['nivo_slider_banner_settings'];
+  foreach($all_sliders as $slider) {
+    $slides = $slider['slides'];
     // Delete all of the slide images
     foreach ($slides as $slide) {
       // Check if the slide has a file ID
       if (isset($slide['fid'])) {
-        // Load the file that corresponds to the file ID
-        $file_object = file_load($slide['fid']);
-
         // Delete the file
-        file_delete($file_object);
+        file_delete($slide['fid']);
       }
     }
 
@@ -33,7 +30,7 @@ function nivo_slider_uninstall() {
 }
 
 
-function nivo_slider_update_2000() {
+function nivo_slider_update_1200() {
   // Find all layouts and load the config.
   $names = config_get_names_with_prefix('layout.layout');
   $i = 1;
