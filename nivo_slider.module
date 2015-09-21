@@ -13,7 +13,6 @@ include_once('includes/nivo_slider_slider.inc');
  * Implements hook_library_info().
  */
 function nivo_slider_library_info() {
-  $module_path = backdrop_get_path('module', 'nivo_slider');
   $libraries['nivo-slider'] = array(
     'title' => 'Nivo Slider',
     'website' => 'http://nivo.dev7studios.com/pricing',
@@ -52,7 +51,7 @@ function nivo_slider_requirements($phase) {
   // Check requirements during the runtime phase
   if ($phase == 'runtime') {
     // Check if the Nivo Slider jQuery plugin library is installed
-    if (($library = backdrop_get_library('nivo-slider', 'nivo-slider'))) {
+    if (($library = backdrop_get_library('nivo_slider', 'nivo-slider'))) {
       $requirements['nivo_slider_library'] = array(
         'title' => t('Nivo Slider jQuery plugin'),
         'value' => t('Installed'),
@@ -112,7 +111,7 @@ function nivo_slider_menu() {
     'page callback' => 'backdrop_get_form',
     'page arguments' => array('nivo_slider_slide_configuration_form', 3),
     'access callback' => TRUE,
-    //'access arguments' => array('administer nivo slider'),
+    'access arguments' => array('administer nivo slider'),
     'file' => 'nivo_slider_slides.admin.inc',
     'weight' => 1,
     'type' => MENU_DEFAULT_LOCAL_TASK,
