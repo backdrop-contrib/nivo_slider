@@ -349,23 +349,21 @@ function nivo_slider_block_save($delta, &$edit = array()) {
 }
 
 /**
- *  Implementation of hook_cron()
+ *  Implementation of hook_layout_update()
  *  
  *  Deletes unused slider settings. Sliders are added via Layout builder and 
  *  their settings are saved in hook_block_save to nivo_slider.settings.json.
- *  
- *  When a block is removed from Layout builder, there is no way to tell this
- *  happened immediately. This may change; see https://github.com/backdrop/backdrop-issues/issues/767.
- *  
- *  Until then this checks for removed layout blocks to delete their settings on 
- *  cron run.
+ *  When a block is removed from Layout builder, this checks for removed layout 
+ *  blocks to delete their settings.
  *  
  */
-function nivo_slider_cron() {
-  $all_layouts = layout_get_all_configs('layout');
+function nivo_slider_layout_update($layout) {
   $layouts = array();
-  foreach($all_layouts as $layout_name => $active_layouts) {
-    foreach($active_layouts['content'] as $uuid => $block) {
+  $config_names = config_get_names_with_prefix('layout.layout');
+  foreach ($config_names as $config_file) {
+    $config = config($config_file);
+    $layout_data = $config->get();
+    foreach($layout_data['content'] as $uuid => $block) {
       if($block['data']['module'] == 'nivo_slider') {
         $layouts[] = $block['data']['settings']['block_settings']['slider_id'];
       }
@@ -374,7 +372,7 @@ function nivo_slider_cron() {
   $settings = config('nivo_slider.settings');
   $data = $settings->get();
   foreach($data as $key => $setting) {
-    if(is_null($setting) || (is_array($setting) && !in_array($key, $layouts))) {
+    if(is_array($setting) && !in_array($key, $layouts)) {
       unset($data[$key]);
     }
   }
