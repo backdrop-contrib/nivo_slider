@@ -73,7 +73,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     $file = file_load($settings['fid']);
 
     // Create a preview image of the slide using an image style if appropriate
-    if ($slider['options']['nivo_slider_image_style'] == FALSE) {
+    if ($slider['options']['image_style'] == FALSE) {
       $variables = array(
         'uri' => file_create_url($file->uri),
       );
@@ -82,7 +82,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     else {
       $variables = array(
         'uri' => $file->uri,
-        'style_name' => $slider['options']['nivo_slider_image_style_slide']
+        'style_name' => $slider['options']['image_style_slide']
       );
       $image = theme('image_style', $variables);
     }
