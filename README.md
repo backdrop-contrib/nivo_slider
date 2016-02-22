@@ -40,7 +40,7 @@ To install Nivo Slider:
  - Download the latest version of the Nivo Slider jQuery plugin
    (http://dev7studios.com/nivo-slider/) and extract it to a 
    /libraries folder in the root of your Backdrop install. The
-   extracted folder must be named nivo_slider.
+   extracted folder must be named nivo-slider.
  - Enable Nivo Slider.
  - Add a 'Nivo Slider' block to your desired layout and region in Layout 
    Builder using the 'Add Block' button. Choose a name for this slider instance.
