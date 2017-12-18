@@ -27,6 +27,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
 
   // Get all available slides
   $slides = variable_get('nivo_slider_banner_settings', array());
+  $max_weigh_delta = count($slides) + 10;
 
   // Create a vertical tab for each slide
   foreach ($slides as $slide => $settings) {
@@ -48,7 +49,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
     );
     $form['images'][$slide]['weight'] = array(
       '#type' => 'weight',
-      '#delta' => 10,
+      '#delta' => $max_weigh_delta,
       '#default_value' => isset($settings['weight']) ? $settings['weight'] : 1,
       '#attributes' => array(
         'class' => array('slide-weight'),
