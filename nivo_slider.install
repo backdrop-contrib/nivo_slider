@@ -20,7 +20,9 @@ function nivo_slider_uninstall() {
       $file_object = file_load($slide['fid']);
 
       // Delete the file
-      file_delete($file_object);
+      if ($file_object) {
+        file_delete($file_object);
+      }
     }
   }
 
