@@ -128,7 +128,14 @@ function nivo_slider_slider() {
         }
 
         // Add a link to the slide image when required
-        $output .= !empty($settings['url']) ? l($image, $settings['url'], array('html' => TRUE)) : $image;
+        $options = array('html' => TRUE);
+        if (!empty($settings['newtab'])) {
+          $options['attributes'] = array(
+            'target' => '_blank'
+            );
+        }
+
+        $output .= !empty($settings['url']) ? l($image, $settings['url'], $options) : $image;
       }
     }
   }

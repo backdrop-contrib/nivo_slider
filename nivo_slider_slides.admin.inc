@@ -108,6 +108,12 @@ function nivo_slider_slide_configuration_form($form, &$form_state) {
       '#default_value' => isset($settings['url']) ? $settings['url'] : '',
       '#description' => t('Specify a path or an absolute URL. An example path is %blog for the blog page. An example absolute URL is %url for the Drupal website. %front is the front page.', array('%blog' => 'blog', '%url' => 'http://drupal.org', '%front' => '<front>')),
     );
+    $form['images'][$slide]['newtab'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Open URL in a new tab'),
+      '#default_value' => isset($settings['newtab']) ? $settings['newtab'] : '',
+      '#description' => t('Check this to open URL in a new tab'),
+    );
     $form['images'][$slide]['visibility'] = array(
       '#type' => 'textarea',
       '#title' => t('Show slide on specific pages'),
