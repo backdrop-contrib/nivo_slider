@@ -198,7 +198,7 @@ function nivo_slider_settings_submit($form, &$form_state) {
   // Create a new slide if an image was uploaded
   if ($file = file_save_upload('upload')) {
     // Store slide images in a folder named 'banner'
-    $banner_folder = 'public://banner';
+    $banner_folder = 'public://' . variable_get('nivo_slider_dir_name', 'banner');
 
     // Create the banner directory if it does not currently exist
     file_prepare_directory($banner_folder, FILE_CREATE_DIRECTORY);

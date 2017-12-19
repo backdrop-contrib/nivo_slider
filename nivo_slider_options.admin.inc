@@ -80,6 +80,12 @@ function nivo_slider_option_configuration_form($form, &$form_state) {
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   );
+  $form['general']['nivo_slider_dir_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Nivo slider images directory'),
+    '#default_value' => variable_get('nivo_slider_dir_name', 'banner'),
+    '#description' => t('Fill the name of the directory where you want to store images. Default is "banner"'),
+  );
   $form['general']['nivo_slider_random_start'] = array(
     '#type' => 'checkbox',
     '#title' => t('Use a random starting slide'),

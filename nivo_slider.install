@@ -54,6 +54,7 @@ function nivo_slider_uninstall() {
   variable_del('nivo_slider_control_nav_thumbs');
   variable_del('nivo_slider_manual_advance');
   variable_del('nivo_slider_pause_time');
+  variable_del('nivo_slider_dir_name');
 }
 
 /**
