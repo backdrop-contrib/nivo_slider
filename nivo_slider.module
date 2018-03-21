@@ -62,9 +62,13 @@ function nivo_slider_requirements($phase) {
 function nivo_slider_permission() {
   return array(
     'administer nivo slider' => array(
-      'title' => t('Administer Nivo Slider'),
-      'description' => t('Allows a user to configure Nivo Slider.'),
+      'title' => t('Administer Nivo Slides'),
+      'description' => t('Allows a user to configure Nivo slides.'),
     ),
+    'administer nivo slider options' => array(
+      'title' => t('Administer Nivo Options'),
+      'description' => t('Allows a user to configure global Nivo options.'),
+    )
   );
 }
 
@@ -96,7 +100,7 @@ function nivo_slider_menu() {
     'description' => 'Configure slider options.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('nivo_slider_option_configuration_form'),
-    'access arguments' => array('administer nivo slider'),
+    'access arguments' => array('administer nivo slider options'),
     'file' => 'nivo_slider_options.admin.inc',
     'type' => MENU_LOCAL_TASK,
     'weight' => 2,
