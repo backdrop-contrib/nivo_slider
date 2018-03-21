@@ -12,6 +12,7 @@
  *    Slider HTML markup
  */
 function nivo_slider_slider() {
+  global $language;
   // Get all available slides
   $slides = variable_get('nivo_slider_banner_settings', array());
 
@@ -20,8 +21,13 @@ function nivo_slider_slider() {
 
   // Determine which slides should be visible
   foreach ($slides as $slide) {
+    // Detect language negotiation
+    $slide_language = TRUE;
+    if (module_exists('i18n') && !empty($slide['language'])) {
+      $slide_language = $slide['language'] === $language->language;
+    }
     // Only display published slides
-    if ($slide['published'] == TRUE) {
+    if ($slide['published'] === TRUE && $slide_language) {
       // Convert path to lowercase. This allows comparison of the same path
       // with different case. Ex: /Page, /page, /PAGE.
       $pages = drupal_strtolower($slide['visibility']);
