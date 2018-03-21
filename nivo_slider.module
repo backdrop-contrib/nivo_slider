@@ -367,3 +367,24 @@ function nivo_slider_block_view($delta = '') {
 
   return $block;
 }
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function nivo_slider_image_default_styles() {
+  $styles = array();
+  $styles['nivo_slider'] = array(
+    'effects' => array(
+      array(
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => 500,
+          'upscale' => 1,
+        ),
+        'weight' => 0,
+      ),
+    ),
+  );
+
+  return $styles;
+}
