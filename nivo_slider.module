@@ -58,12 +58,11 @@ function nivo_slider_permission() {
  */
 function nivo_slider_menu() {
   $items['admin/structure/nivo-slider'] = array(
-    'title' => 'Nivo Slider',
+    'title' => 'Nivo Sliders',
     'description' => 'Nivo Sliders.',
     'page callback' => 'nivo_slider_slider_list',
     'access callback' => TRUE,
     'access arguments' => array('administer nivo slider'),
-    'type' => MENU_CALLBACK,
   );
   $items['admin/structure/nivo-slider/%slider'] = array(
     'title' => 'Nivo Slider',
@@ -73,7 +72,6 @@ function nivo_slider_menu() {
     'page arguments' => array('nivo_slider_slide_configuration_form', 3),
     'access arguments' => array('administer nivo slider'),
     'file' => 'nivo_slider_slides.admin.inc',
-    'type' => MENU_CALLBACK,
   );
   $items['admin/structure/nivo-slider/%slider/slides'] = array(
     'title' => 'Slides',
@@ -441,11 +439,26 @@ function nivo_slider_slider_list() {
   if($result) {
     $header = array(t('Slider'), 'data' => t('Operations'));
     $rows = array();
-    foreach ($result as $key => $slider) {
+    foreach ($result as $slider_name => $slider) {
       if(is_array($slider)) {
+        $links = array();
+
+        $links['edit'] = array(
+          'title' => t('Edit slides'),
+          'href' => 'admin/structure/nivo-slider/' . $slider_name,
+        );
+        $links['options'] = array(
+          'title' => t('Edit slider options'),
+          'href' => 'admin/structure/nivo-slider/' . $slider_name . '/options',
+        );
+
+        $operations = array(
+          '#type' => 'operations',
+          '#links' => $links,
+        );
         $row = array();
         $row[] = check_plain($slider['slider_name']);
-        $row[] = array('data' => l(t('edit'), 'admin/structure/nivo-slider/' . $key . '/slides'));
+        $row[] = array('data' => $operations);
         $rows[] = $row;
       }
     }
@@ -455,5 +468,13 @@ function nivo_slider_slider_list() {
     $rows = array();
     $rows[] = array(array('data' => t('There are no sliders yet.')));
   }
-  return theme('table', array('header' => $header, 'rows' => $rows));
+  $form['help'] = array(
+    '#type' =>  'help',
+    '#markup' => t('This table lists all existing slider blocks. New sliders can be created by adding a new Nivo Slider block in a !layout.', array('!layout' => l(t('layout'), 'admin/structure/layouts'))),
+  );
+  $form['table'] = array(
+    '#markup' => theme('table', array('header' => $header, 'rows' => $rows)),
+  );
+
+  return $form;
 }
