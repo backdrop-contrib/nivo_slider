@@ -15,6 +15,10 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     '#type' => 'file',
     '#title' => t('Upload a new slide image'),
   );
+  $form['submit2'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save'),
+  );
 
   // Draggable table
   $form['order'] = array();
@@ -227,6 +231,9 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
       'published' => 1,
       'delete' => 0,
     );
+
+    // Don't redirect if coming from contextual links.
+    unset($_GET['destination']);
   }
   // Save the slides
   $save_slides = $form_state['values']['slider'];

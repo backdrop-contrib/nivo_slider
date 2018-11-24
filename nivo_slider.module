@@ -263,20 +263,22 @@ function nivo_slider_hook_info() {
 function nivo_slider_block_info() {
   $blocks['nivo_slider'] = array(
     'info' => t('Nivo Slider'),
-    'cache' => BACKDROP_CACHE_PER_PAGE,
-    'status' => 1,
-    'region' => 'featured',
+    'description' => t('Adds a Nivo image slider block.'),
   );
 
   return $blocks;
 }
 
 /**
- * Implements hook_block_info().
+ * Implements hook_block_configure().
  */
 function nivo_slider_block_configure($delta = '', $settings = array()) {
   $form = array();
   if ($delta == 'nivo_slider') {
+    $form['help'] = array(
+      '#type' => 'help',
+      '#markup' => t('After saving the layout, navigate to where this block displays (for example go to the home page, if you are adding the block to the Home layout), to edit the slide images.'),
+    );
     $form['slider_name'] = array(
       '#type' => 'textfield',
       '#required' => TRUE,
