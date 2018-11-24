@@ -18,10 +18,10 @@ function nivo_slider_library_info() {
     'website' => 'http://nivo.dev7studios.com/pricing',
     'version' => '3.1',
     'js' => array(
-      'libraries/nivo-slider/jquery.nivo.slider.js' => array(),
+      backdrop_get_path('module', 'nivo_slider') . '/js/nivo/jquery.nivo.slider.pack.js' => array(),
     ),
    'css' => array(
-      'libraries/nivo-slider/nivo-slider.css' => array(
+      backdrop_get_path('module', 'nivo_slider') . '/js/nivo/nivo-slider.css' => array(
         'type' => 'file',
         'media' => 'screen',
       ),
@@ -39,36 +39,6 @@ function nivo_slider_config_info() {
     'group' => t('Configuration'),
   );
   return $prefixes;
-}
-
-/**
- * Implements hook_requirements().
- */
-function nivo_slider_requirements($phase) {
-  // Create an array to hold Nivo Slider requirements
-  $requirements = array();
-
-  // Check requirements during the runtime phase
-  if ($phase == 'runtime') {
-    // Check if the Nivo Slider jQuery plugin library is installed
-    if (($library = backdrop_get_library('nivo_slider', 'nivo-slider'))) {
-      $requirements['nivo_slider_library'] = array(
-        'title' => t('Nivo Slider jQuery plugin'),
-        'value' => t('Installed'),
-        'severity' => REQUIREMENT_OK,
-      );
-    }
-    else {
-      $requirements['nivo_slider_library'] = array(
-        'title' => t('Nivo Slider jQuery plugin'),
-        'value' => t('Not installed'),
-        'description' => $library['error message'],
-        'severity' => REQUIREMENT_ERROR,
-      );
-    }
-  }
-
-  return $requirements;
 }
 
 /**
