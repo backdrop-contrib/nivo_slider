@@ -145,7 +145,7 @@ function nivo_slider_help($path, $arg) {
  * Implements hook_contextual_links_view_alter().
  */
 function nivo_slider_contextual_links_view_alter(&$element, &$items) {
-  if (isset($element['#element']['#block']) && $element['#element']['#block']->delta == 'nivo_slider') {
+  if (isset($element['#element']['#block']) && $element['#element']['#block']->delta == 'nivo_slider' && user_access('administer nivo slider')) {
     $element['#links']['slides'] = array(
       'title' => t('Configure slider slides'),
       'href' => 'admin/structure/nivo-slider/slides',
