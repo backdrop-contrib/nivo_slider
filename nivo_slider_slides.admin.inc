@@ -10,7 +10,7 @@
  */
 function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
   backdrop_set_title($slider['slider_name']);
-  // Upload
+  // Upload.
   $form['upload'] = array(
     '#type' => 'file',
     '#title' => t('Upload a new slide image'),
@@ -20,10 +20,10 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     '#value' => t('Save'),
   );
 
-  // Draggable table
+  // Draggable table.
   $form['order'] = array();
 
-  // Vertical tab
+  // Vertical tab.
   $form['images'] = array(
     '#type' => 'vertical_tabs',
     '#title' => t('Slider images'),
@@ -34,11 +34,11 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     '#type' => 'value',
     '#value' => $slider,
   );
-  // Get all available slides
+  // Get all available slides.
   $slides = isset($slider['slides']) ? $slider['slides'] : array();
   // Sort the slides by weight
   backdrop_sort($slides, array('weight'));
-  // Create a vertical tab for each slide
+  // Create a vertical tab for each slide.
   foreach ($slides as $slide => $settings) {
     $form['images'][$slide] = array(
       '#type' => 'fieldset',
@@ -73,10 +73,10 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
       '#default_value' => FALSE,
     );
 
-    // Load the slide's image file
+    // Load the slide's image file.
     $file = file_load($settings['fid']);
 
-    // Create a preview image of the slide using an image style if appropriate
+    // Create a preview image of the slide using an image style if appropriate.
     if ($slider['options']['image_style'] == FALSE) {
       $variables = array(
         'uri' => file_create_url($file->uri),
@@ -150,7 +150,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     );
   }
 
-  // Add a theme function to theme the form
+  // Add a theme function to theme the form.
   $form['#theme'][] = 'nivo_slider_slide_configuration_form';
 
   $form['submit'] = array(
@@ -166,20 +166,20 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
  * Save settings data.
  */
 function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
-  // Create an array to hold slides
+  // Create an array to hold slides.
   $slides = array();
 
-  // Create a file object to hold the slide image file
+  // Create a file object to hold the slide image file.
   $file = entity_create('file', array());
 
-  // Process the available slides
+  // Process the available slides.
   foreach ($form_state['values']['images'] as $slide => $settings) {
     // Ensure that only slide settings are processed
     if (is_numeric($slide)) {
       if (is_array($settings)) {
-        // Delete the slide if required otherwise add it to the array of slides
+        // Delete the slide if required otherwise add it to the array of slides.
         if ($settings['delete']) {
-          // Load the file with the file ID
+          // Load the file with the file ID.
           if (isset($settings['fid'])) {
             file_delete($settings['fid']);
           }
@@ -191,32 +191,32 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
     }
   }
 
-  // Update / create translation source for user defined slide strings
+  // Update/create translation source for user defined slide strings.
   if (function_exists('i18n_string_update')) {
     nivo_slider_locale_refresh($slides);
   }
 
-  // Create a new slide if an image was uploaded
+  // Create a new slide if an image was uploaded.
   if ($file = file_save_upload('upload')) {
-    // Store slide images in a folder named 'banner'
+    // Store slide images in a folder named 'banner'.
     $banner_folder = 'public://banner';
 
-    // Create the banner directory if it does not currently exist
+    // Create the banner directory if it does not currently exist.
     file_prepare_directory($banner_folder, FILE_CREATE_DIRECTORY);
 
-    // Find information about the file
+    // Find information about the file.
     $parts = pathinfo($file->filename);
 
-    // Create a destination for the slide image
+    // Create a destination for the slide image.
     $destination = $banner_folder . '/' . $parts['basename'];
 
-    // Indicate that the slide image is permanent
+    // Indicate that the slide image is permanent.
     $file->status = FILE_STATUS_PERMANENT;
 
-    // Copy the slide image into the banner folder
+    // Copy the slide image into the banner folder.
     $file = file_copy($file, $destination, FILE_EXISTS_REPLACE);
 
-    // Create a new slide
+    // Create a new slide.
     $slides[] = array(
       'fid' => $file->fid,
       'title' => '',
@@ -235,7 +235,7 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
     // Don't redirect if coming from contextual links.
     unset($_GET['destination']);
   }
-  // Save the slides
+  // Save the slides.
   $save_slides = $form_state['values']['slider'];
   $save_slides['slides'] = $slides;
   config_set('nivo_slider.settings', $form_state['values']['slider']['slider_id'], $save_slides);
