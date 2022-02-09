@@ -100,7 +100,7 @@ function nivo_slider_slider($slider_id) {
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
             'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
             'attributes' => array(
-              'class' => 'slide',
+              'class' => array('slide'),
               'id' => 'slide-' . $slide,
               'data-thumb' => file_create_url(check_plain($file->uri)),
               'data-transition' => check_plain($settings['transition']),
@@ -118,7 +118,7 @@ function nivo_slider_slider($slider_id) {
             'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
             'attributes' => array(
-              'class' => 'slide',
+              'class' => array('slide'),
               'id' => 'slide-' . $slide,
               'data-thumb' => image_style_url($options['image_style_thumb'], check_plain($file->uri)),
               'data-transition' => check_plain($settings['transition']),
