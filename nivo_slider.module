@@ -175,8 +175,16 @@ function nivo_slider_default_options() {
 }
 
 /**
+ * Implements hook_i18n_string_refresh().
+ */
+function nivo_slider_i18n_string_refresh() {
+  nivo_slider_locale_refresh();
+  return true;
+}
+
+/**
  * Update/create translation source for user defined slide strings.
- * 
+ *
  * @param $slides
  *   An array of slider slides.
  */
@@ -201,7 +209,7 @@ function nivo_slider_locale_refresh($slides = NULL) {
 
 /**
  * Translates a user defined slide string.
- * 
+ *
  * @param $name
  *   Location glued with ':'.
  * @param $string
@@ -210,12 +218,12 @@ function nivo_slider_locale_refresh($slides = NULL) {
  *  The language code if it is different from the page request one.
  * @param $textgroup
  *  Textgroup.
- * 
+ *
  * @return $string
  *   Translated string, $string if not found.
  */
 function nivo_slider_translate($name, $string, $langcode = NULL, $textgroup = 'nivo_slider') {
-  return function_exists('i18n_string') ? i18n_string($textgroup . ':' . $name, $string, array('langcode' => $langcode)) : $string;  
+  return function_exists('i18n_string') ? i18n_string($textgroup . ':' . $name, $string, array('langcode' => $langcode)) : $string;
 }
 
 /**
