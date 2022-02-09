@@ -52,12 +52,13 @@ in this module for licencing information.
 Maintainers
 -----------
 
-- Docwilmot (https://github.com/docwilmot/)
+- [Docwilmot](https://github.com/docwilmot)
+- [klonos](https://github.com/klonos)
 
 Current Maintainers on Drupal:
 
- - Devin Carlson <http://drupal.org/user/290182>
+- [Devin Carlson](https://www.drupal.org/u/devin-carlson)
  
 Ported to Backdrop by:
 
- - Docwilmot <https://github.com/docwilmot>
+- [Docwilmot](https://github.com/docwilmot)
