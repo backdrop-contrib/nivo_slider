@@ -5,9 +5,8 @@
  * Primarily Backdrop hooks.
  */
 
-// Include the slider functions
+// Include the slider functions.
 include_once('includes/nivo_slider_slider.inc');
-
       
 /**
  * Implements hook_library_info().
@@ -108,7 +107,7 @@ function slider_load($slider_id) {
 }
 
 /**
- *  Implements hook_menu_contextual_links_alter
+ * Implements hook_menu_contextual_links_alter().
  */
 function nivo_slider_menu_contextual_links_alter(&$links, $router_item, $root_path) {
   if ($root_path == 'admin/structure/layouts/manage/%') {
@@ -132,7 +131,7 @@ function nivo_slider_menu_contextual_links_alter(&$links, $router_item, $root_pa
 }
 
 /**
- * Implements hook_i18n_string_info()
+ * Implements hook_i18n_string_info().
  */
 function nivo_slider_i18n_string_info() {
   $groups['nivo_slider'] = array(
@@ -174,8 +173,9 @@ function nivo_slider_default_options() {
   'banner_html_captions' => '',
   );
 }
+
 /**
- * Update / create translation source for user defined slide strings.
+ * Update/create translation source for user defined slide strings.
  * 
  * @param $slides
  *   An array of slider slides.
@@ -241,7 +241,6 @@ function nivo_slider_theme($existing, $type, $theme, $path) {
     ),
   );
 }
-
 
 /**
  * Implements hook_hook_info().
@@ -322,13 +321,12 @@ function nivo_slider_block_save($delta, &$edit = array()) {
 }
 
 /**
- *  Implementation of hook_layout_update()
- *  
- *  Deletes unused slider settings. Sliders are added via Layout builder and 
- *  their settings are saved in hook_block_save to nivo_slider.settings.json.
- *  When a block is removed from Layout builder, this checks for removed layout 
- *  blocks to delete their settings.
- *  
+ * Implementation of hook_layout_update().
+ *
+ * Deletes unused slider settings. Sliders are added via the Layout builder, and 
+ * their settings are saved in hook_block_save() to nivo_slider.settings.json.
+ * When a block is removed from Layout builder, this checks for removed layout 
+ * blocks to delete their settings.
  */
 function nivo_slider_layout_update($layout) {
   $layouts = array();
@@ -406,18 +404,18 @@ function nivo_slider_block_view($delta = '', $settings = array(), $contexts = ar
           ),
         );
 
-        // Collect all themes
+        // Collect all themes.
         $themes = module_invoke_all('nivo_slider_theme_info');
-        // Allow theme information to be altered
+        // Allow theme information to be altered.
         backdrop_alter('nivo_slider_theme_info', $themes);
 
-        // Find the currently selected theme
+        // Find the currently-selected theme.
         $current_theme = $slider['options']['theme'];
 
-        // Get the current theme's settings
+        // Get the current theme's settings.
         $theme = $themes[$current_theme];
 
-        // Add the theme's resources
+        // Add the theme's resources.
         foreach (array('js', 'css') as $type) {
           if (!empty($theme['resources'][$type])) {
             foreach ($theme['resources'][$type] as $file_path) {
