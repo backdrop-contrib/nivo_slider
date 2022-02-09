@@ -9,21 +9,21 @@
  * Implements hook_uninstall().
  */
 function nivo_slider_uninstall() {
-   // Get the current slider settings
+   // Get the current slider settings.
   $all_sliders = config_get('nivo_slider.settings');
-  
+
   foreach($all_sliders as $slider) {
     $slides = $slider['slides'];
-    // Delete all of the slide images
+    // Delete all of the slide images.
     foreach ($slides as $slide) {
-      // Check if the slide has a file ID
+      // Check if the slide has a file ID.
       if (isset($slide['fid'])) {
-        // Delete the file
+        // Delete the file.
         file_delete($slide['fid']);
       }
     }
 
-    // Delete the folder the slider images were contained in
+    // Delete the folder the slider images were contained in.
     $banner_folder = 'public://banner/';
     file_unmanaged_delete_recursive($banner_folder);
   }
@@ -54,7 +54,7 @@ function nivo_slider_update_1000() {
   $config->set('nivo_slider_banner_html_captions', update_variable_get('nivo_slider_banner_html_captions', ''));
   $config->save();
 
-  // Remove slide variables
+  // Remove slide variables.
   update_variable_del('nivo_slider_banner_settings');
   update_variable_del('nivo_slider_banner_html_captions');
   update_variable_del('nivo_slider_theme');
@@ -98,18 +98,18 @@ function nivo_slider_update_1200() {
     $i++;
   }
 
-    // Now load the Nivo Slider config file.
+  // Load the Nivo Slider config file.
   $nivo_settings = config('nivo_slider.settings');
-  // Get the whole settings. Since Nivo only previously offered one Slider
-  // we're going to copy that slider's settings to each block we found.
+  // Get all settings. Since Nivo only previously offered one Slider, we're
+  // going to copy that slider's settings to each block we found.
   $settings = $nivo_settings->get();
   // Save the slide settings, then delete them.
   $slides = $settings['nivo_slider_banner_settings'];
   unset($settings['nivo_slider_banner_settings']);
   $options = array();
-  // Now load all remaining settings. We're going to save them as '$options'.
+  // Load all remaining settings. We're going to save them as '$options'.
   foreach ($settings as $key => $setting) {
-    // Strip the 'nivo_slider_' from the beginning.
+    // Strip the 'nivo_slider_' prefix.
     $new_key = substr($key, 12);
     $options[$new_key] = $setting;
     unset($settings[$key]);
