@@ -34,10 +34,14 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     '#type' => 'value',
     '#value' => $slider,
   );
+
   // Get all available slides.
   $slides = isset($slider['slides']) ? $slider['slides'] : array();
+  $max_weigh_delta = count($slides) + 10;
+
   // Sort the slides by weight
   backdrop_sort($slides, array('weight'));
+
   // Create a vertical tab for each slide.
   foreach ($slides as $slide => $settings) {
     $form['images'][$slide] = array(
@@ -58,7 +62,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     );
     $form['images'][$slide]['weight'] = array(
       '#type' => 'weight',
-      '#delta' => 10,
+      '#delta' => $max_weigh_delta,
       '#default_value' => isset($settings['weight']) ? $settings['weight'] : 1,
       '#attributes' => array(
         'class' => array('slide-weight'),
