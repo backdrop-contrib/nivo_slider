@@ -18,8 +18,13 @@ function nivo_slider_uninstall() {
     foreach ($slides as $slide) {
       // Check if the slide has a file ID.
       if (isset($slide['fid'])) {
+        // Load the file that corresponds to the file ID.
+        $file_object = file_load($slide['fid']);
+
         // Delete the file.
-        file_delete($slide['fid']);
+        if ($file_object) {
+          file_delete($file_object);
+        }
       }
     }
 
