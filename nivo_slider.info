@@ -1,6 +1,8 @@
 name = Nivo Slider
+type = module
 description = Provides a user interface for building a rotating banner powered by the Nivo Slider jQuery plugin.
 backdrop = 1.x
 
 dependencies[] = block
-type = module
+
+configure = admin/structure/nivo-slider
