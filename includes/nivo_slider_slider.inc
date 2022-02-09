@@ -97,8 +97,8 @@ function nivo_slider_slider($slider_id) {
             'uri' => file_create_url(check_plain($file->uri)),
             'width' => NULL,
             'height' => NULL,
+            'title' => check_plain(empty($description_text_only) ? nivo_slider_translate('slide:' . $slide . ':description', $description) : $description),
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
-            'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
             'attributes' => array(
               'class' => array('slide'),
               'id' => 'slide-' . $slide,
@@ -115,7 +115,7 @@ function nivo_slider_slider($slider_id) {
           $variables = array(
             'style_name' => $options['image_style_slide'],
             'uri' => check_plain($file->uri),
-            'title' => check_plain(nivo_slider_translate('slide:' . $slide . ':description', $description)),
+            'title' => check_plain(empty($description_text_only) ? nivo_slider_translate('slide:' . $slide . ':description', $description) : $description),
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
             'attributes' => array(
               'class' => array('slide'),
