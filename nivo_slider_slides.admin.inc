@@ -218,7 +218,7 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
     $file->status = FILE_STATUS_PERMANENT;
 
     // Copy the slide image into the banner folder.
-    $file = file_copy($file, $destination, FILE_EXISTS_REPLACE);
+    $file = file_copy($file, $destination, FILE_EXISTS_RENAME);
 
     // Create a new slide.
     $slides[] = array(
