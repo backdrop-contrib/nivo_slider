@@ -301,6 +301,9 @@ function nivo_slider_block_configure($delta = '', $settings = array()) {
   return $form;
 }
 
+/**
+ * Implements hook_block_save().
+ */
 function nivo_slider_block_save($delta, &$edit = array()) {
   if ($delta == 'nivo_slider') {
     $config = config('nivo_slider.settings');
