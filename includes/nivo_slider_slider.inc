@@ -25,7 +25,7 @@ function nivo_slider_slider($slider_id) {
     // Detect language negotiation
     $slide_language = TRUE;
     if (module_exists('i18n') && !empty($slide['language'])) {
-      $slide_language = $slide['language'] === $language->language;
+      $slide_language = $slide['language'] === $language->langcode;
     }
     // Only display published slides
     if ($slide['published'] === TRUE && $slide_language) {
