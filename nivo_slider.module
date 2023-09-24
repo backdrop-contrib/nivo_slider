@@ -46,9 +46,13 @@ function nivo_slider_config_info() {
 function nivo_slider_permission() {
   return array(
     'administer nivo slider' => array(
-      'title' => t('Administer Nivo Slider'),
-      'description' => t('Allows a user to configure Nivo Slider.'),
+      'title' => t('Administer Nivo Slides'),
+      'description' => t('Allows a user to configure Nivo slides.'),
     ),
+    'administer nivo slider options' => array(
+      'title' => t('Administer Nivo Options'),
+      'description' => t('Allows a user to configure global Nivo options.'),
+    )
   );
 }
 
@@ -131,7 +135,23 @@ function nivo_slider_menu_contextual_links_alter(&$links, $router_item, $root_pa
 }
 
 /**
- * Implements hook_i18n_string_info().
+ * Implements hook_contextual_links_view_alter().
+ */
+function nivo_slider_contextual_links_view_alter(&$element, &$items) {
+  if (isset($element['#element']['#block']) && $element['#element']['#block']->delta == 'nivo_slider' && user_access('administer nivo slider')) {
+    $element['#links']['slides'] = array(
+      'title' => t('Configure slider slides'),
+      'href' => 'admin/structure/nivo-slider/slides',
+    );
+    $element['#links']['options'] = array(
+      'title' => t('Configure slider options'),
+      'href' => 'admin/structure/nivo-slider/options',
+    );
+  }
+}
+
+/**
+ * Implements hook_i18n_string_info()
  */
 function nivo_slider_i18n_string_info() {
   $groups['nivo_slider'] = array(
@@ -183,7 +203,7 @@ function nivo_slider_i18n_string_refresh() {
 }
 
 /**
- * Update/create translation source for user defined slide strings.
+ * Update / create translation source for user defined slide strings.
  *
  * @param $slides
  *   An array of slider slides.
@@ -488,4 +508,26 @@ function nivo_slider_slider_list() {
   );
 
   return $form;
+}
+
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function nivo_slider_image_default_styles() {
+  $styles = array();
+  $styles['nivo_slider'] = array(
+    'effects' => array(
+      array(
+        'name' => 'image_scale',
+        'data' => array(
+          'width' => 500,
+          'upscale' => 1,
+        ),
+        'weight' => 0,
+      ),
+    ),
+  );
+
+  return $styles;
 }

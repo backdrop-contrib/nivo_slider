@@ -12,6 +12,7 @@
  *    Slider HTML markup
  */
 function nivo_slider_slider($slider_id) {
+  global $language;
   // Get all available slides
   $slider = config_get('nivo_slider.settings', $slider_id);
   $slides = $slider['slides'];
@@ -21,8 +22,13 @@ function nivo_slider_slider($slider_id) {
 
   // Determine which slides should be visible.
   foreach ($slides as $slide) {
-    // Only display published slides.
-    if ($slide['published'] == TRUE) {
+    // Detect language negotiation
+    $slide_language = TRUE;
+    if (module_exists('i18n') && !empty($slide['language'])) {
+      $slide_language = $slide['language'] === $language->language;
+    }
+    // Only display published slides
+    if ($slide['published'] === TRUE && $slide_language) {
       // Convert path to lowercase. This allows comparison of the same path
       // with different case. Ex: /Page, /page, /PAGE.
       $pages = backdrop_strtolower($slide['visibility']);
@@ -99,6 +105,7 @@ function nivo_slider_slider($slider_id) {
             'height' => NULL,
             'title' => check_plain(empty($description_text_only) ? nivo_slider_translate('slide:' . $slide . ':description', $description) : $description),
             'alt' => check_plain(nivo_slider_translate('slide:' . $slide . ':title', $settings['title'])),
+            'title' => check_plain(empty($description_text_only) ? nivo_slider_translate('slide:' . $slide . ':description', $description) : $description),
             'attributes' => array(
               'class' => array('slide'),
               'id' => 'slide-' . $slide,
