@@ -23,8 +23,6 @@ function theme_nivo_slider_slide_configuration_form($variables) {
 
   // Create an array to hold the table rows
   $rows = array();
-  dpm($form['images']);
-  dpm($form['slider']);
   $slider_id = $form['slider']['#value']['slider_id'];
 
   // Generate an array of table rows from the available slides
@@ -61,8 +59,18 @@ function theme_nivo_slider_slide_configuration_form($variables) {
       );
       unset($property['delete']);
       $fid = $property['fid']['#value'];
-      $row[] = l('link', "admin/structure/nivo-slider/$slider_id/$slide");
-
+      $row[] = l(
+        'link',
+        "admin/structure/nivo-slider/$slider_id/$slide",
+        array(
+          'attributes' => array(
+            'class' => array('use-ajax block-item'),
+            'data-dialog' => TRUE,
+            'data-dialog-options' => json_encode(array('dialogClass' => 'nivo-dialog')),
+          )
+        )
+      );
+      
       // Store the individual row
       $rows[] = array(
         'data' => $row,

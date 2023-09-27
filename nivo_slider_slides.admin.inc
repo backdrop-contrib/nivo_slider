@@ -118,12 +118,25 @@ function nivo_slider_slide_image_configuration_form($form, &$form_state, $slider
   );
 
   $form['actions'] = array('#type' => 'actions');
+  $form['actions']['cancel'] = array(
+    '#type' => 'submit',
+    '#value' => t('Cancel'),
+    '#validate' => array(),
+    '#submit' => array('nivo_slider_slide_image_configuration_form_cancel'),
+  );
   $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save slide'), //empty($layout->is_new) ? t('Save layout') : t('Create layout'),
   );
 
   return $form;
+}
+
+/**
+ * Save settings data.
+ */
+function nivo_slider_slide_image_configuration_form_cancel($form, &$form_state) {
+  $form_state['redirect'] = 'admin/structure/nivo-slider/' . $form_state['slider']['slider_id'];
 }
 
 /**
@@ -141,6 +154,13 @@ function nivo_slider_slide_image_configuration_form_submit($form, &$form_state) 
  * Configuration form for slider slides.
  */
 function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
+  $form['#attached'] = array(
+    'library' => array(
+      array('system', 'backdrop.ajax'),
+      array('system', 'backdrop.announce'),
+    ),
+  );
+
   backdrop_set_title($slider['slider_name']);
   // Upload.
   $form['upload'] = array(
