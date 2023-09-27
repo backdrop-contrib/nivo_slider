@@ -232,23 +232,14 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
     // Load the slide's image file.
     $file = file_load($settings['fid']);
 
-    // Create a preview image of the slide using an image style if appropriate.
-    if ($slider['options']['image_style'] == FALSE) {
-      $variables = array(
-        'uri' => file_create_url($file->uri),
-      );
-      $image = theme('image', $variables);
-    }
-    else {
       $variables = array(
         'uri' => $file->uri,
-        'style_name' => $slider['options']['image_style_slide']
+        'style_name' => 'thumbnail',
       );
       $image = theme('image_style', $variables);
-    }
 
     $form['images'][$slide]['preview'] = array(
-      '#markup' =>  $image,
+      '#markup' =>  l($image, 'file/' . $settings['fid'], array('html' => TRUE)),
     );
     $form['images'][$slide]['fid'] = array(
       '#type' => 'hidden',

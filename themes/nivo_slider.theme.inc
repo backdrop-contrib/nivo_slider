@@ -32,6 +32,14 @@ function theme_nivo_slider_slide_configuration_form($variables) {
       $row = array();
 
       // Add a column containing the slide's title to the current row
+      $preview = $property['preview'];
+      dpm(backdrop_render($property['fid']));
+      $row[] = array(
+        'data' => backdrop_render($preview),
+      );
+      unset($property['preview']);
+
+      // Add a column containing the slide's title to the current row
       $name = $property['name'];
       $row[] = array(
         'data' => backdrop_render($name),
@@ -83,6 +91,7 @@ function theme_nivo_slider_slide_configuration_form($variables) {
   if (!empty($rows)) {
     // Create an array of table headers
     $headers = array(
+      '',
       t('Name'),
       t('Weight'),
       t('Published'),
