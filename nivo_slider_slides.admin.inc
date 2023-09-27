@@ -229,23 +229,58 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
       '#default_value' => FALSE,
     );
 
+    $links = array();
+    $slider_id = $slider['slider_id'];
+    $links['configure'] = array(
+      'title' => t('Configure'),
+      'href' => "admin/structure/nivo-slider/$slider_id/$slide",
+      'attributes' => array(
+        'class' => array('use-ajax'),
+        'data-dialog' => TRUE,
+        'data-dialog-options' => json_encode(array('dialogClass' => 'nivo-dialog')),
+      ),
+    );
+    $links['delete'] = array(
+      'title' => t('Delete'),
+      'href' => "admin/structure/nivo-slider/$slider_id/$slide/delete",
+    );
+
+    $form['images'][$slide]['operations'] = array(
+      '#type' => 'dropbutton',
+      '#links' => $links,
+    );
+
     // Load the slide's image file.
     $file = file_load($settings['fid']);
 
-      $variables = array(
-        'uri' => $file->uri,
-        'style_name' => 'thumbnail',
-      );
-      $image = theme('image_style', $variables);
+    $variables = array(
+      'uri' => $file->uri,
+      'style_name' => 'thumbnail',
+    );
+    $image = theme('image_style', $variables);
 
     $form['images'][$slide]['preview'] = array(
       '#markup' =>  l($image, 'file/' . $settings['fid'], array('html' => TRUE)),
     );
+
     $form['images'][$slide]['fid'] = array(
       '#type' => 'hidden',
       '#value' => isset($settings['fid']) ? $settings['fid'] : '',
     );
-    $form['images'][$slide]['title'] = array(
+
+    $form['images'][$slide]['fid'] = array(
+      '#type' => 'hidden',
+      '#value' => isset($settings['fid']) ? $settings['fid'] : '',
+    );
+
+    $details = nivo_slider_slide_get_details($settings);
+    $form['images'][$slide]['details'] = array(
+      '#type' => 'details',
+      '#summary' => t('Image information'),
+      '#details' => $details,
+    );
+
+  $form['images'][$slide]['title'] = array(
       '#type' => 'textfield',
       '#title' => t('Title'),
       '#default_value' => isset($settings['title']) ? $settings['title'] : '',
@@ -414,4 +449,41 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
   $save_slides = $form_state['values']['slider'];
   $save_slides['slides'] = $slides;
   config_set('nivo_slider.settings', $form_state['values']['slider']['slider_id'], $save_slides);
+}
+
+/**
+ * Get slide details.
+ */
+function nivo_slider_slide_get_details($slide_info) {
+  $output = '';
+  $output .= '<div>' . t('Title: ');
+  $output .= !empty($slide_info['title']) ? check_plain($slide_info['title']) : t('Default');
+  $output .= '</div>';
+  $output .= '<div>' . t('Description: ');
+  $output .= !empty($slide_info['description']['value']) ? check_plain($slide_info['description']['value']) : t('No description');
+  $output .= '</div>';
+
+  if (!empty($slide_info['url'])) {
+    $output .= '<div>' . t('URL: ');
+    $output .= $slide_info['url'];
+    $output .= '</div>';
+    $output .= '<div>' . t('New tab: ');
+    $output .= empty($slide_info['new_tab']) ? t('Opens in current tab') : t('Opens in new tab');
+    $output .= '</div>';
+  }
+  else {
+    $output .= '<div>' . t('URL: ');
+    $output .= t('Not linked to URL');
+    $output .= '</div>';
+  }
+
+  $output .= '<div>' . t('Visibility: ');
+  $output .= !empty($slide_info['visibility'] && $slide_info['visibility'] != '*') ? $slide_info['visibility'] : t('Shown on all pages');
+  $output .= '</div>';
+  $output .= '<div>' . t('Transition: ');
+  $output .= !empty($slide_info['transition']) ? $slide_info['transition'] : t('No transition');
+  $output .= '</div>';
+
+  dpm($slide_info);
+  return $output;
 }
