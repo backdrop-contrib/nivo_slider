@@ -487,3 +487,47 @@ function nivo_slider_slide_get_details($slide_info) {
   dpm($slide_info);
   return $output;
 }
+
+/**
+ * Delete slide confirm form.
+ */
+function nivo_slider_slide_image_delete_confirm_form($form, &$form_state, $slider, $slide) {
+  $slide_info = $slider['slides'][$slide];
+
+  // Load the slide's image file.
+  $file = file_load($slide_info['fid']);
+
+  $variables = array(
+    'uri' => $file->uri,
+    'style_name' => 'medium',
+  );
+  $image = theme('image_style', $variables);
+
+  $form['preview'] = array(
+    '#markup' =>  '<div>' . $image . '</div>',
+  );
+
+  $form_state['slider'] = $slider;
+  $form_state['slide'] = $slide;
+
+  $slide_name = !empty($slide_info['title']) ? $slide_info['title'] : 'number ' . ($slide + 1);
+  $question = t('Delete slide @slide_name?', array('@slide_name' => $slide_name));
+
+  return confirm_form($form, $question, 'admin/structure/nivo-slider/' . $slider['slider_id']);
+}
+
+
+/**
+ * Delete slide confirm form submit.
+ */
+function nivo_slider_slide_image_delete_confirm_form_submit($form, &$form_state) {
+  $slider = $form_state['slider'];
+  $slide = $form_state['slide'];
+
+  file_delete($slider['slides'][$slide]['fid']);
+  unset($slider['slides'][$slide]);
+  config_set('nivo_slider.settings', $slider['slider_id'], $slider);
+
+  $form_state['redirect'] = 'admin/structure/nivo-slider/' . $slider['slider_id'];
+}
+

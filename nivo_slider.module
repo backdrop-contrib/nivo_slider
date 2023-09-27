@@ -107,6 +107,16 @@ function nivo_slider_menu() {
     'weight' => 2,
     'type' => MENU_CALLBACK,
   );
+  $items['admin/structure/nivo-slider/%slider/%/delete'] = array(
+    'title' => 'Delete slide image',
+    'description' => 'Delete slide image.',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('nivo_slider_slide_image_delete_confirm_form', 3, 4),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_slides.admin.inc',
+    'weight' => 2,
+    'type' => MENU_CALLBACK,
+  );
 
   return $items;
 }
