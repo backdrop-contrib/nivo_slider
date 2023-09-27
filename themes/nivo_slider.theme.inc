@@ -23,6 +23,9 @@ function theme_nivo_slider_slide_configuration_form($variables) {
 
   // Create an array to hold the table rows
   $rows = array();
+  dpm($form['images']);
+  dpm($form['slider']);
+  $slider_id = $form['slider']['#value']['slider_id'];
 
   // Generate an array of table rows from the available slides
   foreach ($form['images'] as $slide => &$property) {
@@ -57,6 +60,8 @@ function theme_nivo_slider_slide_configuration_form($variables) {
         'data' => backdrop_render($delete),
       );
       unset($property['delete']);
+      $fid = $property['fid']['#value'];
+      $row[] = l('link', "admin/structure/nivo-slider/$slider_id/$slide");
 
       // Store the individual row
       $rows[] = array(
@@ -74,6 +79,7 @@ function theme_nivo_slider_slide_configuration_form($variables) {
       t('Weight'),
       t('Published'),
       t('Delete'),
+      t('Link'),
     );
 
     // Over-write the 'order' form element with the draggable table
