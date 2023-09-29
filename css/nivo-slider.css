@@ -1,0 +1,9 @@
+.nivo-slider-dialog {
+  max-width: 600px;
+}
+#nivo-slider-slides details {
+  padding: 5px;
+  border: none;
+  margin: 0;
+  background: none;
+}
