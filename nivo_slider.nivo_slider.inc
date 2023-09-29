@@ -10,8 +10,7 @@
  */
 function nivo_slider_nivo_slider_theme_info() {
   // Find the path to the Nivo Slider jQuery plugin
-  $lib = backdrop_get_library('nivo_slider', 'nivo-slider'); //'nivo_slider', 'nivo_slider_library');
-  $library_path = 'libraries/nivo-slider';
+  $library_path = backdrop_get_path('module', 'nivo_slider');
 
   return array(
     'bar' => array(
