@@ -187,8 +187,12 @@ function nivo_slider_slide_image_configuration_form_submit($form, &$form_state) 
     $form_state['values']['fid'] = $form_state['new_fid'];
     $form_state['slider']['slides'][] = $form_state['values'];
   }
+  $form_state['values']['weight'] = 0;
+  $form_state['values']['published'] = 0;
+  unset($form_state['values']['upload']);
 
   config_set('nivo_slider.settings', $form_state['slider']['slider_id'], $form_state['slider']);
+  $form_state['redirect'] = 'admin/structure/nivo-slider/' . $form_state['slider']['slider_id'];
 }
 
 /**

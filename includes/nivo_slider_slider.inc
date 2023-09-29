@@ -28,7 +28,7 @@ function nivo_slider_slider($slider_id) {
       $slide_language = $slide['language'] === $language->langcode;
     }
     // Only display published slides
-    if ($slide['published'] === TRUE && $slide_language) {
+    if ($slide['published'] && $slide_language) {
       // Convert path to lowercase. This allows comparison of the same path
       // with different case. Ex: /Page, /page, /PAGE.
       $pages = backdrop_strtolower($slide['visibility']);
