@@ -33,7 +33,6 @@ function theme_nivo_slider_slide_configuration_form($variables) {
 
       // Add a column containing the slide's title to the current row
       $preview = $property['preview'];
-      dpm(backdrop_render($property['fid']));
       $row[] = array(
         'data' => backdrop_render($preview),
       );
@@ -81,6 +80,7 @@ function theme_nivo_slider_slide_configuration_form($variables) {
       );
     }
   }
+  unset($form['images']);
 
   // Build the draggable table if any rows are available
   if (!empty($rows)) {
