@@ -14,16 +14,23 @@ function nivo_slider_slide_image_configuration_form($form, &$form_state, $slider
   $form_state['slider'] = $slider;
   $form_state['slide_number'] = $slide_number;
 
-  $form['images']['name'] = array(
-    '#markup' => t('Image !number: @title', array(
-      '!number' => $slide + 1,
-      '@title' => isset($slide_setting['title']) ? $slide_setting['title'] : '',
-      )
-    ),
-  );
+  if ($slide_number == 'add') {
+    $form['images']['upload'] = array(
+      '#type' => 'file',
+      '#title' => t('Upload a new slide image'),
+    );
+  }
+  else {
+    $form['images']['name'] = array(
+      '#markup' => t('Image !number: @title', array(
+        '!number' => $slide + 1,
+        '@title' => isset($slide_setting['title']) ? $slide_setting['title'] : '',
+        )
+      ),
+    );
 
-  // Load the slide's image file.
-  $file = file_load($slide_setting['fid']);
+    // Load the slide's image file.
+    $file = file_load($slide_setting['fid']);
 
     $variables = array(
       'uri' => $file->uri,
@@ -31,13 +38,14 @@ function nivo_slider_slide_image_configuration_form($form, &$form_state, $slider
     );
     $image = theme('image_style', $variables);
 
-  $form['images']['preview'] = array(
-    '#markup' =>  $image,
-  );
-  $form['images']['fid'] = array(
-    '#type' => 'hidden',
-    '#value' => isset($slide_setting['fid']) ? $slide_setting['fid'] : '',
-  );
+    $form['images']['preview'] = array(
+      '#markup' =>  $image,
+    );
+    $form['images']['fid'] = array(
+      '#type' => 'hidden',
+      '#value' => isset($slide_setting['fid']) ? $slide_setting['fid'] : '',
+    );
+  }
   $form['images']['title'] = array(
     '#type' => 'textfield',
     '#title' => t('Title'),
@@ -142,10 +150,43 @@ function nivo_slider_slide_image_configuration_form_cancel($form, &$form_state) 
 /**
  * Save settings data.
  */
+function nivo_slider_slide_image_configuration_form_validate($form, &$form_state) {
+
+  // Create a new slide if an image was uploaded.
+  if ($file = file_save_upload('upload')) {
+    // Store slide images in a folder named 'banner'
+    $banner_folder = 'public://' . config_get('nivo_slider.settings', 'dir_name');
+
+    // Create the banner directory if it does not currently exist.
+    file_prepare_directory($banner_folder, FILE_CREATE_DIRECTORY);
+
+    // Find information about the file.
+    $parts = pathinfo($file->filename);
+
+    // Create a destination for the slide image.
+    $destination = $banner_folder . '/' . $parts['basename'];
+
+    // Indicate that the slide image is permanent.
+    $file->status = FILE_STATUS_PERMANENT;
+
+    // Copy the slide image into the banner folder.
+    $file = file_copy($file, $destination, FILE_EXISTS_RENAME);
+    $form_state['new_fid'] = $file->fid;
+  }
+}
+
+/**
+ * Save settings data.
+ */
 function nivo_slider_slide_image_configuration_form_submit($form, &$form_state) {
   form_state_values_clean($form_state);
   $slide_number = $form_state['slide_number'];
-  $form_state['slider']['slides'][$slide_number] = array_merge($form_state['slider']['slides'][$slide_number], $form_state['values']);
+  if ($slide_number != 'add') {
+    $form_state['slider']['slides'][$slide_number] = array_merge($form_state['slider']['slides'][$slide_number], $form_state['values']);
+  } else {
+    $form_state['values']['fid'] = $form_state['new_fid'];
+    $form_state['slider']['slides'][] = $form_state['values'];
+  }
   dpm($form_state['slider']['slides'][$slide_number]);
   config_set('nivo_slider.settings', $form_state['slider']['slider_id'], $form_state['slider']);
 }

@@ -97,6 +97,16 @@ function nivo_slider_menu() {
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
   );
+  $items['admin/structure/nivo-slider/%slider/add'] = array(
+    'title' => 'Add slide',
+    'description' => 'Add slide',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('nivo_slider_slide_image_configuration_form', 3, 'add'),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_slides.admin.inc',
+    'weight' => 2,
+    'type' => MENU_LOCAL_ACTION,
+  );
   $items['admin/structure/nivo-slider/%slider/%'] = array(
     'title' => 'Configure slide image',
     'description' => 'Configure slide image.',
