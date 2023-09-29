@@ -201,6 +201,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
       array('system', 'backdrop.announce'),
     ),
   );
+  backdrop_add_css(backdrop_get_path('module', 'nivo_slider') . '/css/nivo-slider.css');
 
   backdrop_set_title($slider['slider_name']);
 
@@ -252,7 +253,7 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
       'attributes' => array(
         'class' => array('use-ajax'),
         'data-dialog' => TRUE,
-        'data-dialog-options' => json_encode(array('dialogClass' => 'nivo-dialog')),
+        'data-dialog-options' => json_encode(array('dialogClass' => 'nivo-slider-dialog')),
       ),
     );
     $links['delete'] = array(
@@ -310,13 +311,15 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
 function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
   // Create an array to hold slides.
   $slides = array();
+  $save_slides = $form_state['values']['slider'];
+  dpm($form_state['values']);
 
   // Process the available slides.
   foreach ($form_state['values']['images'] as $slide => $settings) {
     // Ensure that only slide settings are processed
     if (is_numeric($slide)) {
       if (is_array($settings)) {
-        $slides[] = $settings;
+        $slides[] = $settings + $save_slides['slides'][$slide];
       }
     }
   }
@@ -327,7 +330,6 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
   }
 
   // Save the slides.
-  $save_slides = $form_state['values']['slider'];
   $save_slides['slides'] = $slides;
   config_set('nivo_slider.settings', $form_state['values']['slider']['slider_id'], $save_slides);
 }
