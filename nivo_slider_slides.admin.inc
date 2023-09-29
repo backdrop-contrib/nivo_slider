@@ -286,24 +286,6 @@ function nivo_slider_slide_configuration_form($form, &$form_state, $slider) {
       '#summary' => t('Image information'),
       '#details' => $details,
     );
-
-    if (module_exists('i18n')) {
-      $languages = language_list('enabled');
-      // Take only enabled
-      $languages = array_keys($languages[1]);
-      $language_array = array();
-      foreach ($languages as $key => $language) {
-        $language_array[$language] = $language;
-      }
-      $form['images'][$slide]['language'] = array(
-        '#type' => 'select',
-        '#title' => t('Show slide on specific languages'),
-        '#options' => $language_array,
-        '#default_value' => isset($settings['language']) ? $settings['language'] : '',
-        '#empty_option' => '- All -',
-        '#description' => t("Specify language on which slide will be shown"),
-      );
-    }
   }
 
   // Add a theme function to theme the form.
