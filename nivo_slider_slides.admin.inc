@@ -9,7 +9,7 @@
  * Configuration form for slider slides.
  */
 function nivo_slider_slide_image_configuration_form($form, &$form_state, $slider, $slide_number) {
-  $slide_setting = $slider['slides'][$slide_number];
+  $slide_setting = array();
 
   $form_state['slider'] = $slider;
   $form_state['slide_number'] = $slide_number;
@@ -21,6 +21,7 @@ function nivo_slider_slide_image_configuration_form($form, &$form_state, $slider
     );
   }
   else {
+    $slide_setting = $slider['slides'][$slide_number];
     $form['images']['name'] = array(
       '#markup' => t('Image !number: @title', array(
         '!number' => $slide + 1,
@@ -316,7 +317,6 @@ function nivo_slider_slide_configuration_form_submit($form, &$form_state) {
   // Create an array to hold slides.
   $slides = array();
   $save_slides = $form_state['values']['slider'];
-  dpm($form_state['values']);
 
   // Process the available slides.
   foreach ($form_state['values']['images'] as $slide => $settings) {
