@@ -23,12 +23,20 @@ function theme_nivo_slider_slide_configuration_form($variables) {
 
   // Create an array to hold the table rows
   $rows = array();
+  $slider_id = $form['slider']['#value']['slider_id'];
 
   // Generate an array of table rows from the available slides
   foreach ($form['images'] as $slide => &$property) {
     if (is_numeric($slide)) {
       // Create an array to hold the table row for the current slide
       $row = array();
+
+      // Add a column containing the slide's title to the current row
+      $preview = $property['preview'];
+      $row[] = array(
+        'data' => backdrop_render($preview),
+      );
+      unset($property['preview']);
 
       // Add a column containing the slide's title to the current row
       $name = $property['name'];
@@ -51,13 +59,20 @@ function theme_nivo_slider_slide_configuration_form($variables) {
       );
       unset($property['published']);
 
-      // Add a column containing the slide's weight to the current row
-      $delete = $property['delete'];
+      // Add a column containing the slide's details to the current row
+      $details = $property['details'];
       $row[] = array(
-        'data' => backdrop_render($delete),
+        'data' => backdrop_render($details),
       );
-      unset($property['delete']);
+      unset($property['details']);
 
+      // Add a column containing the slide's operations to the current row
+      $operations = $property['operations'];
+      $row[] = array(
+        'data' => backdrop_render($operations),
+      );
+      unset($property['operations']);
+      
       // Store the individual row
       $rows[] = array(
         'data' => $row,
@@ -65,15 +80,18 @@ function theme_nivo_slider_slide_configuration_form($variables) {
       );
     }
   }
+  unset($form['images']);
 
   // Build the draggable table if any rows are available
   if (!empty($rows)) {
     // Create an array of table headers
     $headers = array(
+      '',
       t('Name'),
       t('Weight'),
       t('Published'),
-      t('Delete'),
+      t('Information'),
+      t('Link'),
     );
 
     // Over-write the 'order' form element with the draggable table

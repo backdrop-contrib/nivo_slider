@@ -1,0 +1,17 @@
+{
+    "_config_name": "image.style.nivo_slider",
+    "storage": 4,
+    "module": "nivo_slider",
+    "label": "Nivo slider",
+    "name": "nivo_slider",
+    "effects": [
+        {
+            "name": "image_scale",
+            "data": {
+                "width": "500",
+                "upscale": 1
+            },
+            "weight": 0
+        }
+    ]
+}

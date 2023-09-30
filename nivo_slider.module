@@ -46,9 +46,13 @@ function nivo_slider_config_info() {
 function nivo_slider_permission() {
   return array(
     'administer nivo slider' => array(
-      'title' => t('Administer Nivo Slider'),
-      'description' => t('Allows a user to configure Nivo Slider.'),
+      'title' => t('Administer Nivo Slides'),
+      'description' => t('Allows a user to configure Nivo slides.'),
     ),
+    'administer nivo slider options' => array(
+      'title' => t('Administer Nivo Options'),
+      'description' => t('Allows a user to configure global Nivo options.'),
+    )
   );
 }
 
@@ -93,8 +97,52 @@ function nivo_slider_menu() {
     'weight' => 2,
     'type' => MENU_LOCAL_TASK,
   );
+  $items['admin/structure/nivo-slider/%slider/add'] = array(
+    'title' => 'Add slide',
+    'description' => 'Add slide',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('nivo_slider_slide_image_configuration_form', 3, 'add'),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_slides.admin.inc',
+    'weight' => 2,
+    'type' => MENU_LOCAL_ACTION,
+  );
+  $items['admin/structure/nivo-slider/%slider/%'] = array(
+    'title' => 'Configure slide image',
+    'description' => 'Configure slide image.',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('nivo_slider_slide_image_configuration_form', 3, 4),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_slides.admin.inc',
+    'weight' => 2,
+    'type' => MENU_CALLBACK,
+  );
+  $items['admin/structure/nivo-slider/%slider/%/delete'] = array(
+    'title' => 'Delete slide image',
+    'description' => 'Delete slide image.',
+    'page callback' => 'backdrop_get_form',
+    'page arguments' => array('nivo_slider_slide_image_delete_confirm_form', 3, 4),
+    'access arguments' => array('administer nivo slider'),
+    'file' => 'nivo_slider_slides.admin.inc',
+    'weight' => 2,
+    'type' => MENU_CALLBACK,
+  );
 
   return $items;
+}
+
+function nivo_slider_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  if ($root_path == 'admin/structure/nivo-slider/%') {
+    foreach ($data['actions']['output'] as $key => $action_link) {
+      if ($action_link['#link']['path'] === 'admin/structure/nivo-slider/%/add') {
+        $data['actions']['output'][$key]['#link']['localized_options']['attributes'] = array(
+          'class' => array('use-ajax'),
+          'data-dialog' => TRUE,
+          'data-dialog-options' => json_encode(array('dialogClass' => 'nivo-slider-dialog')),
+        );
+      }
+    }
+  }
 }
 
 /**
@@ -131,7 +179,23 @@ function nivo_slider_menu_contextual_links_alter(&$links, $router_item, $root_pa
 }
 
 /**
- * Implements hook_i18n_string_info().
+ * Implements hook_contextual_links_view_alter().
+ */
+function nivo_slider_contextual_links_view_alter(&$element, &$items) {
+  if (isset($element['#element']['#block']) && $element['#element']['#block']->delta == 'nivo_slider' && user_access('administer nivo slider')) {
+    $element['#links']['slides'] = array(
+      'title' => t('Configure slider slides'),
+      'href' => 'admin/structure/nivo-slider/slides',
+    );
+    $element['#links']['options'] = array(
+      'title' => t('Configure slider options'),
+      'href' => 'admin/structure/nivo-slider/options',
+    );
+  }
+}
+
+/**
+ * Implements hook_i18n_string_info()
  */
 function nivo_slider_i18n_string_info() {
   $groups['nivo_slider'] = array(
@@ -183,7 +247,7 @@ function nivo_slider_i18n_string_refresh() {
 }
 
 /**
- * Update/create translation source for user defined slide strings.
+ * Update / create translation source for user defined slide strings.
  *
  * @param $slides
  *   An array of slider slides.
@@ -489,3 +553,4 @@ function nivo_slider_slider_list() {
 
   return $form;
 }
+

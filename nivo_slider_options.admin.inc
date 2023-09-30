@@ -68,7 +68,7 @@ function nivo_slider_option_configuration_form($form, &$form_state, $slider) {
     );
     $form['image_style_thumb'] = array(
       '#type' => 'select',
-      '#title' => t('Tumbnail image style'),
+      '#title' => t('Thumbnail image style'),
       '#options' => $available_image_styles,
       '#default_value' => $options['image_style_thumb'],
       '#description' => t('Select an image style to apply to slide thumbnail images.'),
@@ -86,6 +86,13 @@ function nivo_slider_option_configuration_form($form, &$form_state, $slider) {
     '#title' => t('General'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
+  );
+  // @todo: ensure this works if dir changes after some images already exist.
+  $form['general']['dir_name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Nivo slider images directory'),
+    '#default_value' => config_get('nivo_slider.settings', 'dir_name'),
+    '#description' => t('Fill the name of the directory where you want to store images. Default is "banner". The directory will be created if it does not exist.'),
   );
   $form['general']['random_start'] = array(
     '#type' => 'checkbox',
